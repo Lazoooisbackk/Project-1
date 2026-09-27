@@ -1,31 +1,19 @@
-# guskic studio – Website
+# guskic studiO
 
-Statische Basis-Website (HTML, CSS, Vanilla JS), ohne Build-Schritt.
+Webdesign-Studio von Lazar Guskic (Maria Ellend / Wien).
 
-## Struktur
+## Logo
+- Datei: `index.html` (im Browser öffnen, 3D mit three.js 0.160)
+- Schreibweise: **guskic studiO** (alles klein, nur das O am Ende groß)
+- Das O ist ein 3D-Objekt aus zerknitterter Chrom-Folie, dreht sich mit der Maus, Klick = neu zerknittern
+- Hintergrund: zerknittertes Papier, Weiß + Creme gemischt
+- Vorbild für den Stil: https://www.noth.in
 
-```
-index.html        Startseite (Hero, Leistungen, Arbeiten, Studio, Ablauf, Kontakt)
-impressum.html    Impressum (Platzhalter ausfüllen)
-datenschutz.html  Datenschutzerklärung (Platzhalter ausfüllen)
-css/styles.css    Design-Tokens, Layout, Komponenten
-js/main.js        Mobile Navigation, Header-Zustand, Reveal, Jahr im Footer
-assets/           Favicon und weitere Assets
-```
+## Design
+- Schrift Logo: Newsreader 500 (Google Fonts)
+- Schrift Labels: Geist Mono (Google Fonts)
+- Papier: #F5F3EE · Tinte: #131313 · Grau: #5F5B54
+- Spruch: „Websites, die man anfassen möchte.“
 
-## Lokal starten
-
-Datei `index.html` direkt im Browser öffnen oder einen lokalen Server nutzen:
-
-```
-npx serve .
-```
-
-## Brand
-
-| Name     | Hex       |
-| -------- | --------- |
-| Orchid   | `#E5BDDF` |
-| Wine Ash | `#32292F` |
-
-Schriften: Newsreader (Display), Inter (Text) via Google Fonts.
+## Nächster Schritt
+Eigene Website für guskic studiO bauen, rund um dieses Logo (Startseite mit dem 3D-O oben).
