@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>guskic studiO</title>
+<meta name="description" content="guskic studiO – Webdesign-Studio aus Wien. Individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
+<meta name="theme-color" content="#F5F3EE">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Geist+Mono:wght@400;500&display=swap">
@@ -18,12 +21,12 @@
     color-scheme:light;
   }
   html,body{height:100%}
-  body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden}
+  body{margin:0;background:var(--paper);color:var(--ink)}
   .stage{
     position:relative;box-sizing:border-box;height:100%;
     display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);
     padding-inline:var(--pad);padding-block:clamp(16px,2.6vw,32px);
-    touch-action:none;cursor:crosshair;
+    touch-action:pan-y;cursor:crosshair;
     -webkit-user-select:none;user-select:none;
   }
   #gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
@@ -53,6 +56,7 @@
     .readout{text-align:left}
   }
 </style>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <main class="stage" id="stage">
@@ -73,6 +77,138 @@
     <span class="readout" id="readout">Laden 000</span>
   </div>
 </main>
+
+<!-- ============================================================
+     Website unterhalb des Logos. Der Hero (#stage) bleibt unverändert.
+     Styles: css/styles.css
+     ============================================================ -->
+<div class="site">
+
+  <nav class="nav" aria-label="Hauptnavigation">
+    <a class="nav__brand" href="#stage">guskic studiO</a>
+    <ul class="nav__list">
+      <li><a href="#studio">Studio</a></li>
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#arbeiten">Arbeiten</a></li>
+      <li><a href="#ablauf">Ablauf</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <section class="section" id="studio" aria-labelledby="studio-title">
+    <div class="section__bar">
+      <span>01 — Studio</span>
+      <span>Maria Ellend · Wien</span>
+    </div>
+    <h2 class="display" id="studio-title">Ein unabhängiges Webdesign-Studio. Design und Code aus einer Hand.</h2>
+    <div class="section__cols">
+      <p class="text">guskic studiO gestaltet und entwickelt individuelle Websites mit eigenem Code – keine Templates, kein Baukasten. Jedes Projekt entsteht von der ersten Skizze bis zum Launch an einem Tisch.</p>
+      <p class="text text--muted">Schwerpunkt sind designlastige Websites mit Charakter: Typografie, Bewegung und 3D, dort wo es der Marke dient.</p>
+    </div>
+  </section>
+
+  <section class="section" id="leistungen" aria-labelledby="leistungen-title">
+    <div class="section__bar">
+      <span>02 — Leistungen</span>
+      <span>Drei Bausteine</span>
+    </div>
+    <h2 class="display" id="leistungen-title">Was das Studio macht.</h2>
+    <ul class="rows">
+      <li class="row">
+        <span class="row__num">01</span>
+        <h3 class="row__title">Webdesign</h3>
+        <p class="row__text">Konzept, Layout, Typografie und Farbsystem. Design, das die Marke trägt – vom ersten Entwurf bis zum fertigen Screen.</p>
+      </li>
+      <li class="row">
+        <span class="row__num">02</span>
+        <h3 class="row__title">Development</h3>
+        <p class="row__text">HTML, CSS, JavaScript und React. Sauberer, performanter Custom Code – schnell, zugänglich und langfristig wartbar.</p>
+      </li>
+      <li class="row">
+        <span class="row__num">03</span>
+        <h3 class="row__title">3D &amp; Motion</h3>
+        <p class="row__text">Three.js, React Three Fiber und GSAP. Interaktive Szenen und Animationen, die nicht ablenken, sondern führen.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section" id="arbeiten" aria-labelledby="arbeiten-title">
+    <div class="section__bar">
+      <span>03 — Arbeiten</span>
+      <span>Auswahl</span>
+    </div>
+    <h2 class="display" id="arbeiten-title">Ausgewählte Projekte.</h2>
+    <ul class="tiles">
+      <li class="tile">
+        <div class="tile__media"><span class="tile__badge">Case Study folgt</span></div>
+        <div class="tile__meta"><h3 class="tile__title">Projekt 01</h3><span>Webdesign · Development</span></div>
+      </li>
+      <li class="tile">
+        <div class="tile__media"><span class="tile__badge">Case Study folgt</span></div>
+        <div class="tile__meta"><h3 class="tile__title">Projekt 02</h3><span>3D · Motion</span></div>
+      </li>
+      <li class="tile">
+        <div class="tile__media"><span class="tile__badge">Case Study folgt</span></div>
+        <div class="tile__meta"><h3 class="tile__title">Projekt 03</h3><span>Branding · Webdesign</span></div>
+      </li>
+      <li class="tile">
+        <div class="tile__media"><span class="tile__badge">Case Study folgt</span></div>
+        <div class="tile__meta"><h3 class="tile__title">Projekt 04</h3><span>Development</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section" id="ablauf" aria-labelledby="ablauf-title">
+    <div class="section__bar">
+      <span>04 — Ablauf</span>
+      <span>Vier Schritte</span>
+    </div>
+    <h2 class="display" id="ablauf-title">Vom Briefing zum Launch.</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step__num">01</span>
+        <h3 class="step__title">Briefing</h3>
+        <p class="step__text">Ziele, Zielgruppe, Inhalte und Rahmen klären. Daraus entsteht ein klarer Projektumfang.</p>
+      </li>
+      <li class="step">
+        <span class="step__num">02</span>
+        <h3 class="step__title">Konzept &amp; Design</h3>
+        <p class="step__text">Struktur, Layout und visuelle Sprache. Abstimmung in kurzen Schleifen, bis das Design sitzt.</p>
+      </li>
+      <li class="step">
+        <span class="step__num">03</span>
+        <h3 class="step__title">Development</h3>
+        <p class="step__text">Umsetzung in sauberem Code, responsiv und performant. Animationen und 3D nach Bedarf.</p>
+      </li>
+      <li class="step">
+        <span class="step__num">04</span>
+        <h3 class="step__title">Launch &amp; Betreuung</h3>
+        <p class="step__text">Testing, Go-live und Übergabe. Auf Wunsch laufende Weiterentwicklung.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section section--contact" id="kontakt" aria-labelledby="kontakt-title">
+    <div class="section__bar">
+      <span>05 — Kontakt</span>
+      <span>Offen für neue Projekte</span>
+    </div>
+    <h2 class="display" id="kontakt-title">Projekt im Kopf?</h2>
+    <a class="mail" href="mailto:hallo@guskic.studio">hallo@guskic.studio</a>
+    <p class="text text--muted">Kurz beschreiben, worum es geht. Der Rest ergibt sich im Gespräch.</p>
+  </section>
+
+  <footer class="footer">
+    <span>© <span id="year">2026</span> guskic studiO</span>
+    <span>Maria Ellend · Wien</span>
+    <ul class="footer__links">
+      <li><a href="impressum.html">Impressum</a></li>
+      <li><a href="datenschutz.html">Datenschutz</a></li>
+    </ul>
+  </footer>
+
+</div>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
 <script type="importmap">
   { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
@@ -360,7 +496,7 @@ async function main(){
   let spin = null, seed = 0;
   const crumpleAgain = () => { if (!spin) spin = { t: performance.now(), s0: seed }; };
   stage.addEventListener('click', crumpleAgain);
-  addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); crumpleAgain(); } });
+  addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && (e.target === document.body || stage.contains(e.target))){ e.preventDefault(); crumpleAgain(); } });
 
   const deg = r => { let d = THREE.MathUtils.radToDeg(r); d = ((d % 360) + 540) % 360 - 180; return (d < 0 ? '−' : '+') + Math.abs(d).toFixed(1).padStart(5, '0') + '°'; };
   const T0 = performance.now();

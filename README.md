@@ -17,3 +17,10 @@ Webdesign-Studio von Lazar Guskic (Maria Ellend / Wien).
 
 ## Nächster Schritt
 Eigene Website für guskic studiO bauen, rund um dieses Logo (Startseite mit dem 3D-O oben).
+
+## Website
+- `index.html`: oben die Logo-Seite als Hero (unverändert), darunter Vorlagen-Sektionen: Studio, Leistungen, Arbeiten, Ablauf, Kontakt, Footer
+- `css/styles.css`: Styles für alles unterhalb des Heros (Hero-Styles bleiben inline in `index.html`)
+- `impressum.html`, `datenschutz.html`: Vorlagen, Platzhalter in eckigen Klammern ausfüllen
+- `assets/favicon.svg`
+- Lokal starten: `index.html` im Browser öffnen oder `npx serve .`
