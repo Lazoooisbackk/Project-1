@@ -1,0 +1,26 @@
+:root {
+  --paper: #F5F3EE;
+  --ink: #131313;
+  --muted: #5F5B54;
+  --black: #0B0B0C;
+  --white: #FFFFFF;
+  --line: rgba(19, 19, 19, 0.14);
+  --line-light: rgba(245, 243, 238, 0.18);
+
+  --serif: "Newsreader", "Iowan Old Style", "Times New Roman", serif;
+  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --pad: clamp(16px, 3.2vw, 44px);
+  --h1: clamp(40px, 6vw, 96px);
+  --nav-h: 64px;
+
+  --z-grain: 900;
+  --z-cursor: 950;
+  --z-menu: 800;
+  --z-form: 850;
+  --z-curtain: 990;
+  --z-loader: 1000;
+
+  color-scheme: light;
+}

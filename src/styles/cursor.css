@@ -1,0 +1,12 @@
+.cursor {
+  position: fixed; left: 0; top: 0; z-index: var(--z-cursor);
+  width: 92px; height: 92px; margin: -46px 0 0 -46px;
+  border-radius: 999px;
+  background: var(--white); color: var(--ink);
+  display: grid; place-items: center;
+  font: 500 11px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase;
+  pointer-events: none;
+  transform: scale(0);
+  will-change: transform;
+}
+@media (hover: none) { .cursor { display: none; } }

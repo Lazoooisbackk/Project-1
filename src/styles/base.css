@@ -1,0 +1,140 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+body.is-loading { overflow: hidden; }
+
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, video, canvas, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.on-dark :focus-visible { outline-color: var(--paper); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed; top: 0; left: 0; z-index: calc(var(--z-loader) + 1);
+  padding: 12px 16px; background: var(--ink); color: var(--paper);
+  font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .07em;
+  transform: translateY(-120%);
+}
+.skip-link:focus { transform: none; }
+
+/* Labels */
+.label {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+@media (min-width: 1200px) { .label { font-size: 12px; } }
+.on-dark .label { color: rgba(245, 243, 238, .62); }
+
+/* Display / Statement */
+.statement {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-size: var(--h1);
+  line-height: 1.02;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+/* Underline links: draws from left to right */
+.u-link {
+  position: relative;
+  display: inline-block;
+}
+.u-link::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -.12em;
+  height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .5s cubic-bezier(.76, 0, .24, 1);
+}
+.u-link:hover::after, .u-link:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+
+/* Buttons */
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 52px; padding: 0 26px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font: 500 14px/1 var(--sans);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: color .45s cubic-bezier(.76, 0, .24, 1);
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0; background: currentColor;
+  transform: translateY(101%); transition: transform .5s cubic-bezier(.76, 0, .24, 1);
+  z-index: -1;
+}
+.btn span { position: relative; z-index: 1; }
+.btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn--solid:hover { color: var(--ink); }
+.btn--solid::before { background: var(--paper); }
+.btn--ghost:hover { color: var(--paper); }
+.btn--ghost::before { background: var(--ink); }
+.on-dark .btn--ghost:hover { color: var(--ink); }
+.on-dark .btn--ghost::before { background: var(--paper); }
+
+/* Split-Text masks. Child gets padding-bottom, mask a negative margin, so descenders survive. */
+.line-mask, .w-mask, .ch-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: .15em;
+  margin-bottom: -.15em;
+}
+.line-mask { display: block; }
+.line, .w, .ch { display: inline-block; will-change: transform; }
+.line { display: block; }
+.ch-mask--space { width: .25em; }
+.w-block { display: inline-block; white-space: nowrap; }
+
+/* Grain */
+.grain {
+  position: fixed; inset: 0; z-index: var(--z-grain);
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: .04;
+  mix-blend-mode: multiply;
+}
+
+/* Magnetic wrapper */
+.magnetic { display: inline-block; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}

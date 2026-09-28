@@ -1,0 +1,19 @@
+.footer {
+  position: relative;
+  padding: clamp(48px, 8vw, 100px) var(--pad) 28px;
+  overflow: hidden;
+}
+.footer__mark {
+  font-family: var(--serif); font-weight: 500; font-optical-sizing: auto;
+  line-height: 1.08; letter-spacing: -.035em;
+  white-space: nowrap; overflow: clip; padding-bottom: .14em;
+  margin: 0 0 clamp(24px, 4vw, 48px);
+}
+.footer__mark .ch-mask { padding-bottom: .14em; margin-bottom: -.14em; cursor: default; }
+.footer__mark .ch { transform-origin: 50% 100%; }
+.footer__mark .ch-mask--space { width: .22em; }
+.footer__links {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding-top: 20px; border-top: 1px solid var(--line);
+}
+.footer__links ul { display: flex; flex-wrap: wrap; gap: 20px; }
