@@ -26,25 +26,36 @@
 .loader__g { display: inline-block; opacity: 0; }
 .loader__o { display: inline-block; opacity: 0; transform-origin: 50% 50%; }
 
-.loader__gap {
+/* Bildfenster zwischen g und O. Die Material-Os sitzen darin auf Loader-Schwarz. */
+.loader__win {
   position: relative;
   display: block;
-  width: 1rem;
-  height: 1em;
   flex: none;
+  width: 1rem;
+  height: 1.5em;
+  overflow: hidden;
+  background: var(--black);
 }
-.loader__objs {
+.loader__item {
   position: absolute; left: 50%; top: 50%;
-  width: 1.25em; height: 1.25em;
-  transform: translate(-50%, -50%);
+  display: block;
+  height: 70%;
+  max-height: 400px;
+  aspect-ratio: var(--ar, 1);
+  opacity: 0;
+  will-change: transform, opacity;
 }
-.loader__obj {
-  position: absolute; inset: 0;
+.loader__item img {
+  display: block;
   width: 100%; height: 100%;
   object-fit: contain;
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
+  image-rendering: auto;
+}
+.loader__chrome {
+  position: absolute; left: 50%; top: 50%;
+  height: 100%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
 }
 
 .loader__counter {
@@ -53,4 +64,6 @@
   font: 400 11px/1 var(--mono);
   letter-spacing: .07em;
   font-variant-numeric: tabular-nums;
+  transition: color .3s;
 }
+.loader__counter.is-zero { color: var(--orchid); }

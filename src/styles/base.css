@@ -76,7 +76,7 @@ a { color: inherit; text-decoration: none; }
 .u-link::after {
   content: "";
   position: absolute; left: 0; right: 0; bottom: -.12em;
-  height: 1px; background: currentColor;
+  height: 1px; background: var(--orchid);
   transform: scaleX(0); transform-origin: right;
   transition: transform .5s cubic-bezier(.76, 0, .24, 1);
 }

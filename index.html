@@ -3,418 +3,223 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>guskic studiO</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Geist+Mono:wght@400;500&display=swap">
-<style>
-  :root{
-    --paper:#F5F3EE;
-    --ink:#131313;
-    --ink-2:#5F5B54;
-    --pad:clamp(16px,3.2vw,44px);
-    --serif:"Newsreader","Iowan Old Style","Times New Roman",serif;
-    --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
-    color-scheme:light;
-  }
-  html,body{height:100%}
-  body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden}
-  .stage{
-    position:relative;box-sizing:border-box;height:100%;
-    display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);
-    padding-inline:var(--pad);padding-block:clamp(16px,2.6vw,32px);
-    touch-action:none;cursor:crosshair;
-    -webkit-user-select:none;user-select:none;
-  }
-  #gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
-  .bar{
-    position:relative;z-index:1;display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-    font:500 11px/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
-  }
-  .center{position:relative;z-index:1;align-self:center;display:grid;grid-template-columns:minmax(0,1fr);min-width:0;gap:clamp(6px,1.2vw,16px)}
-  .mark{
-    margin:0;font-family:var(--serif);font-weight:500;font-optical-sizing:auto;
-    font-size:clamp(48px,15vw,240px);line-height:1.08;letter-spacing:-.035em;
-    white-space:nowrap;overflow:clip;padding-bottom:.14em;
-  }
-  .mark-inner{display:inline-block}
-  .o-ghost{color:transparent}
-  .no-gl .o-ghost{color:var(--ink)}
-  .bl{display:inline-block;width:0;height:0}
-  .tag{
-    margin:0;justify-self:end;
-    font:italic 400 clamp(16px,1.9vw,26px)/1.3 var(--serif);color:var(--ink-2);
-  }
-  .readout{white-space:pre;font-variant-numeric:tabular-nums;text-align:right}
-  @media (max-width:600px){
-    .bar{font-size:10px}
-    .tag{justify-self:start}
-    .bottom{flex-direction:column;align-items:flex-start;gap:6px}
-    .readout{text-align:left}
-  }
-</style>
+<meta name="theme-color" content="#0B0B0C">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="256x256">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-mono-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<title>guskic studiO – Websites, die man anfassen möchte.</title>
+<meta name="description" content="guskic studiO ist das Webdesign-Studio von Lazar Guskic aus Wien: individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="guskic studiO – Websites, die man anfassen möchte.">
+<meta property="og:description" content="Webdesign-Studio aus Wien. Individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
+<meta property="og:image" content="/og.jpg">
+<meta property="og:locale" content="de_AT">
+<meta name="twitter:card" content="summary_large_image">
+<style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#0B0B0C;z-index:1000}.loader[hidden]{display:none}</style>
+<script type="module" src="/src/main.js"></script>
 </head>
-<body>
-<main class="stage" id="stage">
-  <canvas id="gl" aria-hidden="true"></canvas>
+<body class="is-loading">
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
 
-  <div class="bar top">
-    <span>Webdesign · Wien</span>
-    <span>Logo N°01</span>
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__center">
+    <span class="loader__mask"><span class="loader__g">g</span></span>
+    <span class="loader__win"><canvas class="loader__chrome" aria-hidden="true"></canvas></span>
+    <span class="loader__o">O</span>
   </div>
+  <span class="loader__counter">100</span>
+</div>
 
-  <div class="center">
-    <h1 class="mark" id="mark" aria-label="guskic studiO"><span class="mark-inner" id="markInner" aria-hidden="true">guskic studi<span class="bl" id="bl"></span><span class="o-ghost" id="oGhost">O</span></span></h1>
-    <p class="tag">Websites, die man anfassen möchte.</p>
+<header class="nav">
+  <a class="nav__mark" href="./#stage" aria-label="guskic studiO – zur Startseite">gO</a>
+  <div class="nav__right">
+    <button class="sound" type="button" aria-pressed="false" aria-label="Sound ein- oder ausschalten">
+      <span class="sound__label">Sound off</span>
+      <span class="sound__track" aria-hidden="true"><span class="sound__tick"></span></span>
+    </button>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
+      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__label sr-only">Menü öffnen</span>
+    </button>
   </div>
+</header>
 
-  <div class="bar bottom">
-    <span id="hint">Maus bewegen · Klicken zum Zerknittern</span>
-    <span class="readout" id="readout">Laden 000</span>
+<nav class="menu on-dark" id="menu" aria-hidden="true" aria-label="Menü">
+  <ul class="menu__list">
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#arbeiten">Arbeiten</a></span></li>
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#leistungen">Leistungen</a></span></li>
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#studio">Studio</a></span></li>
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#kontakt">Kontakt</a></span></li>
+  </ul>
+  <div class="menu__foot">
+    <a class="label u-link" href="impressum.html">Impressum</a>
+    <a class="label u-link" href="datenschutz.html">Datenschutz</a>
+    <span class="label">Maria Ellend · Wien</span>
   </div>
+</nav>
+
+<main id="main">
+
+  <section class="hero" id="stage" data-hero aria-label="guskic studiO">
+    <canvas class="hero__gl" id="gl" aria-hidden="true"></canvas>
+    <video class="hero__video" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
+
+    <div class="hero__bar hero__bar--top label">
+      <span>Webdesign · Wien</span>
+      <span>N°01 — 2026</span>
+    </div>
+
+    <div class="hero__center">
+      <h1 class="mark" id="mark" aria-label="guskic studiO"><span class="mark__inner" id="markInner" aria-hidden="true"><span class="mark__chars" id="markChars">guskic studi</span><span class="bl" id="bl"></span><span class="o-ghost" id="oGhost">O</span></span></h1>
+      <p class="hero__tag">Websites, die man anfassen möchte.</p>
+    </div>
+
+    <div class="hero__bar hero__bar--bottom label">
+      <span>Scroll<span class="sr-only" id="hint"> · Maus bewegen · Klicken zum Zerknittern</span></span>
+      <span class="readout" id="readout">Laden 000</span>
+    </div>
+  </section>
+
+  <section class="manifest" id="manifest" aria-label="Manifest">
+    <p class="manifest__statement" style="--rows: 4; --rows-m: 8;">
+      <span class="manifest__word line-mask"><span class="line">Die</span></span>
+      <span class="manifest__word line-mask"><span class="line">meisten</span></span>
+      <span class="manifest__word line-mask"><span class="line">Websites</span></span>
+      <span class="manifest__word line-mask"><span class="line">werden</span></span>
+      <span class="manifest__word line-mask"><span class="line">weggescrollt.</span></span>
+      <span class="manifest__word line-mask"><span class="line">Meine</span></span>
+      <span class="manifest__word line-mask"><span class="line">werden</span></span>
+      <span class="manifest__word line-mask"><span class="line">angefasst.</span></span>
+    </p>
+    <p class="manifest__side">Ich baue Websites für Menschen, die nicht wie alle anderen aussehen wollen: von Wien aus, für überall.</p>
+  </section>
+
+  <section class="works on-dark" id="arbeiten" aria-labelledby="works-title">
+    <div class="works__grid">
+      <h2 class="works__title" id="works-title" aria-label="Arbeiten">
+        <span class="works__letter" aria-hidden="true">A</span><span class="works__letter" aria-hidden="true">R</span><span class="works__letter" aria-hidden="true">B</span><span class="works__letter" aria-hidden="true">E</span><span class="works__letter" aria-hidden="true">I</span><span class="works__letter" aria-hidden="true">T</span><span class="works__letter" aria-hidden="true">E</span><span class="works__letter" aria-hidden="true">N</span>
+      </h2>
+
+      <div class="works__list">
+        <a class="work" href="https://ounji.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
+          <div class="work__media">
+            <img class="work__img" src="./works/ounji.jpg" alt="Screenshot der Website von OUNJI, Brow & Lash Studio" loading="lazy" decoding="async" width="1600" height="1200">
+            <div class="work__placeholder label"><span>Screenshot folgt · public/works/ounji.jpg</span></div>
+          </div>
+          <div class="work__meta">
+            <span class="work__num label">W'01</span>
+            <h3 class="work__title">OUNJI</h3>
+            <p class="work__line">Ein Studio, das man spürt, bevor man es betritt.</p>
+            <span class="work__tags label">Brow &amp; Lash Studio · Webflow · 2026</span>
+          </div>
+        </a>
+
+        <a class="work" href="https://fleischerei-guskic.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
+          <div class="work__media">
+            <img class="work__img" src="./works/fleischerei-guskic.jpg" alt="Screenshot der Website der Fleischerei Guskic am Hannovermarkt" loading="lazy" decoding="async" width="1600" height="1200">
+            <div class="work__placeholder label"><span>Screenshot folgt · public/works/fleischerei-guskic.jpg</span></div>
+          </div>
+          <div class="work__meta">
+            <span class="work__num label">W'02</span>
+            <h3 class="work__title">Fleischerei Guskic</h3>
+            <p class="work__line">Tradition seit Generationen, jetzt online.</p>
+            <span class="work__tags label">Fleischerei am Hannovermarkt, Wien · Webflow · 2026</span>
+          </div>
+        </a>
+
+        <a class="work work--cta" href="#kontakt">
+          <div class="work__media">
+            <div class="work__pulse" aria-hidden="true"><canvas></canvas><span class="work__o">O</span></div>
+          </div>
+          <div class="work__meta">
+            <span class="work__num label">W'03</span>
+            <h3 class="work__title">Dein Projekt?</h3>
+            <p class="work__line">Hier könnte deine Marke stehen.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="works__all"><a class="u-link" href="#kontakt">Alle ansehen (03)</a></div>
+  </section>
+
+  <section class="services on-dark" id="leistungen" aria-labelledby="services-title">
+    <div class="services__objects" aria-hidden="true"></div>
+    <div class="services__grid">
+      <h2 class="services__lead" id="services-title">Ich gestalte:</h2>
+      <ul class="services__list">
+        <li class="services__item line-mask"><span class="line">Websites</span></li>
+        <li class="services__item line-mask"><span class="line">Landingpages</span></li>
+        <li class="services__item line-mask"><span class="line">Online-Shops</span></li>
+        <li class="services__item line-mask"><span class="line">Branding</span></li>
+        <li class="services__item line-mask"><span class="line">Betreuung</span></li>
+      </ul>
+      <p class="services__note">Perspektive ist, wo Strategie auf Gestaltung trifft.</p>
+    </div>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-title">
+    <div class="studio__grid">
+      <figure class="studio__portrait">
+        <img class="studio__img" src="./studio/lazar.jpg" alt="Lazar Guskic" loading="lazy" decoding="async" width="1200" height="1500">
+        <figcaption class="studio__placeholder label"><span>Portrait folgt · public/studio/lazar.jpg</span></figcaption>
+      </figure>
+      <div>
+        <span class="label">Studio</span>
+        <h2 class="studio__text" id="studio-title">Ich bin Lazar, 17, aus Maria Ellend. Ich baue Websites mit Gefühl für Details, weil der erste Eindruck heute online passiert.</h2>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
+      <div class="marquee__track marquee__track--ghost"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
+      <div class="marquee__track marquee__track--ghost marquee__track--ghost2"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontakt" aria-labelledby="contact-title">
+    <span class="label">Kontakt</span>
+    <h2 class="contact__title statement" id="contact-title">Lass uns anfangen.</h2>
+    <div class="contact__actions">
+      <span class="magnetic"><a class="btn btn--solid" href="mailto:hallo@guskic.studio"><span>Projekt anfragen</span></a></span>
+      <span class="magnetic"><a class="btn btn--ghost" href="https://www.instagram.com/" target="_blank" rel="noopener"><span>Instagram</span></a></span>
+    </div>
+    <div class="contact__bar">
+      <span class="label">Weiter scrollen öffnet das Formular</span>
+      <div class="contact__timeline" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
 </main>
 
-<script type="importmap">
-  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
-</script>
-<script type="module">
-import * as THREE from 'three';
+<div class="form-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="form-title">
+  <button class="form-overlay__close label u-link" type="button">Schließen</button>
+  <div class="form-overlay__inner">
+    <span class="label">Kontakt</span>
+    <h2 class="statement" id="form-title">Projekt anfragen</h2>
+    <form class="form" novalidate>
+      <div class="form__field"><label class="label" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+      <div class="form__field"><label class="label" for="f-email">E-Mail</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="form__field"><label class="label" for="f-message">Worum geht es?</label><textarea id="f-message" name="message" rows="4"></textarea></div>
+      <span class="magnetic"><button class="btn btn--solid" type="submit"><span>Absenden</span></button></span>
+    </form>
+  </div>
+</div>
 
-/* Simplex noise 3D (Ashima Arts / Stefan Gustavson, MIT) */
-const NOISE = `
-vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
-vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
-vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
-vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
-float snoise(vec3 v){
-  const vec2 C=vec2(1.0/6.0,1.0/3.0);
-  const vec4 D=vec4(0.0,0.5,1.0,2.0);
-  vec3 i=floor(v+dot(v,C.yyy));
-  vec3 x0=v-i+dot(i,C.xxx);
-  vec3 g=step(x0.yzx,x0.xyz);
-  vec3 l=1.0-g;
-  vec3 i1=min(g.xyz,l.zxy);
-  vec3 i2=max(g.xyz,l.zxy);
-  vec3 x1=x0-i1+C.xxx;
-  vec3 x2=x0-i2+C.yyy;
-  vec3 x3=x0-D.yyy;
-  i=mod289(i);
-  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
-  float n_=0.142857142857;
-  vec3 ns=n_*D.wyz-D.xzx;
-  vec4 j=p-49.0*floor(p*ns.z*ns.z);
-  vec4 x_=floor(j*ns.z);
-  vec4 y_=floor(j-7.0*x_);
-  vec4 x=x_*ns.x+ns.yyyy;
-  vec4 y=y_*ns.x+ns.yyyy;
-  vec4 h=1.0-abs(x)-abs(y);
-  vec4 b0=vec4(x.xy,y.xy);
-  vec4 b1=vec4(x.zw,y.zw);
-  vec4 s0=floor(b0)*2.0+1.0;
-  vec4 s1=floor(b1)*2.0+1.0;
-  vec4 sh=-step(h,vec4(0.0));
-  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
-  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-  vec3 p0=vec3(a0.xy,h.x);
-  vec3 p1=vec3(a0.zw,h.y);
-  vec3 p2=vec3(a1.xy,h.z);
-  vec3 p3=vec3(a1.zw,h.w);
-  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);
-  m=m*m;
-  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-}`;
-
-/* Foil crumple: ridged noise pushes the surface in and out along its normal */
-const CRUMPLE = `
-float crumple(vec3 p){
-  vec3 q=p*4.6+vec3(uSeed*3.1,uSeed*1.7,uSeed*2.3);
-  float n=(1.0-abs(snoise(q)))*0.55
-         +(1.0-abs(snoise(q*2.07+11.3)))*0.30
-         +(1.0-abs(snoise(q*4.30+27.1)))*0.15;
-  return (n-0.62)*0.06*uAmt;
-}`;
-
-const QUAD_V = `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }`;
-
-/* Paper: bake crease normals once per resize. Voronoi facets give straight creases like crumpled paper */
-const GEN_F = `
-varying vec2 vUv;
-uniform float uAspect;
-${NOISE}
-vec2 hash2(vec2 p){ p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))); return fract(sin(p)*43758.5453); }
-vec2 facet(vec2 p,float sd){
-  vec2 n=floor(p),f=fract(p); float md=8.0; vec2 id=vec2(0.0);
-  for(int j=-1;j<=1;j++) for(int i=-1;i<=1;i++){
-    vec2 g=vec2(float(i),float(j));
-    vec2 r=g+hash2(n+g+sd)-f;
-    float d=dot(r,r);
-    if(d<md){ md=d; id=n+g; }
-  }
-  return hash2(id*1.37+sd*3.1)*2.0-1.0;
-}
-void main(){
-  vec2 p=vec2(vUv.x*uAspect,vUv.y);
-  vec2 t=facet(p*2.2,0.0)*0.075+facet(p*5.3,5.0)*0.04+facet(p*11.0,9.0)*0.018;
-  t+=vec2(snoise(vec3(p*1.1,2.0)),snoise(vec3(p*1.1,8.0)))*0.03;
-  vec3 n=normalize(vec3(t,1.0));
-  float patchy=smoothstep(-0.35,0.7,snoise(vec3(p*0.45,1.7)));
-  gl_FragColor=vec4(n*0.5+0.5,patchy);
-}`;
-
-/* Paper: shade per frame, light follows the pointer */
-const SHADE_F = `
-varying vec2 vUv;
-uniform sampler2D tN;
-uniform vec2 uLight;
-uniform vec4 uSh;
-uniform float uShA;
-uniform float uAspect;
-float hash(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
-void main(){
-  vec4 t=texture2D(tN,vUv);
-  vec3 n=normalize(t.xyz*2.0-1.0);
-  vec3 L=normalize(vec3(uLight.x*0.9,uLight.y*0.9+0.35,0.9));
-  float s=dot(n,L)-L.z;
-  vec3 white=vec3(0.972,0.969,0.957);
-  vec3 cream=vec3(0.925,0.902,0.861);
-  vec3 col=mix(white,cream,t.w*0.75);
-  col*=1.0+s*0.85;
-  col+=pow(max(s,0.0),1.2)*0.10;
-  vec2 q=vUv-uSh.xy; q.x*=uAspect;
-  float d=length(q/uSh.zw);
-  col*=1.0-uShA*exp(-d*d*1.6);
-  vec2 v=vUv-0.5;
-  col*=1.0-dot(v,v)*0.12;
-  col+=(hash(gl_FragCoord.xy)-0.5)*0.018;
-  gl_FragColor=vec4(col,1.0);
-}`;
-
-const $ = s => document.querySelector(s);
-const stage = $('#stage'), canvas = $('#gl'), mark = $('#mark'), inner = $('#markInner');
-const ghost = $('#oGhost'), bl = $('#bl'), readout = $('#readout'), hint = $('#hint'), tag = $('.tag');
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (matchMedia('(pointer: coarse)').matches) hint.textContent = 'Ziehen zum Drehen · Tippen zum Zerknittern';
-
-const clamp01 = x => Math.min(1, Math.max(0, x));
-const easeOut = x => 1 - Math.pow(1 - x, 3);
-const easeInOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-const easeBack = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
-
-/* Serif capital O as a tube: thick sides, thin top and bottom, slightly tilted stress */
-function buildO(aspect){
-  const segU = 320, segV = 64;
-  const A = aspect / 2, B = 0.5;
-  const rMax = 0.108, rMin = 0.044, stress = -0.22;
-  const rt = th => rMin + (rMax - rMin) * Math.pow(Math.cos(th - stress), 2);
-  const center = th => { const r = rt(th); return [(A - r) * Math.cos(th), (B - r) * Math.sin(th)]; };
-  const pos = new Float32Array(segU * segV * 3), aT = new Float32Array(segU * segV);
-  let k = 0;
-  for (let i = 0; i < segU; i++){
-    const th = i / segU * Math.PI * 2;
-    const c = center(th), c1 = center(th + 1e-3), c0 = center(th - 1e-3);
-    let tx = c1[0] - c0[0], ty = c1[1] - c0[1];
-    const len = Math.hypot(tx, ty); tx /= len; ty /= len;
-    const nx = ty, ny = -tx, r = rt(th);
-    for (let j = 0; j < segV; j++){
-      const ph = j / segV * Math.PI * 2, cp = Math.cos(ph), sp = Math.sin(ph);
-      pos[k * 3] = c[0] + r * cp * nx;
-      pos[k * 3 + 1] = c[1] + r * cp * ny;
-      pos[k * 3 + 2] = r * sp;
-      aT[k] = r / rMax;
-      k++;
-    }
-  }
-  const idx = [];
-  for (let i = 0; i < segU; i++) for (let j = 0; j < segV; j++){
-    const a = i * segV + j, b = ((i + 1) % segU) * segV + j;
-    const c = ((i + 1) % segU) * segV + (j + 1) % segV, d = i * segV + (j + 1) % segV;
-    idx.push(a, b, d, b, c, d);
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('aT', new THREE.BufferAttribute(aT, 1));
-  g.setIndex(idx);
-  g.computeVertexNormals();
-  return g;
-}
-
-/* Studio for the reflections: dark ceiling, bright paper floor, softboxes, one cobalt and one warm strip */
-function makeEnv(renderer){
-  const s = new THREE.Scene();
-  s.add(new THREE.Mesh(new THREE.SphereGeometry(20, 64, 32), new THREE.ShaderMaterial({
-    side: THREE.BackSide, depthWrite: false,
-    vertexShader: `varying vec3 vP; void main(){ vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-    fragmentShader: `varying vec3 vP; void main(){
-      float y=normalize(vP).y;
-      vec3 top=vec3(0.035,0.036,0.045), hor=vec3(0.10,0.10,0.115), flo=vec3(0.62,0.60,0.57);
-      vec3 c=y>0.0?mix(hor,top,pow(y,0.6)):mix(hor,flo,pow(-y,0.5));
-      gl_FragColor=vec4(c,1.0); }`
-  })));
-  const panel = (w, h, col, p) => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(...col), side: THREE.DoubleSide }));
-    m.position.set(...p); m.lookAt(0, 0, 0); s.add(m);
-  };
-  panel(8, 3, [6, 6, 6], [0, 7, 4]);
-  panel(1, 9, [5, 5, 5.2], [-8, 0, 3]);
-  panel(1.2, 7, [0.6, 1.1, 5], [8, 1, -1]);
-  panel(3, 2, [5, 2.4, 1.1], [3, 2, -8]);
-  panel(2.4, 1.2, [1.4, 1.4, 1.4], [0, -2, 9]);
-  const pm = new THREE.PMREMGenerator(renderer);
-  const tex = pm.fromScene(s, 0.02).texture;
-  pm.dispose();
-  return tex;
-}
-
-function fitMark(){
-  mark.style.fontSize = '100px';
-  const w100 = inner.offsetWidth;
-  const fs = Math.min(mark.clientWidth / w100 * 100 * 0.995, innerHeight * 0.3);
-  mark.style.fontSize = fs.toFixed(2) + 'px';
-  return fs;
-}
-
-/* Layout position relative to the stage, independent of running transforms */
-const off = el => { let x = 0, y = 0; for (let n = el; n && n !== stage; n = n.offsetParent){ x += n.offsetLeft; y += n.offsetTop; } return { x, y }; };
-const mctx = document.createElement('canvas').getContext('2d');
-function glyphBox(fs){
-  mctx.font = `500 ${fs}px Newsreader`;
-  const m = mctx.measureText('O');
-  let L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight, A = m.actualBoundingBoxAscent, D = m.actualBoundingBoxDescent;
-  if (!(R > 0 && A > 0)){ L = -0.03 * fs; R = 0.72 * fs; A = 0.7 * fs; D = 0.015 * fs; }
-  const o = off(ghost), base = off(bl).y;
-  return { cx: o.x + (R - L) / 2, cy: base - (A - D) / 2, w: L + R, h: A + D };
-}
-
-async function main(){
-  try { await Promise.race([document.fonts.load('500 100px "Newsreader"'), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
-
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-  } catch (e) {
-    document.documentElement.classList.add('no-gl');
-    readout.textContent = '3D nicht verfügbar';
-    return;
-  }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.autoClear = false;
-
-  const scene = new THREE.Scene();
-  scene.environment = makeEnv(renderer);
-  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-  camera.position.z = 10;
-
-  const quad = new THREE.PlaneGeometry(2, 2), fsCam = new THREE.Camera();
-  const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthBuffer: false });
-  const genMat = new THREE.ShaderMaterial({ uniforms: { uAspect: { value: 1 } }, vertexShader: QUAD_V, fragmentShader: GEN_F, depthTest: false, depthWrite: false });
-  const shadeMat = new THREE.ShaderMaterial({
-    uniforms: { tN: { value: rt.texture }, uLight: { value: new THREE.Vector2() }, uSh: { value: new THREE.Vector4(.5, .5, .2, .1) }, uShA: { value: 0 }, uAspect: { value: 1 } },
-    vertexShader: QUAD_V, fragmentShader: SHADE_F, depthTest: false, depthWrite: false
-  });
-  const genScene = new THREE.Scene(), bgScene = new THREE.Scene();
-  const gq = new THREE.Mesh(quad, genMat), bq = new THREE.Mesh(quad, shadeMat);
-  gq.frustumCulled = bq.frustumCulled = false;
-  genScene.add(gq); bgScene.add(bq);
-
-  const U = { uAmt: { value: reduce ? 1 : 0 }, uSeed: { value: 0 } };
-  const mat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff, metalness: 1, roughness: .1, flatShading: true,
-    iridescence: .5, iridescenceIOR: 1.45, iridescenceThicknessRange: [200, 560], envMapIntensity: 1.1
-  });
-  mat.onBeforeCompile = sh => {
-    sh.uniforms.uAmt = U.uAmt; sh.uniforms.uSeed = U.uSeed;
-    sh.vertexShader = 'uniform float uAmt;\nuniform float uSeed;\nattribute float aT;\n' + NOISE + CRUMPLE + '\n' +
-      sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n  transformed += objectNormal * crumple(position) * mix(0.55, 1.0, aT);');
-  };
-
-  let mesh = null, box = null, baseScale = 1;
-  function layout(){
-    const w = stage.clientWidth, h = stage.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h; camera.updateProjectionMatrix();
-    rt.setSize(w, h);
-    genMat.uniforms.uAspect.value = shadeMat.uniforms.uAspect.value = w / h;
-    renderer.setRenderTarget(rt); renderer.clear(); renderer.render(genScene, fsCam); renderer.setRenderTarget(null);
-    const fs = fitMark();
-    box = glyphBox(fs);
-    if (!mesh){ mesh = new THREE.Mesh(buildO(box.w / box.h), mat); scene.add(mesh); }
-    const wpp = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / h;
-    mesh.position.set((box.cx - w / 2) * wpp, -(box.cy - h / 2) * wpp, 0);
-    baseScale = box.h * wpp;
-  }
-  layout();
-  let pending = false;
-  new ResizeObserver(() => { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; layout(); }); }).observe(stage);
-
-  if (!reduce){
-    inner.animate([{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }], { duration: 900, easing: 'cubic-bezier(.2,.7,.1,1)', fill: 'backwards' });
-    tag.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 900, easing: 'ease-out', fill: 'backwards' });
-  }
-
-  const ptr = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
-  addEventListener('pointermove', e => { ptr.x = e.clientX / innerWidth * 2 - 1; ptr.y = e.clientY / innerHeight * 2 - 1; }, { passive: true });
-  let spin = null, seed = 0;
-  const crumpleAgain = () => { if (!spin) spin = { t: performance.now(), s0: seed }; };
-  stage.addEventListener('click', crumpleAgain);
-  addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); crumpleAgain(); } });
-
-  const deg = r => { let d = THREE.MathUtils.radToDeg(r); d = ((d % 360) + 540) % 360 - 180; return (d < 0 ? '−' : '+') + Math.abs(d).toFixed(1).padStart(5, '0') + '°'; };
-  const T0 = performance.now();
-
-  function frame(now){
-    const t = (now - T0) / 1000;
-    cur.x += (ptr.x - cur.x) * .07; cur.y += (ptr.y - cur.y) * .07;
-
-    let sc = 1, amt = 1, count = 100;
-    if (!reduce){
-      sc = easeBack(clamp01((t - .45) / .6));
-      amt = easeOut(clamp01((t - 1.05) / .9));
-      count = Math.round(100 * easeOut(clamp01(t / 1.9)));
-    }
-    let spinA = 0, bump = 0;
-    if (spin){
-      const k = clamp01((now - spin.t) / 1200), e = easeInOut(k);
-      spinA = reduce ? 0 : e * Math.PI * 2;
-      seed = spin.s0 + e;
-      bump = Math.sin(Math.PI * k) * .8;
-      if (k >= 1) spin = null;
-    }
-    U.uSeed.value = seed;
-    U.uAmt.value = amt * (1 + bump);
-
-    const drift = reduce ? 0 : 1;
-    const ry = cur.x * .6 + Math.sin(t * .4) * .16 * drift + spinA;
-    const rx = cur.y * .42 + Math.cos(t * .31) * .05 * drift;
-    if (mesh){ mesh.rotation.set(rx, ry, 0); mesh.scale.setScalar(baseScale * Math.max(sc, .001)); }
-
-    shadeMat.uniforms.uLight.value.set(cur.x, -cur.y);
-    if (box){
-      const w = stage.clientWidth, h = stage.clientHeight;
-      shadeMat.uniforms.uSh.value.set(
-        (box.cx - cur.x * box.h * .12) / w,
-        1 - (box.cy + box.h * .1 - cur.y * box.h * .06) / h,
-        box.w * .62 / h, box.h * .56 / h);
-      shadeMat.uniforms.uShA.value = .09 * clamp01(sc);
-    }
-
-    readout.textContent = count < 100
-      ? `Laden ${String(count).padStart(3, '0')}`
-      : `X ${deg(rx)}  Y ${deg(ry)}  Knitter ${U.uAmt.value.toFixed(2)}`;
-
-    renderer.setRenderTarget(null);
-    renderer.clear();
-    renderer.render(bgScene, fsCam);
-    renderer.clearDepth();
-    renderer.render(scene, camera);
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-}
-main();
-</script>
+<footer class="footer" aria-label="Fußzeile">
+  <p class="footer__mark" aria-label="guskic studiO"><span class="footer__mark-text" aria-hidden="true">guskic studiO</span></p>
+  <div class="footer__links label">
+    <ul>
+      <li><a class="u-link" href="impressum.html">Impressum</a></li>
+      <li><a class="u-link" href="datenschutz.html">Datenschutz</a></li>
+      <li><a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span>© <span data-year>2026</span> guskic studiO</span>
+  </div>
+</footer>
 </body>
 </html>

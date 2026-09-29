@@ -9,8 +9,8 @@ import { initTransitions } from './transitions.js';
 import { initSound } from './sound.js';
 import { initMagnetic } from './interactions.js';
 import { initHero } from './hero.js';
-import { runLoader } from './loader.js';
-import { loadObjects } from './objects.js';
+import { runLoader, introWillPlay } from './loader.js';
+import { preloadMaterials } from './materials.js';
 import { initManifest } from './sections/manifest.js';
 import { initWorks } from './sections/works.js';
 import { initServices } from './sections/services.js';
@@ -27,7 +27,8 @@ const fonts = Promise.all([
   document.fonts.load('400 11px "Geist Mono"'),
 ]).catch(() => {});
 
-const objects = loadObjects();
+/* Die Material-Os so früh wie möglich laden, aber nur wenn das Intro spielt */
+if (introWillPlay()) preloadMaterials();
 
 initScroll();
 initGrain();
@@ -38,8 +39,8 @@ const cursor = initCursor();
 const hero = initHero();
 
 initManifest();
-initWorks({ cursor, objects });
-initServices({ objects });
+initWorks({ cursor });
+initServices();
 initStudio();
 initContact({ sound });
 initFooter();
@@ -56,7 +57,7 @@ import('./scroll.js').then(({ scrollTo }) => {
   });
 });
 
-runLoader({ hero, objects, fonts }).then(() => {
+runLoader({ hero, fonts }).then(() => {
   ScrollTrigger.refresh();
 });
 window.addEventListener('load', () => ScrollTrigger.refresh());

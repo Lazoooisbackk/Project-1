@@ -49,6 +49,15 @@ export function buildO(aspect) {
   return g;
 }
 
+/* Seitenverhältnis (Breite / Höhe) des Newsreader-O, wie im Hero gemessen */
+export function oAspect() {
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = '500 100px Newsreader';
+  const m = ctx.measureText('O');
+  const L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight, A = m.actualBoundingBoxAscent, D = m.actualBoundingBoxDescent;
+  return R > 0 && A > 0 ? (L + R) / (A + D) : 0.75 / 0.715;
+}
+
 /* Studio für die Spiegelungen: dunkle Decke, heller Papierboden, Softboxen, ein kobaltblauer und ein warmer Streifen */
 export function makeEnv(renderer) {
   const s = new THREE.Scene();

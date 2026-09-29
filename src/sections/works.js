@@ -1,7 +1,8 @@
 import { gsap, ScrollTrigger, Flip } from '../utils/gsap.js';
 import { $, $$, debounce, reducedMotion } from '../utils/dom.js';
+import { createMiniO } from '../miniO.js';
 
-export function initWorks({ cursor, objects } = {}) {
+export function initWorks({ cursor } = {}) {
   const section = $('.works');
   if (!section) return;
   const reduce = reducedMotion();
@@ -65,9 +66,9 @@ export function initWorks({ cursor, objects } = {}) {
     }
   });
 
-  /* Pulsierendes Chrom-O in der CTA-Karte */
-  const pulse = $('.work__pulse', section);
-  if (pulse) Promise.resolve(objects).then((loaded) => { const urls = (loaded && loaded.urls) || []; const i = Number(pulse.dataset.object || 7); if (urls[i]) pulse.src = urls[i]; });
+  /* Pulsierendes Chrom-O in der CTA-Karte; ohne WebGL steht das Newsreader-O */
+  const pulse = $('.work__pulse canvas', section);
+  if (pulse && !createMiniO(pulse, { fill: 0.8, observe: true, spin: 0.4 })) pulse.remove();
 
   if (cursor) cursor.bind(section);
 }

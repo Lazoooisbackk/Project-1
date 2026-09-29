@@ -50,21 +50,21 @@ export function initHero() {
   const video = $('.hero__video');
   if (video && state.ok) {
     video.muted = true; video.loop = true; video.playsInline = true;
-    video.addEventListener('canplay', () => { api.setVideo(video); video.play().catch(() => {}); }, { once: true });
+    video.addEventListener('canplay', () => { api.setVideo(video); if (revealed) video.play().catch(() => {}); }, { once: true });
     video.addEventListener('error', () => { video.remove(); }, { once: true });
     video.src = asset('hero/reveal.mp4');
   }
 
-  /* Render-Loop nur, wenn der Hero sichtbar und der Tab aktiv ist */
+  /* Render-Loop nur, wenn der Hero sichtbar ist, der Tab aktiv ist und der Loader ihn nicht mehr verdeckt */
   let inView = true;
-  const io = new IntersectionObserver(([entry]) => {
-    inView = entry.isIntersecting;
-    if (inView && !document.hidden) api.start(); else api.stop();
-    if (video) { if (inView) video.play().catch(() => {}); else video.pause(); }
-  }, { threshold: 0.01 });
+  const sync = () => {
+    const on = revealed && inView && !document.hidden;
+    if (on) api.start(); else api.stop();
+    if (video) { if (on) video.play().catch(() => {}); else video.pause(); }
+  };
+  const io = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); }, { threshold: 0.01 });
   io.observe(stage);
-  document.addEventListener('visibilitychange', () => { if (document.hidden) api.stop(); else if (inView) api.start(); });
-  api.start();
+  document.addEventListener('visibilitychange', sync);
 
   /* Layout erneut, sobald die Schrift geladen ist (Fit-Text braucht die Metriken) */
   document.fonts.load('500 100px "Newsreader"').then(() => api.layout()).catch(() => {});
@@ -75,6 +75,7 @@ export function initHero() {
     revealed = true;
     emit('loader:hero-reveal-start');
     api.layout();
+    sync();
     if (instant || reduce) {
       gsap.set(split.chars, { yPercent: 0 });
       gsap.set(tagSplit.lines, { yPercent: 0 });
