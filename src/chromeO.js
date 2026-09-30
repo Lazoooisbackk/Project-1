@@ -100,6 +100,11 @@ export function makeFoilMaterial(uniforms, opts = {}) {
   return mat;
 }
 
+/* Tinten-Effekt im Hero (Uniforms, 0..1): Farbton-Stärke der Perlmutt-Interferenz, Lichtstreifen,
+   Glitzer-Dichte (1 = max. ca. 1,6 % der Fläche gleichzeitig), heller Rand und Glow der Tinte.
+   Zur Laufzeit: hero.ink.uSparkle.value = 0.8 */
+export const INK = { irid: 0.4, streak: 0.7, sparkle: 0.5, bloom: 0.8 };
+
 export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hint }) {
   const state = {
     ok: false,
@@ -109,7 +114,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     running: false,  // Render-Loop aktiv
     reduce: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
-  const api = { state, layout: () => {}, crumpleAgain: () => {}, start: () => {}, stop: () => {}, setFluid: () => {}, setVideo: () => {}, renderer: null, dispose: () => {} };
+  const api = { state, layout: () => {}, crumpleAgain: () => {}, start: () => {}, stop: () => {}, setFluid: () => {}, setVideo: () => {}, renderer: null, ink: null, dispose: () => {} };
 
   if (window.matchMedia('(pointer: coarse)').matches) hint.textContent = content.hero.hintTouch;
 
@@ -138,9 +143,12 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     uniforms: {
       uLight: { value: new THREE.Vector2() }, uSh: { value: new THREE.Vector4(0.5, 0.5, 0.2, 0.1) }, uShA: { value: 0 }, uAspect: { value: 1 },
       tMask: { value: null }, uMaskOn: { value: 0 }, tVideo: { value: null }, uVideoOn: { value: 0 }, uVideoFit: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 },
+      uIrid: { value: INK.irid }, uStreak: { value: INK.streak }, uSparkle: { value: INK.sparkle }, uBloom: { value: INK.bloom }, uDpr: { value: 1 },
     },
     vertexShader: QUAD_V, fragmentShader: SHADE_F, depthTest: false, depthWrite: false,
   });
+  const { uIrid, uStreak, uSparkle, uBloom } = shadeMat.uniforms;
+  api.ink = { uIrid, uStreak, uSparkle, uBloom };
   const bgScene = new THREE.Scene();
   const bq = new THREE.Mesh(quad, shadeMat);
   bq.frustumCulled = false;
@@ -195,6 +203,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     shadeMat.uniforms.uAspect.value = w / h;
+    shadeMat.uniforms.uDpr.value = renderer.getPixelRatio();
     const fs = fitMark();
     box = glyphBox(fs);
     if (!mesh) { mesh = new THREE.Mesh(buildO(box.w / box.h), mat); scene.add(mesh); }

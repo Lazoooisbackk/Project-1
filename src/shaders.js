@@ -58,23 +58,10 @@ float crumple(vec3 p){
 
 export const QUAD_V = `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }`;
 
-/* Voronoi-Facetten: gerade Knicke wie bei zerknittertem Papier */
-export const FACET = `
-vec2 hash2(vec2 p){ p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))); return fract(sin(p)*43758.5453); }
-vec2 facet(vec2 p,float sd){
-  vec2 n=floor(p),f=fract(p); float md=8.0; vec2 id=vec2(0.0);
-  for(int j=-1;j<=1;j++) for(int i=-1;i<=1;i++){
-    vec2 g=vec2(float(i),float(j));
-    vec2 r=g+hash2(n+g+sd)-f;
-    float d=dot(r,r);
-    if(d<md){ md=d; id=n+g; }
-  }
-  return hash2(id*1.37+sd*3.1)*2.0-1.0;
-}`;
-
 /* Hero-Fläche über dem Verlaufs-Hintergrund: transparent, nur ein weicher Schatten unter dem O.
-   Die Fluid-Maske (tMask) legt darunter eine dunkle Chromfolie oder ein Video frei.
-   Ausgabe vormultipliziert (Canvas mit alpha). */
+   Die Fluid-Maske (tMask) legt darunter schillerndes Weiß frei (Perlmutt / Seifenhaut) oder ein Video.
+   Reihenfolge beim Heilen der Maske: erst die Fläche, dann der Glow, zuletzt der Glitzer.
+   Ausgabe vormultipliziert (Canvas mit alpha), Farbwerte direkt in sRGB. */
 export const SHADE_F = `
 varying vec2 vUv;
 uniform vec2 uLight;
@@ -87,53 +74,102 @@ uniform sampler2D tVideo;
 uniform float uVideoOn;
 uniform vec2 uVideoFit;
 uniform float uTime;
+uniform float uIrid;
+uniform float uStreak;
+uniform float uSparkle;
+uniform float uBloom;
+uniform float uDpr;
 ${NOISE}
-${FACET}
-vec3 foil(vec2 uv, vec3 L){
-  vec2 p=vec2(uv.x*uAspect,uv.y);
-  vec2 t=facet(p*9.0,1.0)*0.8+facet(p*21.0,4.0)*0.5+facet(p*45.0,8.0)*0.25;
-  t+=vec2(snoise(vec3(p*2.0,uTime*0.05)),snoise(vec3(p*2.0,3.0+uTime*0.05)))*0.12;
-  vec3 n=normalize(vec3(t,0.55));
-  vec3 V=vec3(0.0,0.0,1.0);
-  vec3 H=normalize(L+V);
-  float spec=pow(max(dot(n,H),0.0),18.0);
-  float fres=pow(1.0-max(dot(n,V),0.0),2.5);
-  float f=dot(n,vec3(0.3,0.7,0.0))*3.0+uTime*0.2;
-  vec3 irid=vec3(sin(f),sin(f+2.1),sin(f+4.2))*0.5+0.5;
-  vec3 col=vec3(0.045,0.045,0.05);
-  col+=vec3(0.55,0.56,0.6)*spec;
-  col+=irid*fres*0.28;
-  col+=max(dot(n,L),0.0)*0.06;
-  return col;
+float hash12(vec2 p){ vec3 p3=fract(vec3(p.xyx)*0.1031); p3+=dot(p3,p3.yzx+33.33); return fract((p3.x+p3.y)*p3.z); }
+vec2 hash22(vec2 p){ vec3 p3=fract(vec3(p.xyx)*vec3(0.1031,0.1030,0.0973)); p3+=dot(p3,p3.yzx+33.33); return fract((p3.xx+p3.yz)*p3.zy); }
+
+/* Dünnfilm-Interferenz: reflektierte Farbe eines Films der Dicke d (nm), n = 1.33, bei Blickwinkel cosT */
+vec3 thinFilm(float d, float cosT){
+  float opd=2.0*1.33*d*cosT;
+  return 0.5+0.5*cos(6.2831853*opd/vec3(650.0,532.0,450.0));
 }
+
+/* Perlmutt: Basis #F5F3EE, zarte Dünnfilm-Farben je nach Blickwinkel und Ort,
+   dazu ein gebürsteter Lichtstreifen (Anisotropie), der durch den Zeiger läuft */
+vec3 pearl(vec2 uv, out vec3 film){
+  vec2 p=vec2(uv.x*uAspect,uv.y);
+  float t=uTime*0.06;
+  vec2 g=vec2(snoise(vec3(p*1.6,t)),snoise(vec3(p*1.6+7.3,t)));
+  vec3 n=normalize(vec3(g*0.5,1.0));
+  vec2 lp=0.5+uLight*0.5;
+  vec3 V=normalize(vec3((uv-lp)*vec2(uAspect,1.0)*0.9,1.0));
+  float cosT=clamp(dot(n,V),0.0,1.0);
+  float d=380.0+170.0*snoise(vec3(p*0.9,t*0.7+3.0))+60.0*snoise(vec3(p*3.1,t+9.0));
+  film=thinFilm(d,cosT);
+  vec3 chroma=film-dot(film,vec3(1.0/3.0));
+
+  vec3 col=vec3(0.961,0.953,0.933);
+  col*=0.9+0.1*clamp(dot(n,normalize(vec3(uLight*0.6,1.0))),0.0,1.0);
+
+  vec2 dir=normalize(vec2(0.62,0.78));
+  vec2 q=(uv-lp)*vec2(uAspect,1.0);
+  float across=dot(q,vec2(-dir.y,dir.x)), along=dot(q,dir);
+  float brushed=0.65+0.35*snoise(vec3(along*3.0,across*42.0,t*2.0));
+  float band=exp(-across*across/0.006)*brushed*uStreak;
+
+  col+=chroma*uIrid*(0.3+0.25*band);
+  col+=band*0.12;
+  return clamp(col,0.0,1.0);
+}
+
+/* Glitzer: Raster aus 4-CSS-px-Zellen, ein Teil davon trägt ein Korn (1–2 px), das zufällig
+   für 0,3–0,8 s aufblitzt. Bei uSparkle = 1 leuchten höchstens ca. 1,6 % der Fläche gleichzeitig. */
+float sparkle(vec2 frag){
+  float cell=4.0*uDpr;
+  vec2 id=floor(frag/cell), f=frag/cell-id;
+  float h=hash12(id);
+  if(h>uSparkle*0.9) return 0.0;
+  vec2 h2=hash22(id+17.0);
+  float T=1.8+h2.x*3.2, D=0.3+h2.y*0.5;
+  float lt=mod(uTime+h*97.0,T);
+  if(lt>D) return 0.0;
+  float env=sin(3.14159265*lt/D); env*=env;
+  vec2 c=0.25+0.5*hash22(id+3.1);
+  float r=(0.5+0.5*hash12(id+9.7))*0.25;
+  return env*(1.0-smoothstep(r*0.35,r,length(f-c)));
+}
+
 void main(){
-  vec3 L=normalize(vec3(uLight.x*0.9,uLight.y*0.9+0.35,0.9));
   vec2 q=vUv-uSh.xy; q.x*=uAspect;
   float d=length(q/uSh.zw);
   float shadow=uShA*exp(-d*d*1.6);
 
-  float m=0.0;
+  float a=0.0;
   if(uMaskOn>0.5){
     vec3 dye=texture2D(tMask,vUv).rgb;
-    float a=max(dye.r,max(dye.g,dye.b));
-    m=smoothstep(0.06,0.55,a);
+    a=max(dye.r,max(dye.g,dye.b));
   }
   vec3 col=vec3(0.0);
   float alpha=shadow;
-  if(m>0.001){
+  if(a>0.003){
+    float m=smoothstep(0.06,0.55,a);
+    vec3 film=vec3(0.5);
     vec3 under;
     if(uVideoOn>0.5){
       vec2 vuv=(vUv-0.5)*uVideoFit+0.5;
       under=texture2D(tVideo,vuv).rgb;
     } else {
-      under=foil(vUv,L);
+      under=pearl(vUv,film);
     }
-    col=under*m;
-    alpha=m+shadow*(1.0-m);
-    /* Tintenrand: leicht dunkler Saum an der Kante der Maske */
-    float edge=smoothstep(0.0,0.35,m)*(1.0-smoothstep(0.35,1.0,m))*0.18;
-    col*=1.0-edge;
-    alpha=alpha+edge*(1.0-alpha);
+    /* Bloom: heller Rand an der Kante der Tinte und weicher Glow darüber hinaus */
+    float rim=smoothstep(0.0,0.35,m)*(1.0-smoothstep(0.35,1.0,m));
+    under=min(under+rim*uBloom*0.3,1.0);
+    float glow=smoothstep(0.012,0.3,a)*(1.0-m)*uBloom*0.5;
+    col=vec3(1.0,0.99,0.975)*glow;
+    alpha=glow+shadow*(1.0-glow);
+    col=under*m+col*(1.0-m);
+    alpha=m+alpha*(1.0-m);
+
+    /* Glitzer bleibt am längsten: niedrigste Schwelle der Maske */
+    float sp=sparkle(gl_FragCoord.xy)*smoothstep(0.003,0.08,a);
+    vec3 spc=mix(vec3(1.0),clamp(film*1.3,0.0,1.0),0.35);
+    col=spc*sp+col*(1.0-sp);
+    alpha=sp+alpha*(1.0-sp);
   }
   gl_FragColor=vec4(col,alpha);
 }`;

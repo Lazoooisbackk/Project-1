@@ -44,14 +44,13 @@
 .mark .ch-mask { padding-bottom: .12em; margin-bottom: -.12em; }
 .mark .ch-mask--space { width: .22em; }
 .o-ghost { color: transparent; }
-.no-gl .o-ghost { color: var(--ink); }
+.no-gl .o-ghost { color: var(--paper); }
 .bl { display: inline-block; width: 0; height: 0; }
 
 .hero__tag {
   justify-self: end;
   font: italic 500 clamp(16px, 1.9vw, 26px)/1.3 var(--serif);
   font-optical-sizing: auto;
-  color: var(--muted);
 }
 
 .readout { white-space: pre; font-variant-numeric: tabular-nums; text-align: right; }

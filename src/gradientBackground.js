@@ -1,59 +1,61 @@
 /*
-  Animierter Mesh-Verlauf als Hintergrund für einen beliebigen Container.
+  Animierter Neon-Verlauf als Hintergrund für einen beliebigen Container.
 
     import { init } from './gradientBackground.js';
-    const bg = init(document.querySelector('#kontakt'), { speed: 1 });
+    const bg = init(document.querySelector('.site-bg'), { grain: 0 });
 
-  WebGL: ein Fullscreen-Fragment-Shader. Fünf Farbfelder wandern auf geschlossenen
-  Sinus-Bahnen (eine Runde = loop Sekunden, nahtlos), skalieren und drehen sich leicht
-  und werden über den Abstand mit smoothstep-Falloff in OKLab gemischt. Zum Rand hin
-  übernimmt die Grundfarbe. Dazu ca. 3 % Filmkorn gegen Banding.
-  Ohne WebGL: geschichtete CSS-Radial-Verläufe mit Keyframes, gleiche Farben.
+  WebGL: ein Fullscreen-Fragment-Shader auf Schwarz. Sechs Farbfelder wandern auf geschlossenen
+  Sinus-Bahnen (eine Runde = loop Sekunden, nahtlos), skalieren und drehen sich leicht und
+  leuchten wie Neonlicht: Kern plus weicher Halo (smoothstep-Falloff), additiv gemischt (screen),
+  Intensität pulsiert leicht. Beim Scrollen wandern die Felder mit (eigener Faktor je Feld);
+  wer unten hinausläuft, kommt oben wieder herein. Eine weiche Helligkeitsgrenze (ceiling) hält
+  helle Schrift darüber lesbar. Dither gegen Banding.
+  Ohne WebGL: geschichtete CSS-Radial-Verläufe (screen) mit Keyframes, gleiche Farben.
 
   Farben ändern:
-    - beim Start:    init(el, { colors: [...5 Farben], base: '#F4F6FF' })
-    - zur Laufzeit:  bg.setColors([...], base)   oder   bg.uniforms.uColors.value[0].set('#3F8CFF')
+    - dauerhaft:     DEFAULTS.palette unten (orchid, frozen, zitrus) und DEFAULTS.base
+    - beim Start:    init(el, { palette: { orchid: '#DA70D6' }, base: '#0B0B0C' })
+    - zur Laufzeit:  bg.setColors({ zitrus: '#E4FD97' })   oder   bg.uniforms.uColors.value[i].set('#…')
   Tempo: bg.setSpeed(0.5) bzw. bg.uniforms.uSpeed.value (1 = eine Runde pro loop Sekunden)
+  Leuchtkraft: bg.uniforms.uCeiling / uHaloGain / uHalo, Stärke je Feld: FIELDS[].g
   Anhalten von außen (z. B. wenn der Verlauf ganz verdeckt ist): bg.suspend(true / false)
 */
 import * as THREE from 'three';
 import './styles/gradient.css';
 
-/* Reihenfolge = Reihenfolge von options.colors. x/y: 0..1 im Container (y von oben),
-   r: Radien der Ellipse (relativ zur Wurzel der Fläche), a/f/p: Bahn-Amplitude, -Frequenz, -Phase */
+/* c: Farbe aus der Palette. x/y: 0..1 im Container (y von oben), r: Kernradien der Ellipse
+   (relativ zur Wurzel der Fläche), a/f/p: Bahn-Amplitude, -Frequenz, -Phase,
+   s: Scroll-Faktor (Felder wandern um scrollY × s nach unten), g: Leuchtstärke */
 const FIELDS = [
-  { x: 0.50, y: 0.12, r: [0.88, 0.56], a: [0.10, 0.05], f: [1, 1], p: 0.0 }, // Blau, oben Mitte
-  { x: 0.90, y: 0.10, r: [0.62, 0.50], a: [0.06, 0.05], f: [1, 2], p: 1.7 }, // Himmelblau, oben rechts
-  { x: 0.12, y: 0.88, r: [0.80, 0.60], a: [0.08, 0.06], f: [1, 1], p: 3.1 }, // Rot-Pink, unten links
-  { x: 0.42, y: 0.60, r: [0.66, 0.46], a: [0.10, 0.07], f: [2, 1], p: 4.4 }, // Koralle, Richtung Mitte
-  { x: 0.90, y: 0.74, r: [0.78, 0.58], a: [0.07, 0.08], f: [1, 1], p: 5.6 }, // Violett, rechts / unten rechts
+  { c: 'orchid', x: 0.18, y: 0.20, r: [0.34, 0.28], a: [0.08, 0.05], f: [1, 1], p: 0.0, s: 0.22, g: 1.00 },
+  { c: 'frozen', x: 0.80, y: 0.30, r: [0.37, 0.29], a: [0.07, 0.06], f: [1, 2], p: 1.1, s: 0.31, g: 0.85 },
+  { c: 'zitrus', x: 0.50, y: 0.60, r: [0.25, 0.21], a: [0.10, 0.06], f: [2, 1], p: 2.3, s: 0.17, g: 0.90 },
+  { c: 'orchid', x: 0.86, y: 0.84, r: [0.33, 0.26], a: [0.06, 0.07], f: [1, 1], p: 3.4, s: 0.27, g: 0.95 },
+  { c: 'frozen', x: 0.12, y: 0.76, r: [0.36, 0.28], a: [0.08, 0.06], f: [1, 1], p: 4.6, s: 0.35, g: 0.85 },
+  { c: 'zitrus', x: 0.44, y: 0.04, r: [0.23, 0.18], a: [0.09, 0.05], f: [1, 2], p: 5.5, s: 0.25, g: 0.80 },
 ];
 
 const DEFAULTS = {
-  colors: ['#3F8CFF', '#A9D4FF', '#FF2D55', '#FF5A6E', '#A78BFA'],
-  base: '#F4F6FF',   // Grundfarbe an Rändern und Ecken
+  palette: { orchid: '#DA70D6', frozen: '#A0BDDB', zitrus: '#E4FD97' },
+  base: '#0B0B0C',   // Grundfarbe, die ganze Fläche
   speed: 1,          // Tempo-Faktor
   loop: 14,          // Sekunden pro Runde bei speed 1
+  glow: 1,           // Leuchtstärke aller Felder (1 = Spitze eines Feldes an der Helligkeitsgrenze)
+  halo: 2.4,         // Halo-Radius als Vielfaches des Kernradius
+  haloGain: 0.6,     // Stärke des Halos
+  pulse: 0.10,       // Intensität pulsiert um ±10 % (eine Welle pro Runde)
+  ceiling: 0.16,     // max. relative Leuchtdichte: 0.16 = helle Schrift #F5F3EE überall ≥ 4,5:1
+  scroll: true,      // Felder wandern beim Scrollen mit (für fest stehende Hintergründe)
   grain: 0.03,       // Deckkraft des Korns
-  edge: 0.22,        // Breite der hellen Randzone (0..0.5)
+  dither: 1,         // Dither in 1/255-Stufen gegen Banding (unsichtbar)
   pointer: true,     // Maus zieht das nächste Farbfeld an (nie auf Touch)
   dpr: 1.5,          // Obergrenze Pixel Ratio
 };
 
 const TAU = Math.PI * 2;
 const N = FIELDS.length;
-
-/* Lineares sRGB (THREE.Color) -> OKLab, einmal pro Frame auf der CPU statt pro Pixel */
-function toLab(c, out) {
-  const l = Math.cbrt(0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929 * c.b);
-  const m = Math.cbrt(0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b);
-  const s = Math.cbrt(0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b);
-  return out.set(
-    0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
-    1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
-    0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
-  );
-}
+const SCALE_MAX = 1.08;  // Skalierung der Felder schwankt um ±8 %
+const PULL_MAX = 0.22;   // max. Zug zur Maus (skalierte Einheiten)
 
 const vertexShader = /* glsl */ `
 varying vec2 vUv;
@@ -64,22 +66,14 @@ const fragmentShader = /* glsl */ `
 precision highp float;
 varying vec2 vUv;
 uniform vec2 uRes;
-uniform float uTime, uLoop, uSeed, uGrain, uEdge;
-uniform vec3 uLab[${N}];
-uniform vec3 uBaseLab;
+uniform float uTime, uLoop, uSeed, uGrain, uDither, uHalo, uHaloGain, uCeiling;
+uniform vec3 uColors[${N}];
+uniform vec3 uBase;
 uniform vec2 uCenter[${N}];
 uniform vec4 uShape[${N}];
+uniform float uGain[${N}];
+uniform float uPeriod[${N}];
 
-/* OKLab -> lineares sRGB. Gemischt wird in OKLab: gleichmäßige Übergänge ohne graue oder dunkle Mitte */
-vec3 fromLab(vec3 L) {
-  vec3 lms = mat3(1.0, 1.0, 1.0,
-                  0.3963377774, -0.1055613458, -0.0894841775,
-                  0.2158037573, -0.0638541728, -1.2914855480) * L;
-  lms = lms * lms * lms;
-  return mat3(4.0767416621, -1.2684380046, -0.0041960863,
-              -3.3077115913, 2.6097574011, -0.7034186147,
-              0.2309699292, -0.3413193965, 1.7076147010) * lms;
-}
 vec3 toSRGB(vec3 c) {
   c = clamp(c, 0.0, 1.0);
   return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
@@ -101,34 +95,37 @@ void main() {
   p += 0.075 * vec2(sin(p.y * 2.3 + th + 0.7), sin(p.x * 1.9 - th + 1.9))
      + 0.030 * vec2(sin(p.x * 3.7 + p.y * 1.1 + 2.0 * th), sin(p.y * 3.1 - p.x * 1.4 - 2.0 * th + 4.0));
 
-  /* Farbton: Felder untereinander gewichtet (w²). Deckung: weiche Vereinigung aller Felder (w) */
-  vec3 lab = uBaseLab * 1e-5;
-  float wh = 1e-5, cover = 1.0;
+  /* Neon: Kern + weicher Halo je Feld, additiv wie Licht (screen). Jedes Feld zweimal,
+     im Abstand seiner Scroll-Periode: läuft es unten hinaus, ist es oben schon wieder da. */
+  vec3 dark = vec3(1.0);
   for (int i = 0; i < ${N}; i++) {
-    vec2 d = p - uCenter[i];
     vec4 s = uShape[i];
-    d = vec2(s.z * d.x + s.w * d.y, -s.w * d.x + s.z * d.y) / s.xy;
-    float w = 1.0 - smoothstep(0.0, 1.0, length(d));
-    lab += uLab[i] * w * w;
-    wh += w * w;
-    cover *= 1.0 - w;
+    for (int j = 0; j < 2; j++) {
+      vec2 d = p - uCenter[i] + vec2(0.0, float(j) * uPeriod[i]);
+      d = vec2(s.z * d.x + s.w * d.y, -s.w * d.x + s.z * d.y) / s.xy;
+      float r = length(d);
+      float core = 1.0 - smoothstep(0.0, 1.0, r);
+      float halo = 1.0 - smoothstep(0.0, uHalo, r);
+      float g = (core * core * core + uHaloGain * halo * halo * halo) * uGain[i];
+      dark *= 1.0 - clamp(uColors[i] * g, 0.0, 1.0);
+    }
   }
-  cover = 1.0 - cover;
+  vec3 col = 1.0 - (1.0 - uBase) * dark;
 
-  /* Ränder und Ecken laufen elliptisch in die Grundfarbe aus */
-  float r = length(uv * 2.0 - 1.0);
-  cover *= 1.0 - smoothstep(1.0 - uEdge * 2.0, 1.42, r);
+  /* Helligkeitsgrenze mit weichem Knie: helle Schrift bleibt überall lesbar, keine harte Kante */
+  float L = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  float knee = uCeiling * 0.6, span = uCeiling - knee;
+  if (L > knee) col *= (knee + span * (1.0 - exp(-(L - knee) / span))) / L;
 
-  vec3 col = toSRGB(fromLab(mix(uBaseLab, lab / wh, cover)));
-
+  col = toSRGB(col);
   col = mix(col, vec3(hash(gl_FragCoord.xy + uSeed * 17.31)), uGrain);
+  col += (hash(gl_FragCoord.xy * 1.37 + uSeed * 3.1) - 0.5) * uDither / 255.0;
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
 export function init(container, options = {}) {
-  const o = { ...DEFAULTS, ...options };
-  const colors = FIELDS.map((_, i) => o.colors[i] || DEFAULTS.colors[i]);
+  const o = { ...DEFAULTS, ...options, palette: { ...DEFAULTS.palette, ...options.palette } };
   const mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -148,11 +145,13 @@ export function init(container, options = {}) {
     el.setAttribute('aria-hidden', 'true');
     el.style.setProperty('--gbg-loop', `${o.loop / Math.max(o.speed, 0.01)}s`);
     el.style.setProperty('--gbg-grain', String(o.grain));
-    el.innerHTML = FIELDS.map((f, i) => `<i style="--x:${f.x * 100}%;--y:${f.y * 100}%;--w:${f.r[0] * 150}%;--h:${f.r[1] * 190}%;--o:${Math.round(f.a[0] * 90)}%;--d:${-(f.p / TAU) * o.loop}s;--dir:${i % 2 ? 'reverse' : 'normal'}"></i>`).join('');
+    el.innerHTML = FIELDS.map((f, i) => `<i style="--c:var(--gbg-${f.c});--x:${f.x * 100}%;--y:${f.y * 100}%;--w:${f.r[0] * 2 * 1.6 * 90}%;--h:${f.r[1] * 2 * 1.6 * 110}%;--o:${Math.round(f.a[0] * 90)}%;--g:${(0.4 * f.g).toFixed(2)};--d:${-(f.p / TAU) * o.loop}s;--dir:${i % 2 ? 'reverse' : 'normal'}"></i>`).join('');
     container.prepend(el);
-    const setColors = (list = colors, base = o.base) => {
-      list.forEach((c, i) => { if (c) el.style.setProperty(`--c${i}`, c); });
-      el.style.setProperty('--gbg-base', base);
+    const setColors = (palette = {}, base = null) => {
+      Object.assign(o.palette, palette);
+      Object.entries(o.palette).forEach(([key, c]) => el.style.setProperty(`--gbg-${key}`, c));
+      if (base) o.base = base;
+      el.style.setProperty('--gbg-base', o.base);
     };
     setColors();
     const sync = () => el.classList.toggle('is-paused', !inView || document.hidden || held);
@@ -197,13 +196,16 @@ export function init(container, options = {}) {
     uSpeed: { value: o.speed },
     uSeed: { value: 0 },
     uGrain: { value: o.grain },
-    uEdge: { value: o.edge },
-    uColors: { value: colors.map((c) => new THREE.Color(c)) },
+    uDither: { value: o.dither },
+    uHalo: { value: o.halo },
+    uHaloGain: { value: o.haloGain },
+    uCeiling: { value: o.ceiling },
+    uColors: { value: FIELDS.map((f) => new THREE.Color(o.palette[f.c])) },
     uBase: { value: new THREE.Color(o.base) },
-    uLab: { value: FIELDS.map(() => new THREE.Vector3()) },
-    uBaseLab: { value: new THREE.Vector3() },
     uCenter: { value: FIELDS.map(() => new THREE.Vector2()) },
     uShape: { value: FIELDS.map(() => new THREE.Vector4(1, 1, 1, 0)) },
+    uGain: { value: FIELDS.map(() => 1) },
+    uPeriod: { value: FIELDS.map(() => 1) },
   };
   const geo = new THREE.PlaneGeometry(2, 2);
   const mat = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, depthTest: false, depthWrite: false });
@@ -211,23 +213,39 @@ export function init(container, options = {}) {
   quad.frustumCulled = false;
   const cam = new THREE.Camera();
 
-  /* Bahnen (CPU): Mittelpunkt, Skalierung, Drehung je Feld; alle mit ganzzahligen Frequenzen -> nahtlose Runde */
+  const reduced = () => mqReduce.matches;
+
+  /* Bahnen (CPU): Mittelpunkt, Skalierung, Drehung, Puls je Feld; alle mit ganzzahligen Frequenzen -> nahtlose Runde.
+     Scrollen schiebt jedes Feld nach unten; y wird in [oben, unten + Ausdehnung) umgebrochen. Die Periode
+     (Höhe + Ausdehnung inkl. Halo und Mauszug) ist konstant, der Shader zeichnet die zweite Kopie eine Periode höher. */
   const pull = FIELDS.map(() => ({ x: 0, y: 0 }));
   const base = FIELDS.map(() => ({ x: 0, y: 0 }));
-  let kx = 1, ky = 1, rsx = 1, rsy = 1;
+  let kx = 1, ky = 1, rsx = 1, rsy = 1, hostH = 1;
   function layoutFields() {
-    const th = TAU * (uniforms.uTime.value / uniforms.uLoop.value);
+    const u = uniforms;
+    const th = TAU * (u.uTime.value / u.uLoop.value);
+    const sy = o.scroll && !reduced() ? window.scrollY : 0;
     FIELDS.forEach((f, i) => {
-      base[i].x = (f.x - 0.5) * kx + f.a[0] * rsx * Math.sin(f.f[0] * th + f.p);
-      base[i].y = (f.y - 0.5) * ky + f.a[1] * rsy * Math.cos(f.f[1] * th + f.p * 1.3);
-      const s = 1 + 0.08 * Math.sin(th + f.p * 0.7);
+      const s = 1 + (SCALE_MAX - 1) * Math.sin(th + f.p * 0.7);
+      const rx = f.r[0] * s * rsx, ry = f.r[1] * s * rsy;
+      const ext = Math.max(f.r[0] * rsx, f.r[1] * rsy) * SCALE_MAX * u.uHalo.value + PULL_MAX;
+      const P = ky + ext;
+      const x = (f.x - 0.5) * kx + f.a[0] * rsx * Math.sin(f.f[0] * th + f.p);
+      let y = (f.y - 0.5) * ky + f.a[1] * rsy * Math.cos(f.f[1] * th + f.p * 1.3) + (sy * f.s / hostH) * ky;
+      y = ((((y + ky / 2) % P) + P) % P) - ky / 2;
+      base[i].x = x; base[i].y = y;
       const rot = 0.35 * Math.sin(th + f.p * 1.1) + f.p;
-      uniforms.uCenter.value[i].set(base[i].x + pull[i].x, base[i].y + pull[i].y);
-      uniforms.uShape.value[i].set(f.r[0] * s * rsx, f.r[1] * s * rsy, Math.cos(rot), Math.sin(rot));
+      u.uCenter.value[i].set(x + pull[i].x, y + pull[i].y);
+      u.uShape.value[i].set(rx, ry, Math.cos(rot), Math.sin(rot));
+      u.uPeriod.value[i] = P;
+      /* Spitze jedes Feldes ≈ ceiling, egal wie hell die Farbe ist: weiches Profil statt gekappter Scheibe */
+      const c = u.uColors.value[i], lum = Math.max(0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b, 1e-3);
+      const norm = u.uCeiling.value / (lum * (1 + u.uHaloGain.value));
+      u.uGain.value[i] = f.g * o.glow * norm * (1 + o.pulse * Math.sin(th + f.p * 1.9));
     });
   }
 
-  /* Maus: das nächste Feld wird sanft angezogen (lerp ~0.05 pro Frame bei 60 fps) */
+  /* Maus: das nächste Feld (bzw. seine sichtbare Kopie) wird sanft angezogen (lerp ~0.05 pro Frame bei 60 fps) */
   const ptr = { x: 0, y: 0, active: false };
   let nearest = -1;
   if (o.pointer && finePointer) {
@@ -244,13 +262,19 @@ export function init(container, options = {}) {
       const inside = ptr.x >= r.left && ptr.x <= r.right && ptr.y >= r.top && ptr.y <= r.bottom;
       if (inside) {
         const px = ((ptr.x - r.left) / r.width - 0.5) * kx, py = ((ptr.y - r.top) / r.height - 0.5) * ky;
+        /* Abstand zur näheren der beiden Kopien, dy relativ zu dieser Kopie */
+        const near = (i) => {
+          const b = base[i], P = uniforms.uPeriod.value[i];
+          const d0 = Math.hypot(px - b.x, py - b.y), d1 = Math.hypot(px - b.x, py - (b.y - P));
+          return d0 <= d1 ? { d: d0, dy: py - b.y } : { d: d1, dy: py - (b.y - P) };
+        };
         let best = -1, bd = Infinity;
-        base.forEach((b, i) => { const d = Math.hypot(px - b.x, py - b.y); if (d < bd) { bd = d; best = i; } });
+        FIELDS.forEach((_, i) => { const n = near(i).d; if (n < bd) { bd = n; best = i; } });
         /* kleine Hysterese, damit das Feld nicht zwischen zwei gleich nahen hin- und herspringt */
-        if (nearest < 0 || best === nearest || bd < 0.9 * Math.hypot(px - base[nearest].x, py - base[nearest].y)) nearest = best;
-        tx = (px - base[nearest].x) * 0.35; ty = (py - base[nearest].y) * 0.35;
-        const len = Math.hypot(tx, ty), max = 0.22;
-        if (len > max) { tx *= max / len; ty *= max / len; }
+        if (nearest < 0 || best === nearest || bd < 0.9 * near(nearest).d) nearest = best;
+        tx = (px - base[nearest].x) * 0.35; ty = near(nearest).dy * 0.35;
+        const len = Math.hypot(tx, ty);
+        if (len > PULL_MAX) { tx *= PULL_MAX / len; ty *= PULL_MAX / len; }
       } else nearest = -1;
     } else nearest = -1;
     const a = 1 - Math.pow(1 - 0.05, dt * 60);
@@ -265,22 +289,20 @@ export function init(container, options = {}) {
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     renderer.getDrawingBufferSize(uniforms.uRes.value);
+    hostH = h;
     const asp = w / h;
     kx = Math.sqrt(asp); ky = 1 / Math.sqrt(asp);
-    /* Hochformat: Felder und Bahnen schmaler, sonst überdecken Rot-Pink und Koralle das Violett */
+    /* Hochformat: Felder und Bahnen schmaler, sonst überdecken sie sich zu stark */
     rsx = Math.min(1, Math.sqrt(asp));
     rsy = Math.min(1, Math.pow(asp, 0.2));
   }
 
   function render() {
-    uniforms.uColors.value.forEach((c, i) => toLab(c, uniforms.uLab.value[i]));
-    toLab(uniforms.uBase.value, uniforms.uBaseLab.value);
     layoutFields();
     renderer.render(quad, cam);
   }
 
   let raf = 0, last = 0, running = false;
-  const reduced = () => mqReduce.matches;
   function frame(now) {
     if (!running) return;
     const dt = Math.min(Math.max((now - last) / 1000, 0), 0.1);
@@ -303,7 +325,7 @@ export function init(container, options = {}) {
     if (inView && !document.hidden && !held) start(); else stop();
   };
 
-  /* Reduzierte Bewegung: ein statisches Bild */
+  /* Reduzierte Bewegung: ein statisches Bild, ohne Scroll-Wandern */
   const STATIC_TIME = o.loop * 0.1;
   const onReduce = () => { if (reduced()) { uniforms.uTime.value = STATIC_TIME; pull.forEach((pl) => { pl.x = 0; pl.y = 0; }); } sync(); };
   if (reduced()) uniforms.uTime.value = STATIC_TIME;
@@ -338,8 +360,9 @@ export function init(container, options = {}) {
 
   api = {
     mode: 'webgl', canvas, element: canvas, uniforms,
-    setColors(list = colors, baseColor) {
-      list.forEach((c, i) => { if (c && uniforms.uColors.value[i]) uniforms.uColors.value[i].set(c); });
+    setColors(palette = {}, baseColor = null) {
+      Object.assign(o.palette, palette);
+      FIELDS.forEach((f, i) => uniforms.uColors.value[i].set(o.palette[f.c]));
       if (baseColor) uniforms.uBase.value.set(baseColor);
       if (!running) render();
     },

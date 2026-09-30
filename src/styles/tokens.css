@@ -1,12 +1,12 @@
 :root {
-  --paper: #F5F3EE;          /* helle Schrift und Flächen auf Schwarz */
-  --bg: #F4F6FF;             /* Grundfarbe des Verlaufs-Hintergrunds */
-  --ink: #0B0B0C;
-  --muted: var(--ink);       /* auf dem Verlauf ist alle Schrift dunkel */
+  --paper: #F5F3EE;          /* helle Schrift */
+  --bg: #0B0B0C;             /* Grundfarbe des Neon-Verlaufs */
+  --ink: #0B0B0C;            /* dunkle Schrift auf hellen Flächen (Buttons, Cursor) */
+  --muted: #8A867E;          /* gedämpfte Labels */
   --black: #0B0B0C;
   --white: #FFFFFF;
   --orchid: #DA70D6;
-  --line: rgba(19, 19, 19, 0.14);
+  --line: rgba(245, 243, 238, 0.18);
   --line-light: rgba(245, 243, 238, 0.18);
 
   --serif: "Newsreader", "Iowan Old Style", "Times New Roman", serif;
@@ -24,5 +24,5 @@
   --z-curtain: 990;
   --z-loader: 1000;
 
-  color-scheme: light;
+  color-scheme: dark;
 }
