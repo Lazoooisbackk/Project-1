@@ -74,21 +74,23 @@ export async function runLoader({ hero, fonts }) {
     .to(o, { scale: 1, duration: 1, ease: 'power4.inOut' }, 0);
   if (hasContent) tl.to(win, { width: gapW, duration: 1.2, ease: 'power4.inOut' }, 1);
 
-  /* 4: Karussell. Wolke → Moos → Pixel → Puffy, zweimal, dann das echte Chrom-O */
+  /* 4: Karussell. Wolke → Moos → Pixel → Puffy, zweimal, dann das echte Chrom-O.
+     Tempo: erstes O steht FIRST_HOLD s, danach wechselt alle SWAP s ein neues. */
+  const FIRST_HOLD = 0.35, SWAP = 0.15, SWAP_IN = 0.2;
   const C0 = 1 + 0.5;
   let current = null;
   const swapTo = (next, first) => {
     if (current && current !== next) { gsap.killTweensOf(current); gsap.set(current, { opacity: 0 }); }
     gsap.killTweensOf(next);
     if (first) gsap.fromTo(next, { scale: 0, rotation: 0, opacity: 1 }, { scale: 1, rotation: 8, duration: 0.8, ease: 'back.out(0.9)' });
-    else gsap.fromTo(next, { scale: 0.85, opacity: 0, rotation: rand(-8, 8) }, { scale: 1, opacity: 1, duration: 0.32, ease: 'back.out(1.2)' });
+    else gsap.fromTo(next, { scale: 0.85, opacity: 0, rotation: rand(-8, 8) }, { scale: 1, opacity: 1, duration: SWAP_IN, ease: 'back.out(1.2)' });
     current = next;
   };
 
   let t = C0;
   [...items, ...items].forEach((item, i) => {
     tl.call(() => swapTo(item, i === 0), null, t);
-    t += i === 0 ? 0.5 : 0.24;
+    t += i === 0 ? FIRST_HOLD : SWAP;
   });
 
   if (chrome) {
@@ -101,7 +103,7 @@ export async function runLoader({ hero, fonts }) {
       .fromTo(chrome.state, { crumple: 0 }, { crumple: 1, duration: 0.9, ease: 'power2.inOut' }, t);
   }
 
-  const carouselEnd = Math.max(t + 0.45, C0 + 2.6);
+  const carouselEnd = t + 0.45;
   const count = { v: 100 };
   tl.to(count, {
     v: 0, duration: carouselEnd - C0, ease: 'power2.inOut',
