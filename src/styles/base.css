@@ -14,9 +14,10 @@ html.lenis, html.lenis body { height: auto; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
+  font-weight: 500;
   font-size: 17px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -121,6 +122,9 @@ a { color: inherit; text-decoration: none; }
 .line { display: block; }
 .ch-mask--space { width: .25em; }
 .w-block { display: inline-block; white-space: nowrap; }
+
+/* Verlaufs-Hintergrund hinter der ganzen Seite (src/siteBackground.js) */
+.site-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 
 /* Grain */
 .grain {

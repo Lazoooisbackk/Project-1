@@ -9,6 +9,7 @@ import { initTransitions } from './transitions.js';
 import { initSound } from './sound.js';
 import { initMagnetic } from './interactions.js';
 import { initHero } from './hero.js';
+import { initSiteBackground } from './siteBackground.js';
 import { runLoader, introWillPlay } from './loader.js';
 import { preloadMaterials } from './materials.js';
 import { initManifest } from './sections/manifest.js';
@@ -37,6 +38,8 @@ const sound = initSound();
 initNav({ sound });
 const cursor = initCursor();
 const hero = initHero();
+/* nach dem Hero, damit ein fehlendes WebGL (.no-gl) schon erkannt ist; läuft erst, wenn das Intro den Hero freigibt */
+initSiteBackground({ waitFor: 'loader:hero-reveal-start' });
 
 initManifest();
 initWorks({ cursor });

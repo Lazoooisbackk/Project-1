@@ -23,7 +23,7 @@ export function initHero() {
   const api = createStage({ canvas, stage, mark, inner, ghost, bl, readout, hint });
   const state = api.state;
 
-  /* Fluid-Maske: Tinte legt die Schicht unter dem Papier frei */
+  /* Fluid-Maske: Tinte legt unter dem Verlauf eine dunkle Fläche frei */
   let fluid = null;
   if (state.ok && !reduce) {
     fluid = createFluid(api.renderer, { dyeRes: isMobile() ? 512 : 1024, splatRadius: 0.0014, splatForce: 6000 });
@@ -46,7 +46,7 @@ export function initHero() {
     }, { passive: true });
   }
 
-  /* Optionales Video unter dem Papier: /public/hero/reveal.mp4 */
+  /* Optionales Video statt der dunklen Fläche: /public/hero/reveal.mp4 */
   const video = $('.hero__video');
   if (video && state.ok) {
     video.muted = true; video.loop = true; video.playsInline = true;

@@ -49,7 +49,7 @@
 
 .hero__tag {
   justify-self: end;
-  font: italic 400 clamp(16px, 1.9vw, 26px)/1.3 var(--serif);
+  font: italic 500 clamp(16px, 1.9vw, 26px)/1.3 var(--serif);
   font-optical-sizing: auto;
   color: var(--muted);
 }

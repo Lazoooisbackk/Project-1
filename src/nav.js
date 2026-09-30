@@ -1,4 +1,4 @@
-import { gsap } from './utils/gsap.js';
+import { gsap, ScrollTrigger } from './utils/gsap.js';
 import { $, $$ } from './utils/dom.js';
 import { lockScroll, unlockScroll, scrollTo } from './scroll.js';
 import { content } from './content.js';
@@ -14,6 +14,17 @@ export function initNav({ sound } = {}) {
 
   let open = false;
   const label = $('.menu-btn__label', btn);
+  const root = document.documentElement;
+
+  /* Farbe der Navigation: hell, solange ein schwarzer Abschnitt unter ihrer Mitte (--nav-h / 2) liegt */
+  const nav = $('.nav'), onDark = new Set();
+  $$('main section.on-dark').forEach((s) => ScrollTrigger.create({
+    trigger: s, start: 'top 32px', end: 'bottom 32px',
+    onToggle: (self) => {
+      if (self.isActive) onDark.add(s); else onDark.delete(s);
+      nav.classList.toggle('is-on-dark', onDark.size > 0);
+    },
+  }));
 
   function toggle(force) {
     open = typeof force === 'boolean' ? force : !open;
@@ -23,12 +34,14 @@ export function initNav({ sound } = {}) {
     const tl = gsap.timeline({ defaults: { ease: 'studio', duration: 0.5 } });
     if (open) {
       lockScroll();
+      root.classList.add('is-menu-open');
       tl.to(dots, { x: 0, y: 0, width: 22, height: 2, rotation: (i) => (i === 0 || i === 3 ? 45 : -45) }, 0)
         .to(menu, { autoAlpha: 1, duration: 0.5 }, 0)
         .fromTo(links, { yPercent: 110 }, { yPercent: 0, duration: 1, ease: 'power4.out', stagger: 0.06 }, 0.15);
     } else {
       tl.to(links, { yPercent: -110, duration: 0.5, ease: 'power3.in', stagger: 0.03 }, 0)
         .to(menu, { autoAlpha: 0, duration: 0.5 }, 0.2)
+        .add(() => { if (!open) root.classList.remove('is-menu-open'); }, 0.4)
         .to(dots, { x: (i) => grid[i][0], y: (i) => grid[i][1], width: 5, height: 5, rotation: 0 }, 0)
         .add(() => { unlockScroll(); gsap.set(links, { yPercent: 110 }); });
     }

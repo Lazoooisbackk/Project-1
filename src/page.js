@@ -6,9 +6,11 @@ import { initNav } from './nav.js';
 import { initTransitions } from './transitions.js';
 import { initSound } from './sound.js';
 import { initMagnetic } from './interactions.js';
+import { initSiteBackground } from './siteBackground.js';
 
 document.documentElement.classList.add('js');
 initScroll();
+initSiteBackground();
 initGrain();
 initTransitions();
 const sound = initSound();

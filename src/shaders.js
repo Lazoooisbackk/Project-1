@@ -1,4 +1,4 @@
-/* Gemeinsame GLSL-Bausteine: Simplex-Noise, Knitter-Verschiebung, Papier. */
+/* Gemeinsame GLSL-Bausteine: Simplex-Noise, Knitter-Verschiebung, Hero-Fläche. */
 
 /* Simplex noise 3D (Ashima Arts / Stefan Gustavson, MIT) */
 export const NOISE = `
@@ -72,26 +72,11 @@ vec2 facet(vec2 p,float sd){
   return hash2(id*1.37+sd*3.1)*2.0-1.0;
 }`;
 
-/* Papier: Normalen einmal pro Resize backen */
-export const GEN_F = `
-varying vec2 vUv;
-uniform float uAspect;
-${NOISE}
-${FACET}
-void main(){
-  vec2 p=vec2(vUv.x*uAspect,vUv.y);
-  vec2 t=facet(p*2.2,0.0)*0.075+facet(p*5.3,5.0)*0.04+facet(p*11.0,9.0)*0.018;
-  t+=vec2(snoise(vec3(p*1.1,2.0)),snoise(vec3(p*1.1,8.0)))*0.03;
-  vec3 n=normalize(vec3(t,1.0));
-  float patchy=smoothstep(-0.35,0.7,snoise(vec3(p*0.45,1.7)));
-  gl_FragColor=vec4(n*0.5+0.5,patchy);
-}`;
-
-/* Papier pro Frame schattieren; Licht folgt dem Zeiger.
-   Zusätzlich: Fluid-Maske (tMask) legt darunter eine dunkle Chromfolie oder ein Video frei. */
+/* Hero-Fläche über dem Verlaufs-Hintergrund: transparent, nur ein weicher Schatten unter dem O.
+   Die Fluid-Maske (tMask) legt darunter eine dunkle Chromfolie oder ein Video frei.
+   Ausgabe vormultipliziert (Canvas mit alpha). */
 export const SHADE_F = `
 varying vec2 vUv;
-uniform sampler2D tN;
 uniform vec2 uLight;
 uniform vec4 uSh;
 uniform float uShA;
@@ -104,7 +89,6 @@ uniform vec2 uVideoFit;
 uniform float uTime;
 ${NOISE}
 ${FACET}
-float hash(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
 vec3 foil(vec2 uv, vec3 L){
   vec2 p=vec2(uv.x*uAspect,uv.y);
   vec2 t=facet(p*9.0,1.0)*0.8+facet(p*21.0,4.0)*0.5+facet(p*45.0,8.0)*0.25;
@@ -123,21 +107,10 @@ vec3 foil(vec2 uv, vec3 L){
   return col;
 }
 void main(){
-  vec4 t=texture2D(tN,vUv);
-  vec3 n=normalize(t.xyz*2.0-1.0);
   vec3 L=normalize(vec3(uLight.x*0.9,uLight.y*0.9+0.35,0.9));
-  float s=dot(n,L)-L.z;
-  vec3 white=vec3(0.972,0.969,0.957);
-  vec3 cream=vec3(0.925,0.902,0.861);
-  vec3 col=mix(white,cream,t.w*0.75);
-  col*=1.0+s*0.85;
-  col+=pow(max(s,0.0),1.2)*0.10;
   vec2 q=vUv-uSh.xy; q.x*=uAspect;
   float d=length(q/uSh.zw);
-  col*=1.0-uShA*exp(-d*d*1.6);
-  vec2 v=vUv-0.5;
-  col*=1.0-dot(v,v)*0.12;
-  col+=(hash(gl_FragCoord.xy)-0.5)*0.018;
+  float shadow=uShA*exp(-d*d*1.6);
 
   float m=0.0;
   if(uMaskOn>0.5){
@@ -145,6 +118,8 @@ void main(){
     float a=max(dye.r,max(dye.g,dye.b));
     m=smoothstep(0.06,0.55,a);
   }
+  vec3 col=vec3(0.0);
+  float alpha=shadow;
   if(m>0.001){
     vec3 under;
     if(uVideoOn>0.5){
@@ -153,10 +128,12 @@ void main(){
     } else {
       under=foil(vUv,L);
     }
+    col=under*m;
+    alpha=m+shadow*(1.0-m);
     /* Tintenrand: leicht dunkler Saum an der Kante der Maske */
-    float edge=smoothstep(0.0,0.35,m)*(1.0-smoothstep(0.35,1.0,m));
-    col=mix(col,under,m);
-    col*=1.0-edge*0.18;
+    float edge=smoothstep(0.0,0.35,m)*(1.0-smoothstep(0.35,1.0,m))*0.18;
+    col*=1.0-edge;
+    alpha=alpha+edge*(1.0-alpha);
   }
-  gl_FragColor=vec4(col,1.0);
+  gl_FragColor=vec4(col,alpha);
 }`;

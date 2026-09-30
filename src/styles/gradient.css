@@ -39,7 +39,7 @@
 }
 .gbg--css::before { background: radial-gradient(ellipse farthest-corner, transparent 42%, var(--gbg-base, #F4F6FF) 100%); }
 .gbg--css::after {
-  opacity: .03;
+  opacity: var(--gbg-grain, .03);
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .gbg--css.is-paused i { animation-play-state: paused; }

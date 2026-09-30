@@ -27,7 +27,11 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
 
 ## Design
 
-- Papier `#F5F3EE` · Tinte `#131313` · Grau `#5F5B54` · Loader-Schwarz `#0B0B0C` · Weiß `#FFFFFF`
+- Hintergrund: animierter Verlauf hinter der ganzen Seite (Blau `#3F8CFF`, Himmelblau `#A9D4FF`,
+  Rot-Pink `#FF2D55`, Koralle `#FF5A6E`, Violett `#A78BFA`, Grundfarbe `#F4F6FF`).
+  „Arbeiten“ und „Leistungen“ bleiben Schwarz `#0B0B0C`.
+- Schrift auf dem Verlauf: `#0B0B0C`, Gewicht 500 · helle Schrift auf Schwarz `#F5F3EE`
+- Farben des Verlaufs ändern: `DEFAULTS` oben in `src/gradientBackground.js`
 - Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
 - Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):
   Newsreader (Wortmarke, Display), Geist (Text), Geist Mono (Labels, Zähler)
@@ -68,7 +72,9 @@ src/main.js, src/page.js  Einstieg Startseite / Unterseiten
 src/loader.js             Intro „Ein O, viele Materialien“ (einmal pro Session)
 src/materials.js          Laden der vier Material-Os (WebP + PNG-Fallback)
 src/hero.js               Hero: Wortmarke, Chrom-O, Tinten-Reveal, Übergabe vom Loader
-src/chromeO.js            Chrom-O und Papier (aus dem Logo)
+src/chromeO.js            Chrom-O und transparente Hero-Fläche (aus dem Logo)
+src/gradientBackground.js Verlaufs-Hintergrund (WebGL, CSS-Fallback), wiederverwendbar
+src/siteBackground.js     Verlauf fest hinter der ganzen Seite
 src/miniO.js              Kleines Chrom-O für Loader, Leistungen, Projektkarte
 src/fluidReveal.js        Fluid-Simulation (Stable Fluids) als Maske
 src/sections/*.js         Manifest, Arbeiten, Leistungen, Studio, Kontakt, Footer

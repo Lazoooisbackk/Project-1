@@ -1,10 +1,10 @@
 /*
-  Das Chrom-O und der Papier-Hintergrund. Portiert aus der ursprünglichen
+  Das Chrom-O und die transparente Hero-Fläche über dem Verlauf. Portiert aus der ursprünglichen
   Logo-Seite (index.html). Intro-Zustände (Skalierung, Knitter) werden von
   außen (Loader/Hero) über `state` gesteuert.
 */
 import * as THREE from 'three';
-import { NOISE, CRUMPLE, QUAD_V, GEN_F, SHADE_F } from './shaders.js';
+import { NOISE, CRUMPLE, QUAD_V, SHADE_F } from './shaders.js';
 import { content } from './content.js';
 import { pad3 } from './utils/dom.js';
 
@@ -115,7 +115,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   } catch (e) {
     document.documentElement.classList.add('no-gl');
     readout.textContent = content.hero.noGl;
@@ -124,6 +124,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
   state.ok = true;
   api.renderer = renderer;
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.autoClear = false;
 
@@ -133,19 +134,17 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
   camera.position.z = 10;
 
   const quad = new THREE.PlaneGeometry(2, 2), fsCam = new THREE.Camera();
-  const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthBuffer: false });
-  const genMat = new THREE.ShaderMaterial({ uniforms: { uAspect: { value: 1 } }, vertexShader: QUAD_V, fragmentShader: GEN_F, depthTest: false, depthWrite: false });
   const shadeMat = new THREE.ShaderMaterial({
     uniforms: {
-      tN: { value: rt.texture }, uLight: { value: new THREE.Vector2() }, uSh: { value: new THREE.Vector4(0.5, 0.5, 0.2, 0.1) }, uShA: { value: 0 }, uAspect: { value: 1 },
+      uLight: { value: new THREE.Vector2() }, uSh: { value: new THREE.Vector4(0.5, 0.5, 0.2, 0.1) }, uShA: { value: 0 }, uAspect: { value: 1 },
       tMask: { value: null }, uMaskOn: { value: 0 }, tVideo: { value: null }, uVideoOn: { value: 0 }, uVideoFit: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 },
     },
     vertexShader: QUAD_V, fragmentShader: SHADE_F, depthTest: false, depthWrite: false,
   });
-  const genScene = new THREE.Scene(), bgScene = new THREE.Scene();
-  const gq = new THREE.Mesh(quad, genMat), bq = new THREE.Mesh(quad, shadeMat);
-  gq.frustumCulled = bq.frustumCulled = false;
-  genScene.add(gq); bgScene.add(bq);
+  const bgScene = new THREE.Scene();
+  const bq = new THREE.Mesh(quad, shadeMat);
+  bq.frustumCulled = false;
+  bgScene.add(bq);
 
   const U = { uAmt: { value: 0 }, uSeed: { value: 0 } };
   const mat = makeFoilMaterial(U);
@@ -195,9 +194,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    rt.setSize(w, h);
-    genMat.uniforms.uAspect.value = shadeMat.uniforms.uAspect.value = w / h;
-    renderer.setRenderTarget(rt); renderer.clear(); renderer.render(genScene, fsCam); renderer.setRenderTarget(null);
+    shadeMat.uniforms.uAspect.value = w / h;
     const fs = fitMark();
     box = glyphBox(fs);
     if (!mesh) { mesh = new THREE.Mesh(buildO(box.w / box.h), mat); scene.add(mesh); }

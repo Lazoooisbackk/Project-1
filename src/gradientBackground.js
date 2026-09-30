@@ -14,6 +14,7 @@
     - beim Start:    init(el, { colors: [...5 Farben], base: '#F4F6FF' })
     - zur Laufzeit:  bg.setColors([...], base)   oder   bg.uniforms.uColors.value[0].set('#3F8CFF')
   Tempo: bg.setSpeed(0.5) bzw. bg.uniforms.uSpeed.value (1 = eine Runde pro loop Sekunden)
+  Anhalten von außen (z. B. wenn der Verlauf ganz verdeckt ist): bg.suspend(true / false)
 */
 import * as THREE from 'three';
 import './styles/gradient.css';
@@ -42,6 +43,18 @@ const DEFAULTS = {
 const TAU = Math.PI * 2;
 const N = FIELDS.length;
 
+/* Lineares sRGB (THREE.Color) -> OKLab, einmal pro Frame auf der CPU statt pro Pixel */
+function toLab(c, out) {
+  const l = Math.cbrt(0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929 * c.b);
+  const m = Math.cbrt(0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b);
+  const s = Math.cbrt(0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b);
+  return out.set(
+    0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
+  );
+}
+
 const vertexShader = /* glsl */ `
 varying vec2 vUv;
 void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
@@ -52,21 +65,12 @@ precision highp float;
 varying vec2 vUv;
 uniform vec2 uRes;
 uniform float uTime, uLoop, uSeed, uGrain, uEdge;
-uniform vec3 uColors[${N}];
-uniform vec3 uBase;
+uniform vec3 uLab[${N}];
+uniform vec3 uBaseLab;
 uniform vec2 uCenter[${N}];
 uniform vec4 uShape[${N}];
 
-/* Lineares sRGB <-> OKLab: gleichmäßige Übergänge ohne graue oder dunkle Mitte */
-vec3 toLab(vec3 c) {
-  vec3 lms = mat3(0.4122214708, 0.2119034982, 0.0883024619,
-                  0.5363325363, 0.6806995451, 0.2817188376,
-                  0.0514459929, 0.1073969566, 0.6299787005) * c;
-  lms = pow(max(lms, 0.0), vec3(1.0 / 3.0));
-  return mat3(0.2104542553, 1.9779984951, 0.0259040371,
-              0.7936177850, -2.4285922050, 0.7827717662,
-              -0.0040720468, 0.4505937099, -0.8086757660) * lms;
-}
+/* OKLab -> lineares sRGB. Gemischt wird in OKLab: gleichmäßige Übergänge ohne graue oder dunkle Mitte */
 vec3 fromLab(vec3 L) {
   vec3 lms = mat3(1.0, 1.0, 1.0,
                   0.3963377774, -0.1055613458, -0.0894841775,
@@ -98,15 +102,14 @@ void main() {
      + 0.030 * vec2(sin(p.x * 3.7 + p.y * 1.1 + 2.0 * th), sin(p.y * 3.1 - p.x * 1.4 - 2.0 * th + 4.0));
 
   /* Farbton: Felder untereinander gewichtet (w²). Deckung: weiche Vereinigung aller Felder (w) */
-  vec3 baseLab = toLab(uBase);
-  vec3 lab = baseLab * 1e-5;
+  vec3 lab = uBaseLab * 1e-5;
   float wh = 1e-5, cover = 1.0;
   for (int i = 0; i < ${N}; i++) {
     vec2 d = p - uCenter[i];
     vec4 s = uShape[i];
     d = vec2(s.z * d.x + s.w * d.y, -s.w * d.x + s.z * d.y) / s.xy;
     float w = 1.0 - smoothstep(0.0, 1.0, length(d));
-    lab += toLab(uColors[i]) * w * w;
+    lab += uLab[i] * w * w;
     wh += w * w;
     cover *= 1.0 - w;
   }
@@ -116,7 +119,7 @@ void main() {
   float r = length(uv * 2.0 - 1.0);
   cover *= 1.0 - smoothstep(1.0 - uEdge * 2.0, 1.42, r);
 
-  vec3 col = toSRGB(fromLab(mix(baseLab, lab / wh, cover)));
+  vec3 col = toSRGB(fromLab(mix(uBaseLab, lab / wh, cover)));
 
   col = mix(col, vec3(hash(gl_FragCoord.xy + uSeed * 17.31)), uGrain);
   gl_FragColor = vec4(col, 1.0);
@@ -133,7 +136,7 @@ export function init(container, options = {}) {
   container.classList.add('gbg-host');
   if (madeRelative) container.classList.add('gbg-host--relative');
 
-  let inView = true;
+  let inView = true, held = false;
   let io = null;
   const cleanup = [];
   const listen = (target, type, fn, opts) => { target.addEventListener(type, fn, opts); cleanup.push(() => target.removeEventListener(type, fn, opts)); };
@@ -144,6 +147,7 @@ export function init(container, options = {}) {
     el.className = 'gbg gbg--css';
     el.setAttribute('aria-hidden', 'true');
     el.style.setProperty('--gbg-loop', `${o.loop / Math.max(o.speed, 0.01)}s`);
+    el.style.setProperty('--gbg-grain', String(o.grain));
     el.innerHTML = FIELDS.map((f, i) => `<i style="--x:${f.x * 100}%;--y:${f.y * 100}%;--w:${f.r[0] * 150}%;--h:${f.r[1] * 190}%;--o:${Math.round(f.a[0] * 90)}%;--d:${-(f.p / TAU) * o.loop}s;--dir:${i % 2 ? 'reverse' : 'normal'}"></i>`).join('');
     container.prepend(el);
     const setColors = (list = colors, base = o.base) => {
@@ -151,7 +155,7 @@ export function init(container, options = {}) {
       el.style.setProperty('--gbg-base', base);
     };
     setColors();
-    const sync = () => el.classList.toggle('is-paused', !inView || document.hidden);
+    const sync = () => el.classList.toggle('is-paused', !inView || document.hidden || held);
     io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); });
     io.observe(container);
     listen(document, 'visibilitychange', sync);
@@ -159,6 +163,7 @@ export function init(container, options = {}) {
       mode: 'css', canvas: null, element: el, uniforms: null,
       setColors,
       setSpeed(v) { el.style.setProperty('--gbg-loop', `${o.loop / Math.max(v, 0.01)}s`); },
+      suspend(v = true) { held = v; sync(); },
       start() {}, stop() {}, render() {},
       destroy() {
         io.disconnect(); cleanup.forEach((fn) => fn());
@@ -195,6 +200,8 @@ export function init(container, options = {}) {
     uEdge: { value: o.edge },
     uColors: { value: colors.map((c) => new THREE.Color(c)) },
     uBase: { value: new THREE.Color(o.base) },
+    uLab: { value: FIELDS.map(() => new THREE.Vector3()) },
+    uBaseLab: { value: new THREE.Vector3() },
     uCenter: { value: FIELDS.map(() => new THREE.Vector2()) },
     uShape: { value: FIELDS.map(() => new THREE.Vector4(1, 1, 1, 0)) },
   };
@@ -266,6 +273,8 @@ export function init(container, options = {}) {
   }
 
   function render() {
+    uniforms.uColors.value.forEach((c, i) => toLab(c, uniforms.uLab.value[i]));
+    toLab(uniforms.uBase.value, uniforms.uBaseLab.value);
     layoutFields();
     renderer.render(quad, cam);
   }
@@ -291,7 +300,7 @@ export function init(container, options = {}) {
   const stop = () => { running = false; cancelAnimationFrame(raf); };
   const sync = () => {
     if (reduced()) { stop(); render(); return; }
-    if (inView && !document.hidden) start(); else stop();
+    if (inView && !document.hidden && !held) start(); else stop();
   };
 
   /* Reduzierte Bewegung: ein statisches Bild */
@@ -335,6 +344,7 @@ export function init(container, options = {}) {
       if (!running) render();
     },
     setSpeed(v) { uniforms.uSpeed.value = v; },
+    suspend(v = true) { held = v; sync(); },
     start, stop, render,
     destroy() {
       teardown();
