@@ -15,7 +15,7 @@ export const introWillPlay = () => !session.get(KEY) && !reducedMotion();
 
 export async function runLoader({ hero, fonts }) {
   const el = $('#loader');
-  const g = $('.loader__g', el), o = $('.loader__o', el), win = $('.loader__win', el);
+  const g = $('.loader__g', el), o = $('.loader__o', el), win = $('.loader__win', el), bl = $('.loader__bl', el);
   const counter = $('.loader__counter', el), chromeCanvas = $('.loader__chrome', el);
 
   const finish = () => {
@@ -59,10 +59,25 @@ export async function runLoader({ hero, fonts }) {
   });
   await Promise.all(items.map((p) => p.querySelector('img').decode().catch(() => {})));
 
-  const chrome = hero.state.ok ? createMiniO(chromeCanvas, { fill: 0.7, crumple: 0, scale: 0, spin: 0.55, observe: false }) : null;
+  /* Chrom-O deckungsgleich über das weiße O legen (gleiche Messung wie im Hero) */
+  const placeChrome = () => {
+    const fs = parseFloat(getComputedStyle(o).fontSize);
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = `500 ${fs}px Newsreader`;
+    const m = ctx.measureText('O');
+    let L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight, A = m.actualBoundingBoxAscent, D = m.actualBoundingBoxDescent;
+    if (!(R > 0 && A > 0)) { L = -0.03 * fs; R = 0.72 * fs; A = 0.7 * fs; D = 0.015 * fs; }
+    const h = A + D, size = h * 1.9;
+    const cx = o.offsetLeft + (R - L) / 2, cy = bl.offsetTop - (A - D) / 2;
+    Object.assign(chromeCanvas.style, { width: `${size}px`, height: `${size}px`, left: `${cx - size / 2}px`, top: `${cy - size / 2}px` });
+    return h / size;
+  };
+  const fill = placeChrome();
+  const chrome = hero.state.ok ? createMiniO(chromeCanvas, { fill, crumple: 0, scale: 1, spin: 0.55, observe: false }) : null;
   if (!chrome) chromeCanvas.remove();
+  else window.addEventListener('resize', placeChrome);
 
-  const hasContent = items.length > 0 || !!chrome;
+  const hasContent = items.length > 0;
   const gapW = isMobile() ? '10rem' : '20rem';
   gsap.set(g, { yPercent: 100, opacity: 1 });
   gsap.set(o, { scale: 0, opacity: 1 });
@@ -93,17 +108,9 @@ export async function runLoader({ hero, fonts }) {
     t += i === 0 ? FIRST_HOLD : SWAP;
   });
 
-  if (chrome) {
-    tl.call(() => {
-      if (current) { gsap.killTweensOf(current); gsap.set(current, { opacity: 0 }); }
-      current = null;
-      chrome.start();
-    }, null, t)
-      .fromTo(chrome.state, { scale: 0 }, { scale: 1, duration: 0.8, ease: 'back.out(0.9)' }, t)
-      .fromTo(chrome.state, { crumple: 0 }, { crumple: 1, duration: 0.9, ease: 'power2.inOut' }, t);
-  }
-
-  const carouselEnd = t + 0.45;
+  /* Zähler 100 → 000 über die Dauer des Karussells */
+  const E0 = t;
+  const carouselEnd = E0 + 0.45;
   const count = { v: 100 };
   tl.to(count, {
     v: 0, duration: carouselEnd - C0, ease: 'power2.inOut',
@@ -115,22 +122,32 @@ export async function runLoader({ hero, fonts }) {
     },
   }, C0);
 
+  /* 5: Das letzte O verschwindet, das Fenster schließt sich: g und O rücken zu „gO“ zusammen */
+  tl.call(() => {
+    if (!current) return;
+    gsap.killTweensOf(current);
+    gsap.to(current, { scale: 0, duration: 0.5, ease: 'power4.inOut' });
+  }, null, E0);
+  if (hasContent) tl.to(win, { width: '1rem', duration: 0.8, ease: 'power4.inOut' }, E0 + 0.1);
+  const M = hasContent ? E0 + 0.9 : E0;
+
+  /* 6: Das weiße O verwandelt sich an Ort und Stelle in das Chrom-O, erst glatt, dann zerknittert */
+  if (chrome) {
+    tl.call(() => { chrome.restart(); chrome.start(); }, null, M)
+      .to(o, { opacity: 0, duration: 0.4, ease: 'none' }, M)
+      .to(chromeCanvas, { opacity: 1, duration: 0.4, ease: 'none' }, M)
+      .fromTo(chrome.state, { crumple: 0 }, { crumple: 1, duration: 0.9, ease: 'power2.inOut' }, M + 0.15);
+  }
+
+  /* 7: Exit. Zähler aus, Vorhang von unten nach oben, g sinkt, das O schrumpft */
+  const X = M + (chrome ? 1.3 : 0.3);
+  tl.to(counter, { opacity: 0, duration: 0.5, ease: 'none' }, X - 0.6)
+    .to(el, { height: 0, duration: 1.8, ease: 'power4.inOut' }, X)
+    .to(g, { yPercent: 100, duration: 1, ease: 'power4.inOut' }, X)
+    .to(chrome ? chrome.state : o, { scale: 0, duration: 1, ease: 'power4.inOut' }, X)
+    .add(() => { unlockScroll(); hero.reveal(); }, X);
+
   await tl.then();
-  counter.textContent = '000';
-  counter.classList.add('is-zero');
-
-  /* 5: Exit. Objekt weg, Fenster zu, Zähler aus, Vorhang von unten nach oben */
-  const E = gsap.timeline();
-  if (chrome) E.to(chrome.state, { scale: 0, duration: 0.6, ease: 'power4.inOut' }, 0.5);
-  else if (current) E.to(current, { scale: 0, duration: 0.6, ease: 'power4.inOut' }, 0.5);
-  if (hasContent) E.to(win, { width: '1rem', duration: 0.8, ease: 'power4.inOut' }, 0.6);
-  E.to(counter, { opacity: 0, duration: 0.5, ease: 'none' }, 0.6)
-    .to(el, { height: 0, duration: 1.8, ease: 'power4.inOut' }, 1.4)
-    .to(g, { yPercent: 100, duration: 1, ease: 'power4.inOut' }, 1.4)
-    .to(o, { scale: 0, duration: 1, ease: 'power4.inOut' }, 1.4)
-    .add(() => { unlockScroll(); hero.reveal(); }, 1.4);
-
-  await E.then();
-  if (chrome) chrome.dispose();
+  if (chrome) { window.removeEventListener('resize', placeChrome); chrome.dispose(); }
   finish();
 }

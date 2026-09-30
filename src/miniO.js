@@ -46,7 +46,7 @@ export function createMiniO(canvas, opts = {}) {
     camera.updateProjectionMatrix();
   }
 
-  const T0 = performance.now();
+  let T0 = performance.now();
   let raf = 0;
   function render(now = performance.now()) {
     const t = (now - T0) / 1000;
@@ -84,6 +84,7 @@ export function createMiniO(canvas, opts = {}) {
 
   return {
     state, start, stop, render, resize,
+    restart() { T0 = performance.now(); },
     dispose() {
       stop();
       ro.disconnect();

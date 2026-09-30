@@ -51,11 +51,14 @@
   object-fit: contain;
   image-rendering: auto;
 }
+/* Das weiße O und darüber das Chrom-O, in das es sich am Ende verwandelt */
+.loader__o-wrap { position: relative; display: inline-block; }
+.loader__bl { display: inline-block; width: 0; height: 0; }
 .loader__chrome {
-  position: absolute; left: 50%; top: 50%;
-  height: 100%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
+  position: absolute; left: 0; top: 0;
+  width: 0; height: 0; max-width: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .loader__counter {
