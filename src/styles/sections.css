@@ -27,7 +27,7 @@
   .manifest__side { justify-self: start; }
 }
 
-/* Weicher Übergang: das Neon läuft vor und nach den schwarzen Abschnitten in Schwarz aus
+/* Weicher Übergang: der Sternenstaub läuft vor und nach den schwarzen Abschnitten in Schwarz aus
    (hinter dem Inhalt, über dem Verlauf) */
 .manifest::after, .studio::before {
   content: "";

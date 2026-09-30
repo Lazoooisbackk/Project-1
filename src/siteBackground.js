@@ -1,18 +1,18 @@
 /*
-  Verlaufs-Hintergrund fest hinter der ganzen Seite (statt Papier).
+  Sternenstaub fest hinter der ganzen Seite.
   Hält an, solange schwarze Abschnitte (section.on-dark) den Bildschirm ganz verdecken,
   und auf Wunsch bis zu einem Ereignis (z. B. Ende des Intros).
 */
 import { ScrollTrigger } from './utils/gsap.js';
 import { $$ } from './utils/dom.js';
-import { init } from './gradientBackground.js';
+import { init } from './starfield.js';
 
 export function initSiteBackground({ waitFor = null } = {}) {
   const host = document.createElement('div');
   host.className = 'site-bg';
   host.setAttribute('aria-hidden', 'true');
   document.body.prepend(host);
-  const bg = init(host, { grain: 0 });
+  const bg = init(host);
 
   let waiting = !!waitFor;
   const covered = new Set();

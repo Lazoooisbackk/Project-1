@@ -120,7 +120,7 @@ a { color: inherit; text-decoration: none; }
 .ch-mask--space { width: .25em; }
 .w-block { display: inline-block; white-space: nowrap; }
 
-/* Verlaufs-Hintergrund hinter der ganzen Seite (src/siteBackground.js) */
+/* Sternenstaub hinter der ganzen Seite (src/siteBackground.js) */
 .site-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 
 /* Grain */

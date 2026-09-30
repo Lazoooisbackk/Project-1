@@ -1,8 +1,8 @@
 :root {
   --paper: #F5F3EE;          /* helle Schrift */
-  --bg: #0B0B0C;             /* Grundfarbe des Neon-Verlaufs */
+  --bg: #0B0B0C;             /* Grundfläche des Sternenstaubs */
   --ink: #0B0B0C;            /* dunkle Schrift auf hellen Flächen (Buttons, Cursor) */
-  --muted: #8A867E;          /* gedämpfte Labels */
+  --muted: #9A968F;          /* gedämpfte Labels */
   --black: #0B0B0C;
   --white: #FFFFFF;
   --orchid: #DA70D6;

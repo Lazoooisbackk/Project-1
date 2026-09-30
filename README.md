@@ -27,12 +27,10 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
 
 ## Design
 
-- Hintergrund: Neon-Verlauf auf Schwarz `#0B0B0C` hinter der ganzen Seite, Felder in
-  Frozen `#A0BDDB`, Zitrus `#E4FD97`, Orchid `#DA70D6`; sie wandern beim Scrollen mit.
-  „Arbeiten“ und „Leistungen“ bleiben Schwarz.
-- Schrift: `#F5F3EE`, Labels `#8A867E`, Gewicht 500. Die Helligkeitsgrenze des Verlaufs
-  (`ceiling: 0.16`) hält `#F5F3EE` überall bei mindestens 4,5:1.
-- Verlauf anpassen: `DEFAULTS` oben in `src/gradientBackground.js` (Palette, Leuchtkraft, Halo, Puls)
+- Hintergrund: Sternenstaub auf Schwarz `#0B0B0C` (Weiß `#F5F3EE`, Frozen `#A0BDDB`, Orchid `#DA70D6`),
+  Sterne fallen beim Scrollen mit, Sternschnuppen, Orchid-/Frozen-Lichtschein. „Arbeiten“ und „Leistungen“ bleiben Schwarz.
+- Schrift: `#F5F3EE`, Labels `#9A968F`, Gewicht 500
+- Sternenstaub anpassen: `DEFAULTS` oben in `src/starfield.js` (Anzahl, Farbmix, Fallen, Streifen, Sternschnuppe, Glow, Lichtschein)
 - Tinte im Hero (Perlmutt, Glitzer, Bloom): `INK` in `src/chromeO.js`
 - Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
 - Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):
@@ -75,8 +73,8 @@ src/loader.js             Intro „Ein O, viele Materialien“ (einmal pro Sessi
 src/materials.js          Laden der vier Material-Os (WebP + PNG-Fallback)
 src/hero.js               Hero: Wortmarke, Chrom-O, Tinten-Reveal, Übergabe vom Loader
 src/chromeO.js            Chrom-O (aus dem Logo) und Hero-Fläche mit Perlmutt-Tinte
-src/gradientBackground.js Neon-Verlauf (WebGL, CSS-Fallback), wiederverwendbar
-src/siteBackground.js     Verlauf fest hinter der ganzen Seite
+src/starfield.js          Sternenstaub (WebGL, CSS-Fallback), wiederverwendbar
+src/siteBackground.js     Sternenstaub fest hinter der ganzen Seite
 src/miniO.js              Kleines Chrom-O für Loader, Leistungen, Projektkarte
 src/fluidReveal.js        Fluid-Simulation (Stable Fluids) als Maske
 src/sections/*.js         Manifest, Arbeiten, Leistungen, Studio, Kontakt, Footer
