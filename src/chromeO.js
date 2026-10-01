@@ -114,7 +114,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     running: false,  // Render-Loop aktiv
     reduce: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
-  const api = { state, layout: () => {}, crumpleAgain: () => {}, start: () => {}, stop: () => {}, setFluid: () => {}, setVideo: () => {}, renderer: null, ink: null, dispose: () => {} };
+  const api = { state, layout: () => {}, crumpleAgain: () => {}, start: () => {}, stop: () => {}, setFluid: () => {}, setVideo: () => {}, setOverlay: () => {}, renderer: null, ink: null, shade: null, dispose: () => {} };
 
   if (window.matchMedia('(pointer: coarse)').matches) hint.textContent = content.hero.hintTouch;
 
@@ -144,11 +144,16 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
       uLight: { value: new THREE.Vector2() }, uSh: { value: new THREE.Vector4(0.5, 0.5, 0.2, 0.1) }, uShA: { value: 0 }, uAspect: { value: 1 },
       tMask: { value: null }, uMaskOn: { value: 0 }, tVideo: { value: null }, uVideoOn: { value: 0 }, uVideoFit: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 },
       uIrid: { value: INK.irid }, uStreak: { value: INK.streak }, uSparkle: { value: INK.sparkle }, uBloom: { value: INK.bloom }, uDpr: { value: 1 },
+      uInkFill: { value: 0 },
     },
     vertexShader: QUAD_V, fragmentShader: SHADE_F, depthTest: false, depthWrite: false,
   });
   const { uIrid, uStreak, uSparkle, uBloom } = shadeMat.uniforms;
   api.ink = { uIrid, uStreak, uSparkle, uBloom };
+  api.shade = shadeMat.uniforms;
+  /* Zusätzliche Ebene nach dem Chrom-O im selben Frame (dunkle Textkopie für die Tinte, src/inkText.js) */
+  let overlay = null;
+  api.setOverlay = (fn) => { overlay = fn; };
   const bgScene = new THREE.Scene();
   const bq = new THREE.Mesh(quad, shadeMat);
   bq.frustumCulled = false;
@@ -273,6 +278,7 @@ export function createStage({ canvas, stage, mark, inner, ghost, bl, readout, hi
     renderer.render(bgScene, fsCam);
     renderer.clearDepth();
     renderer.render(scene, camera);
+    if (overlay) overlay(now);
   }
 
   function loop(now) {

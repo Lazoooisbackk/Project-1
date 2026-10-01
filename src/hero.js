@@ -3,6 +3,7 @@ import { $, asset, reducedMotion, isMobile, emit, debounce } from './utils/dom.j
 import { splitChars, splitLines } from './utils/split.js';
 import { createStage } from './chromeO.js';
 import { createFluid } from './fluidReveal.js';
+import { createInkText } from './inkText.js';
 
 export function initHero() {
   const stage = $('#stage'), canvas = $('#gl'), mark = $('#mark'), inner = $('#markInner');
@@ -23,19 +24,24 @@ export function initHero() {
   const api = createStage({ canvas, stage, mark, inner, ghost, bl, readout, hint });
   const state = api.state;
 
-  /* Fluid-Maske: Tinte legt unter dem Verlauf eine dunkle Fläche frei */
-  let fluid = null;
+  /* Fluid-Maske: Tinte legt schillerndes Weiß frei, Text darunter wird dunkel (inkText) */
+  let fluid = null, inkText = null;
   if (state.ok && !reduce) {
     fluid = createFluid(api.renderer, { dyeRes: isMobile() ? 512 : 1024, splatRadius: 0.0014, splatForce: 6000 });
     fluid.resize(stage.clientWidth || 1, stage.clientHeight || 1);
     api.setFluid(fluid);
+    /* ?inkdebug=1 füllt den ganzen Hero mit Tinte (Prüfung der Textkopie) */
+    const inkDebug = new URLSearchParams(location.search).get('inkdebug') === '1';
+    inkText = createInkText({ api, stage, debug: inkDebug });
+    if (inkDebug) window.__inkDebug = { ink: api.ink, refresh: inkText.refresh };
     let last = null;
     stage.addEventListener('pointermove', (e) => {
       const r = stage.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width, y = 1 - (e.clientY - r.top) / r.height;
-      if (last) {
+      /* Tinte erst, wenn die dunkle Textkopie bereit ist (nicht während der Buchstaben-Animation) */
+      if (last && inkText.ready) {
         const dx = x - last.x, dy = y - last.y;
-        if (Math.hypot(dx, dy) > 0.0005) fluid.splat(x, y, dx, dy, 0.9);
+        if (Math.hypot(dx, dy) > 0.0005) { fluid.splat(x, y, dx, dy, 0.9); inkText.touch(); }
       }
       last = { x, y };
     }, { passive: true });
@@ -76,14 +82,16 @@ export function initHero() {
     emit('loader:hero-reveal-start');
     api.layout();
     sync();
+    /* Nach dem Reveal: Buchstaben ohne eigene Grafik-Ebene (optisch gleich), damit die dunkle Textkopie pixelgenau aufliegt */
+    const settle = () => { stage.classList.add('is-settled'); emit('loader:hero-revealed'); };
     if (instant || reduce) {
       gsap.set(split.chars, { yPercent: 0 });
       gsap.set(tagSplit.lines, { yPercent: 0 });
       state.scale = 1; state.crumple = 1; state.loaded = true;
-      emit('loader:hero-revealed');
+      settle();
       return;
     }
-    const tl = gsap.timeline({ onComplete: () => emit('loader:hero-revealed') });
+    const tl = gsap.timeline({ onComplete: settle });
     tl.to(split.chars, { yPercent: 0, duration: 1.8, ease: 'power4.inOut', stagger: { each: 0.07, from: 'random' } }, 0.2)
       .add(() => { state.loaded = true; }, 1.5)
       .to(state, { scale: 1, duration: 1.1, ease: 'back.out(0.9)' }, 1.5)

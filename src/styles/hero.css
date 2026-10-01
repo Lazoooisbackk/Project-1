@@ -14,6 +14,11 @@
   overflow: hidden;
 }
 .hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+/* Tinte über dem Text (src/inkText.js): Canvas über Hero-Text und Navigation, darunter bleibt alles klickbar.
+   Bei offenem Menü unter Menü und Navigation. */
+.hero__gl.is-ink-over { z-index: calc(var(--z-menu) + 2); pointer-events: none; }
+.hero__gl.is-ink-mid { z-index: 2; pointer-events: none; }
+.hero.is-settled .ch, .hero.is-settled .line { will-change: auto; }
 .hero__video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 .hero__bar {

@@ -34,6 +34,7 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
 - Milchglas („Arbeiten“, „Leistungen“): Werte in `src/styles/tokens.css` (`--glass-opacity`, `--glass-frost`, `--glass-blur`, `--glass-fade`);
   die Sterne bleiben auf dem Glas scharf sichtbar, Helligkeit dort über `glassStars` in `src/starfield.js`
 - Tinte im Hero (Perlmutt, Glitzer, Bloom): `INK` in `src/chromeO.js`
+- Text unter der Tinte wird dunkel (`src/inkText.js`); Prüfansicht mit voller Tinte: `?inkdebug=1`
 - Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
 - Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):
   Newsreader (Wortmarke, Display), Geist (Text), Geist Mono (Labels, Zähler)
@@ -75,6 +76,7 @@ src/loader.js             Intro „Ein O, viele Materialien“ (einmal pro Sessi
 src/materials.js          Laden der vier Material-Os (WebP + PNG-Fallback)
 src/hero.js               Hero: Wortmarke, Chrom-O, Tinten-Reveal, Übergabe vom Loader
 src/chromeO.js            Chrom-O (aus dem Logo) und Hero-Fläche mit Perlmutt-Tinte
+src/inkText.js            Dunkle Textkopie unter der Tinte (Hero und Navigation)
 src/starfield.js          Sternenstaub (WebGL, CSS-Fallback), wiederverwendbar
 src/siteBackground.js     Sternenstaub fest hinter der ganzen Seite
 src/miniO.js              Kleines Chrom-O für Loader, Leistungen, Projektkarte
