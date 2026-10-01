@@ -17,6 +17,10 @@
   --h1: clamp(40px, 6vw, 96px);
   --nav-h: 64px;
 
+  /* Milchglas für „Arbeiten“ und „Leistungen“ */
+  --glass-opacity: 0.55;
+  --glass-blur: 20px;
+
   --z-grain: 900;
   --z-cursor: 950;
   --z-menu: 800;
@@ -25,4 +29,9 @@
   --z-loader: 1000;
 
   color-scheme: dark;
+}
+
+/* Handy: weniger Blur, damit das Scrollen flüssig bleibt */
+@media (max-width: 991px) {
+  :root { --glass-blur: 12px; }
 }
