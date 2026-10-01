@@ -11,6 +11,13 @@ export const MATERIALS = content.intro.materials.map((m) => ({
   png: asset(`intro/${m.id}.png`),
 }));
 
+/* Die Stern-Bilder aus public/stars für „Leistungen“, ebenfalls für Schwarz freigestellt */
+export const STARS = content.services.stars.map((m) => ({
+  ...m,
+  webp: asset(`stars/${m.id}.webp`),
+  png: asset(`stars/${m.id}.png`),
+}));
+
 /* Laden + dekodieren. Schlägt WebP fehl, wird PNG versucht; schlägt beides fehl: null. */
 function preload(src, timeout) {
   return new Promise((resolve) => {

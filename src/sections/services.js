@@ -1,7 +1,7 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, $$, rand, reducedMotion, isMobile } from '../utils/dom.js';
 import { content } from '../content.js';
-import { MATERIALS, materialPicture } from '../materials.js';
+import { MATERIALS, STARS, materialPicture } from '../materials.js';
 import { createMiniO } from '../miniO.js';
 
 /* Leistungen auf Schwarz, umgeben von den eigenen Os. Nichts anderes: die Marke hat nur ihre Os. */
@@ -35,8 +35,8 @@ export function initServices() {
     el.appendChild(inner);
     const obj = { el, base: spec.rot, inside: false };
 
-    if (spec.type === 'material') {
-      const m = MATERIALS.find((x) => x.id === spec.id);
+    if (spec.type === 'material' || spec.type === 'star') {
+      const m = (spec.type === 'star' ? STARS : MATERIALS).find((x) => x.id === spec.id);
       if (!m) return;
       /* Nie über 100 % der Pixelgröße bei DPR 2 skalieren */
       const cap = Math.floor(Math.max(m.w, m.h) / 2);

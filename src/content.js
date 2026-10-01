@@ -95,12 +95,18 @@ export const content = {
     lead: 'Ich gestalte:',
     list: ['Websites', 'Landingpages', 'Online-Shops', 'Branding', 'Betreuung'],
     note: 'Perspektive ist, wo Strategie auf Gestaltung trifft.',
-    /* Schwebende Os: x/y in % der Sektion (Desktop), mx/my bis 991 px Breite, size in vw (8–22). */
+    /* Schwebende Objekte: x/y in % der Sektion (Desktop), mx/my bis 991 px Breite, size in vw (8–22).
+       Sterne sind gefüllt und fast quadratisch, darum etwas kleiner als die Os, damit sie gleich groß wirken. */
+    stars: [
+      { id: 'star-wolke', name: 'Wolke', w: 800, h: 768 },
+      { id: 'star-moos', name: 'Moos', w: 775, h: 800 },
+      { id: 'star-puffy', name: 'Puffy', w: 800, h: 788 },
+    ],
     objects: [
-      { type: 'material', id: 'o-01-wolke', x: 30, y: 13, mx: 9, my: 16, size: 16, rot: -12 },
-      { type: 'material', id: 'o-02-moos', x: 91, y: 50, mx: 88, my: 22, size: 20, rot: 14 },
+      { type: 'star', id: 'star-wolke', x: 30, y: 13, mx: 9, my: 16, size: 15, rot: -12 },
+      { type: 'star', id: 'star-moos', x: 91, y: 50, mx: 88, my: 22, size: 18.5, rot: 14 },
       { type: 'material', id: 'o-03-pixel', x: 70, y: 88, mx: 70, my: 84, size: 14, rot: -8 },
-      { type: 'material', id: 'o-04-puffy', x: 17, y: 56, mx: 14, my: 82, size: 18, rot: 18 },
+      { type: 'star', id: 'star-puffy', x: 17, y: 56, mx: 14, my: 82, size: 16.5, rot: 18 },
       { type: 'chrome', x: 50, y: 10, mx: 50, my: 9, size: 8, rot: -6 },
     ],
   },
