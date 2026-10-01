@@ -39,6 +39,7 @@
   .works, .services {
     background:
       linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 80px),
+      linear-gradient(var(--glass-frost), var(--glass-frost)),
       rgba(11, 11, 12, var(--glass-opacity));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
     backdrop-filter: blur(var(--glass-blur)) saturate(120%);
@@ -190,9 +191,9 @@
 /* Die Material-Os sind für Schwarz freigestellt: weicher dunkler Hof dahinter, damit auf dem Glas keine Ränder sichtbar werden */
 .float-obj:not(.float-obj--chrome) .float-obj__inner::before {
   content: "";
-  position: absolute; inset: -22%; z-index: -1;
+  position: absolute; inset: -6%; z-index: -1;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(11, 11, 12, 0.96) 55%, rgba(11, 11, 12, 0.7) 75%, rgba(11, 11, 12, 0));
+  background: radial-gradient(closest-side, rgba(11, 11, 12, 0.95) 62%, rgba(11, 11, 12, 0.55) 82%, rgba(11, 11, 12, 0));
 }
 @media (max-width: 991px) { .float-obj { left: var(--mx, var(--x)); top: var(--my, var(--y)); } }
 .float-obj picture, .float-obj img, .float-obj canvas { display: block; width: 100%; height: 100%; }

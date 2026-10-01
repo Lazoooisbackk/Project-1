@@ -18,7 +18,8 @@
   --nav-h: 64px;
 
   /* Milchglas für „Arbeiten“ und „Leistungen“ */
-  --glass-opacity: 0.55;
+  --glass-opacity: 0.3;                          /* dunkle Tönung: weniger = durchsichtiger */
+  --glass-frost: rgba(245, 243, 238, 0.06);      /* heller Milchglas-Schleier: mehr = heller */
   --glass-blur: 20px;
 
   --z-grain: 900;
