@@ -28,29 +28,49 @@
 }
 
 /* ---------- Milchglas: „Arbeiten“ und „Leistungen“ ----------
-   Getönte Scheibe über dem Sternenstaub, der dahinter weichgezeichnet weiterläuft.
-   Glaskanten oben und unten, zarter Lichtverlauf oben, feines Korn (::before). */
-.works, .services {
-  isolation: isolate;
+   Getönte Scheibe (::before) über dem Sternenstaub, der dahinter weichgezeichnet weiterläuft.
+   Zum Sternenstaub hin (oben bei „Arbeiten“, unten bei „Leistungen“) blendet die Scheibe samt
+   Blur über --glass-fade weich ein bzw. aus: kein harter Schnitt. Wo beide Flächen aneinanderstoßen,
+   bleiben Glaskante und Lichtverlauf. Feines Korn (3 %) liegt in der Scheibe. */
+.works::before, .services::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+  z-index: -1;
+  pointer-events: none;
   background: rgba(11, 11, 12, 0.88);   /* Fallback ohne backdrop-filter */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+.works::before {
+  top: calc(var(--glass-fade) / -2);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--glass-fade));
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--glass-fade));
+}
+.services::before {
+  -webkit-mask-image: linear-gradient(to top, transparent, #000 var(--glass-fade));
+  mask-image: linear-gradient(to top, transparent, #000 var(--glass-fade));
 }
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .works, .services {
+  .works::before, .services::before {
     background:
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 80px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0' intercept='.03'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
       linear-gradient(var(--glass-frost), var(--glass-frost)),
       rgba(11, 11, 12, var(--glass-opacity));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
     backdrop-filter: blur(var(--glass-blur)) saturate(120%);
   }
+  /* zarter Lichtverlauf oben bei „Arbeiten“, innerhalb des weichen Übergangs */
+  .works::before {
+    background:
+      linear-gradient(to bottom, rgba(255, 255, 255, 0) calc(var(--glass-fade) / 2 - 40px), rgba(255, 255, 255, 0.04) calc(var(--glass-fade) / 2 + 10px), rgba(255, 255, 255, 0) calc(var(--glass-fade) / 2 + 80px)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0' intercept='.03'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      linear-gradient(var(--glass-frost), var(--glass-frost)),
+      rgba(11, 11, 12, var(--glass-opacity));
+  }
 }
-.works::before, .services::before {
-  content: "";
-  position: absolute; inset: 0; z-index: -1;
-  pointer-events: none;
-  opacity: 0.03;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Glaskante und Lichtverlauf, wo „Arbeiten“ und „Leistungen“ aneinanderstoßen */
+.works { box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08); }
+.services {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 80px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ---------- Arbeiten ---------- */

@@ -21,6 +21,7 @@
   --glass-opacity: 0.3;                          /* dunkle Tönung: weniger = durchsichtiger */
   --glass-frost: rgba(245, 243, 238, 0.06);      /* heller Milchglas-Schleier: mehr = heller */
   --glass-blur: 20px;
+  --glass-fade: clamp(120px, 16vw, 220px);        /* weicher Übergang Glas ↔ Sternenstaub */
 
   --z-grain: 900;
   --z-cursor: 950;
