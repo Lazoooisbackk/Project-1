@@ -31,6 +31,8 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
   Sterne fallen beim Scrollen mit, Sternschnuppen, Orchid-/Frozen-Lichtschein. „Arbeiten“ und „Leistungen“ bleiben Schwarz.
 - Schrift: `#F5F3EE`, Labels `#9A968F`, Gewicht 500
 - Sternenstaub anpassen: `DEFAULTS` oben in `src/starfield.js` (Anzahl, Farbmix, Fallen, Streifen, Sternschnuppe, Glow, Lichtschein)
+- Milchglas („Arbeiten“, „Leistungen“): Werte in `src/styles/tokens.css` (`--glass-opacity`, `--glass-frost`, `--glass-blur`, `--glass-fade`);
+  die Sterne bleiben auf dem Glas scharf sichtbar, Helligkeit dort über `glassStars` in `src/starfield.js`
 - Tinte im Hero (Perlmutt, Glitzer, Bloom): `INK` in `src/chromeO.js`
 - Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
 - Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):

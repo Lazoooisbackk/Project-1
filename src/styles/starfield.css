@@ -11,6 +11,16 @@
   pointer-events: none;
 }
 
+/* Sterne auf dem Milchglas: über dem Glas (später im Dokument, gleiche Ebene), unter allem Inhalt */
+.sky-front {
+  position: fixed; inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%; height: 100%;
+  max-width: none;
+  pointer-events: none;
+}
+
 /* Fallback ohne WebGL: statische Sterne (2D-Canvas) und der Lichtschein als CSS-Verläufe */
 .sky--css { overflow: hidden; background: var(--sky-base, #0B0B0C); }
 .sky--css canvas { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }

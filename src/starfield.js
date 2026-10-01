@@ -17,6 +17,12 @@
   Werte ändern:    DEFAULTS (Anzahl, Farbmix, Fallen, Streifen, Sternschnuppe, Glow, Lichtschein)
                    oder zur Laufzeit über sky.uniforms (z. B. sky.uniforms.uGlow.value = 1.4)
   Anhalten von außen (z. B. wenn der Hintergrund ganz verdeckt ist): sky.suspend(true / false)
+
+  Milchglas (Option glass): Ein backdrop-filter zeichnet alles dahinter weich, also auch die Sterne.
+  Damit sie auf dem Glas sichtbar bleiben, zeichnet eine zweite, transparente Ebene (.sky-front) über
+  dem Glas und unter dem Inhalt dieselben Sterne mit denselben Daten noch einmal scharf, nur im
+  Glasbereich und mit derselben weichen Kante wie das Glas. glass() liefert pro Frame den Bereich in
+  Bildschirm-px: { top, fadeTop, bottom, fadeBottom }, oder null.
 */
 import * as THREE from 'three';
 import './styles/starfield.css';
@@ -47,6 +53,8 @@ const DEFAULTS = {
   glowOrchid: { x: 0.14, y: 0.86, r: 0.50, a: 0.30 },  // Lichtschein: Mitte relativ, Radius relativ zur Höhe, Deckkraft
   glowFrozen: { x: 0.86, y: 0.12, r: 0.35, a: 0.25 },
   breathe: 0.10,                 // Lichtschein atmet ±10 %
+  glass: null,                   // () => { top, fadeTop, bottom, fadeBottom } | null, siehe oben
+  glassStars: 0.8,               // Helligkeit der Sterne auf dem Glas (1 = wie außerhalb)
   pointer: true,                 // Zeiger-Parallax (nie auf Touch)
   dpr: 1.5,                      // Obergrenze Pixel Ratio
   seed: 7,                       // gleiche Sterne bei jedem Besuch
@@ -102,6 +110,18 @@ void main() {
   gl_FragColor = vec4(col, 1.0);
 }`;
 
+/* Glasbereich für die vordere Ebene: Deckung 0..1 wie die Maske des Glases (linear, weiche Kanten) */
+const GLASS = /* glsl */ `
+uniform vec4 uBand;
+uniform float uBufH, uGlassDpr, uGlassStars;
+float glassCover() {
+  float y = (uBufH - gl_FragCoord.y) / uGlassDpr;
+  return min(clamp((y - uBand.x) / uBand.y, 0.0, 1.0), clamp((uBand.z - y) / uBand.w, 0.0, 1.0));
+}`;
+/* Ausgabe der vorderen Ebene: vormultipliziert auf transparentem Grund, nur im Glasbereich */
+const frontOut = (c) => `vec3 c = (${c}) * glassCover() * uGlassStars;
+  gl_FragColor = vec4(c, clamp(max(c.r, max(c.g, c.b)), 0.0, 1.0));`;
+
 /* 2. Sterne: aA = (seed.x, seed.y, Ebene, Größe px), aB = (Farbe 0/1/2, Halo, Helligkeit, Farbton-Seed),
       aC = (Glitzer-Periode, -Phase, Blitz-Periode oder 0, Blitz-Phase), aD = Drift px/s */
 const STAR_V = /* glsl */ `
@@ -139,8 +159,8 @@ void main() {
   gl_Position = vec4(world.x / uView.x * 2.0 - 1.0, 1.0 - world.y / uView.y * 2.0, 0.0, 1.0);
 }`;
 
-const STAR_F = /* glsl */ `
-uniform float uDpr, uGlow;
+const starFragment = (front = false) => /* glsl */ `
+uniform float uDpr, uGlow;${front ? GLASS : ''}
 varying vec2 vLocal;
 varying vec3 vColor;
 varying float vSize, vHalo, vTrail;
@@ -161,7 +181,7 @@ void main() {
     float w = max(0.45 * s, 0.6 * px);
     tr = exp(-vLocal.x * vLocal.x / (2.0 * w * w)) * (1.0 - k) * (1.0 - k) * 0.6 * min(1.0, energy * 2.0 + 0.3);
   }
-  gl_FragColor = vec4(vColor * (core + halo + tr), 1.0);
+  ${front ? frontOut('vColor * (core + halo + tr)') : 'gl_FragColor = vec4(vColor * (core + halo + tr), 1.0);'}
 }`;
 
 /* 3. Sternschnuppe: vLocal.x = Abstand hinter dem Kopf entlang der Flugrichtung, vLocal.y = seitlich (px) */
@@ -179,9 +199,9 @@ void main() {
   gl_Position = vec4(world.x / uView.x * 2.0 - 1.0, 1.0 - world.y / uView.y * 2.0, 0.0, 1.0);
 }`;
 
-const SHOOT_F = /* glsl */ `
+const shootFragment = (front = false) => /* glsl */ `
 uniform vec3 uWhite, uFrozen, uOrchid;
-uniform float uLen, uAlpha, uTime, uGlow, uIrid;
+uniform float uLen, uAlpha, uTime, uGlow, uIrid;${front ? GLASS : ''}
 varying vec2 vLocal;
 ${PEARL}
 void main() {
@@ -202,7 +222,7 @@ void main() {
   vec3 tc = k < 0.5 ? mix(uWhite, uFrozen, k * 2.0) : mix(uFrozen, uOrchid, (k - 0.5) * 2.0);
   tc = mix(tc, pearl(uTime * 0.6 + k * 1.5), uIrid * 0.5);
   vec3 col = uWhite * (head + bloom * 0.8) + uFrozen * rim * 0.9 + tc * tail;
-  gl_FragColor = vec4(col * uAlpha, 1.0);
+  ${front ? frontOut('col * uAlpha') : 'gl_FragColor = vec4(col * uAlpha, 1.0);'}
 }`;
 
 export function init(container, options = {}) {
@@ -265,12 +285,37 @@ export function init(container, options = {}) {
       el.style.setProperty('--sky-frozen-rgb', rgbList(o.colors.frozen));
       draw();
     };
+    /* Sterne auf dem Milchglas: dieselben Sterne in einem zweiten Canvas über dem Glas, per CSS-Maske auf den Glasbereich begrenzt */
+    let fcv = null, maskRaf = 0;
+    if (o.glass) {
+      fcv = document.createElement('canvas');
+      fcv.className = 'sky-front sky-front--css';
+      fcv.setAttribute('aria-hidden', 'true');
+      fcv.style.opacity = String(o.glassStars);
+      document.body.appendChild(fcv);
+    }
+    function mask() {
+      maskRaf = 0;
+      const b = o.glass();
+      if (!b || b.bottom <= 0 || b.top >= container.clientHeight) { fcv.style.visibility = 'hidden'; return; }
+      const m = `linear-gradient(to bottom, transparent ${b.top}px, #000 ${b.top + b.fadeTop}px, #000 ${b.bottom - b.fadeBottom}px, transparent ${b.bottom}px)`;
+      fcv.style.webkitMaskImage = m;
+      fcv.style.maskImage = m;
+      fcv.style.visibility = '';
+    }
+    if (fcv) {
+      listen(window, 'scroll', () => { if (!maskRaf) maskRaf = requestAnimationFrame(mask); }, { passive: true });
+    }
     function draw() {
+      paint(cv);
+      if (fcv) { paint(fcv); mask(); }
+    }
+    function paint(target) {
       const w = container.clientWidth, h = container.clientHeight;
       if (!w || !h) return;
       const dpr = Math.min(window.devicePixelRatio || 1, o.dpr);
-      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-      const ctx = cv.getContext('2d');
+      target.width = Math.round(w * dpr); target.height = Math.round(h * dpr);
+      const ctx = target.getContext('2d');
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       const pal = [o.colors.white, o.colors.frozen, o.colors.orchid].map(rgbList);
@@ -299,6 +344,8 @@ export function init(container, options = {}) {
       start() {}, stop() {}, render: draw,
       destroy() {
         ro2.disconnect(); cleanup.forEach((fn) => fn());
+        cancelAnimationFrame(maskRaf);
+        if (fcv) fcv.remove();
         el.remove();
         container.classList.remove('sky-host', 'sky-host--relative');
       },
@@ -373,14 +420,14 @@ export function init(container, options = {}) {
   starGeo.setAttribute('aD', new THREE.InstancedBufferAttribute(D, 2));
   starGeo.instanceCount = COUNT;
   const starMat = new THREE.ShaderMaterial({
-    vertexShader: STAR_V, fragmentShader: STAR_F, ...additive,
+    vertexShader: STAR_V, fragmentShader: starFragment(), ...additive,
     uniforms: pick('uView', 'uPar', 'uFall', 'uTrail', 'uDepth', 'uWhite', 'uFrozen', 'uOrchid', 'uTime', 'uMargin', 'uTwinkle', 'uIrid', 'uDrift', 'uDpr', 'uGlow'),
   });
   const stars = new THREE.Mesh(starGeo, starMat);
   stars.frustumCulled = false;
 
   const shootMat = new THREE.ShaderMaterial({
-    vertexShader: SHOOT_V, fragmentShader: SHOOT_F, ...additive,
+    vertexShader: SHOOT_V, fragmentShader: shootFragment(), ...additive,
     uniforms: pick('uView', 'uHead', 'uDir', 'uLen', 'uAlpha', 'uTime', 'uGlow', 'uIrid', 'uWhite', 'uFrozen', 'uOrchid'),
   });
   const shootMesh = new THREE.Mesh(quadGeo, shootMat);
@@ -390,6 +437,77 @@ export function init(container, options = {}) {
   const scene = new THREE.Scene();
   scene.add(glow, stars, shootMesh);
   glow.renderOrder = 0; stars.renderOrder = 1; shootMesh.renderOrder = 2;
+
+  /* ---------- Sterne vor dem Milchglas (siehe oben) ---------- */
+  function createFront() {
+    const fc = document.createElement('canvas');
+    fc.className = 'sky-front';
+    fc.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(fc);
+    let fr;
+    try {
+      fr = new THREE.WebGLRenderer({ canvas: fc, antialias: false, alpha: true, premultipliedAlpha: true, depth: false, stencil: false, powerPreference: 'low-power' });
+    } catch (e) {
+      fc.remove();
+      return null;
+    }
+    fr.setPixelRatio(renderer.getPixelRatio());
+    fr.setClearColor(0x000000, 0);
+    fr.autoClear = false;
+    const gu = {
+      uBand: { value: new THREE.Vector4(0, 1, 0, 1) },
+      uBufH: { value: 1 },
+      uGlassDpr: { value: fr.getPixelRatio() },
+      uGlassStars: { value: o.glassStars },
+    };
+    /* gleiche Geometrie und gleiche Uniforms wie hinten: die Sterne liegen exakt übereinander */
+    const premul = { ...additive, premultipliedAlpha: true };
+    const fStarMat = new THREE.ShaderMaterial({ vertexShader: STAR_V, fragmentShader: starFragment(true), ...premul, uniforms: { ...starMat.uniforms, ...gu } });
+    const fShootMat = new THREE.ShaderMaterial({ vertexShader: SHOOT_V, fragmentShader: shootFragment(true), ...premul, uniforms: { ...shootMat.uniforms, ...gu } });
+    const fStars = new THREE.Mesh(starGeo, fStarMat);
+    const fShoot = new THREE.Mesh(quadGeo, fShootMat);
+    fStars.frustumCulled = fShoot.frustumCulled = false;
+    fStars.renderOrder = 1; fShoot.renderOrder = 2;
+    const fScene = new THREE.Scene();
+    fScene.add(fStars, fShoot);
+    const buf = new THREE.Vector2();
+    let shown = true;
+    const show = (v) => { if (v !== shown) { shown = v; fc.style.visibility = v ? '' : 'hidden'; } };
+    fr.compile(fScene, cam);
+    return {
+      canvas: fc, renderer: fr, uniforms: gu,
+      resize(w, h) {
+        fr.setPixelRatio(renderer.getPixelRatio());
+        fr.setSize(w, h, false);
+        gu.uGlassDpr.value = fr.getPixelRatio();
+        gu.uBufH.value = fr.getDrawingBufferSize(buf).y;
+      },
+      render() {
+        const b = o.glass();
+        const W = view.x, H = view.y;
+        if (!b || b.bottom <= 0 || b.top >= H) { show(false); return; }
+        gu.uBand.value.set(b.top, Math.max(b.fadeTop, 1e-3), b.bottom, Math.max(b.fadeBottom, 1e-3));
+        fShoot.visible = shootMesh.visible;
+        fr.setScissorTest(false);
+        fr.clear();
+        const y0 = Math.max(0, Math.floor(b.top)), y1 = Math.min(H, Math.ceil(b.bottom));
+        fr.setScissor(0, H - y1, W, y1 - y0);
+        fr.setScissorTest(true);
+        fr.render(fScene, cam);
+        show(true);
+      },
+      dispose() {
+        fStarMat.dispose(); fShootMat.dispose();
+        fr.dispose();
+        fc.remove();
+      },
+    };
+  }
+  let front = o.glass ? createFront() : null;
+  if (front) {
+    /* Kontext verloren: ohne vordere Ebene weiter, die Sterne sind dann wie bisher nur weich hinter dem Glas */
+    listen(front.canvas, 'webglcontextlost', (e) => { e.preventDefault(); const f = front; front = null; f.dispose(); });
+  }
 
   /* ---------- Zustand ---------- */
   const rnd = Math.random;
@@ -460,12 +578,14 @@ export function init(container, options = {}) {
     view.set(w, h);
     uniforms.uDpr.value = renderer.getPixelRatio();
     starGeo.instanceCount = visibleCount(w, h);
+    if (front) front.resize(w, h);
   }
 
   function render() {
     uniforms.uTime.value = clock;
     updateGlow();
     renderer.render(scene, cam);
+    if (front) front.render();
   }
 
   let raf = 0, last = 0, running = false;
@@ -526,6 +646,13 @@ export function init(container, options = {}) {
   }
   listen(mqReduce, 'change', sync);
 
+  /* Steht die Animation (reduzierte Bewegung), wandert der Glasbereich beim Scrollen trotzdem: vordere Ebene nachziehen */
+  let frontRaf = 0;
+  listen(window, 'scroll', () => {
+    if (running || !front || frontRaf) return;
+    frontRaf = requestAnimationFrame(() => { frontRaf = 0; if (front && !running) front.render(); });
+  }, { passive: true });
+
   resize();
   const ro = new ResizeObserver(() => { resize(); if (!running) render(); });
   ro.observe(container);
@@ -551,6 +678,8 @@ export function init(container, options = {}) {
     cleanup.splice(0).forEach((fn) => fn());
     quadGeo.dispose(); starGeo.dispose();
     glowMat.dispose(); starMat.dispose(); shootMat.dispose();
+    cancelAnimationFrame(frontRaf);
+    if (front) { front.dispose(); front = null; }
     renderer.dispose();
     canvas.remove();
   }
