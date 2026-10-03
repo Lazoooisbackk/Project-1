@@ -302,33 +302,66 @@ export async function createBalloonLetters(renderer, { seed = 11 } = {}) {
     });
   }
 
-  let k = 1, ox = 0, oy = 0;
-  /* w, h: Größe der Bühne in CSS-Pixeln; left/top/width: Lage der SVG-Wortmarke in der Bühne */
-  function layout(w, h, mark) {
-    camera.left = 0; camera.right = w; camera.top = 0; camera.bottom = -h;
+  /* Federn: jeder Ballon hat eine eigene kleine Auslenkung (Kippen, Drehen, Wippen), die der Zeiger anstößt */
+  letters.forEach((L) => { L.sx = 0; L.sy = 0; L.sz = 0; L.vx = 0; L.vy = 0; L.vz = 0; L.bob = 0; L.vb = 0; L.px = 0; L.py = 0; L.ph = 0; });
+
+  let k = 1;
+  /* mark: Lage der SVG-Wortmarke in der Bühne (CSS-Pixel); rect: Ausschnitt, den die Kamera zeigt */
+  function layout(mark, rect) {
+    camera.left = rect.x; camera.right = rect.x + rect.w; camera.top = -rect.y; camera.bottom = -(rect.y + rect.h);
     camera.updateProjectionMatrix();
     k = mark.width / WORDMARK.width;
-    ox = mark.left; oy = mark.top;
     letters.forEach((L) => {
-      L.mesh.position.set(ox + L.center.x * k, -(oy + L.center.y * k), L.z * k);
+      L.px = mark.left + L.center.x * k;
+      L.py = mark.top + L.center.y * k;
+      L.ph = WORDMARK.height * k;
+      L.mesh.position.set(L.px, -L.py, L.z * k);
       L.mesh.scale.set(k * L.scale, -k * L.scale, k * L.scale);
     });
   }
 
-  /* t in Sekunden, ptr in -1..1: langsames Wackeln, der Zeiger dreht leicht mit (die Glanzlichter wandern) */
-  function update(t, ptr, still = false) {
+  /* Zeiger bei x, y (Pixel der Bühne), Bewegung dx, dy seit dem letzten Ereignis */
+  function poke(x, y, dx, dy) {
     letters.forEach((L) => {
+      const r = L.ph * 0.75;
+      const d = Math.hypot(x - L.px, y - L.py);
+      if (d > r) return;
+      const f = Math.pow(1 - d / r, 2) / Math.max(L.ph, 1);
+      L.vy += dx * f * 2.2;           // seitlich gewischt: der Ballon dreht sich weg
+      L.vx += dy * f * 2.2;           // von oben/unten: er kippt
+      L.vz += (dx * (y - L.py) - dy * (x - L.px)) * f * 0.006;
+      L.vb += Math.hypot(dx, dy) * f * 18;
+    });
+  }
+
+  /* t, dt in Sekunden, ptr in -1..1: langsames Wackeln, Federn, der Zeiger dreht leicht mit (die Glanzlichter wandern) */
+  function update(t, dt, ptr, still = false) {
+    const h = Math.min(Math.max(dt, 0), 1 / 30);
+    letters.forEach((L) => {
+      if (!still && h > 0) {
+        /* gedämpfte Feder: weich wie ein Folienballon, schwingt zwei-, dreimal nach */
+        const K = 38, C = 4.2;
+        L.vx += (-K * L.sx - C * L.vx) * h; L.sx += L.vx * h;
+        L.vy += (-K * L.sy - C * L.vy) * h; L.sy += L.vy * h;
+        L.vz += (-K * L.sz - C * L.vz) * h; L.sz += L.vz * h;
+        L.vb += (-K * L.bob - C * L.vb) * h; L.bob += L.vb * h;
+        L.sx = Math.max(-0.6, Math.min(0.6, L.sx)); L.sy = Math.max(-0.7, Math.min(0.7, L.sy));
+        L.sz = Math.max(-0.35, Math.min(0.35, L.sz)); L.bob = Math.max(-0.12, Math.min(0.12, L.bob));
+      }
       const a = still ? 0 : t * L.speed + L.phase;
       L.mesh.rotation.set(
-        L.rx + Math.sin(a) * 0.035 + ptr.y * 0.16,
-        L.ry + Math.cos(a * 0.8) * 0.045 + ptr.x * 0.22,
-        L.rz + Math.sin(a * 0.6 + 1.3) * 0.02,
+        L.rx + Math.sin(a) * 0.035 + ptr.y * 0.16 + L.sx,
+        L.ry + Math.cos(a * 0.8) * 0.045 + ptr.x * 0.22 + L.sy,
+        L.rz + Math.sin(a * 0.6 + 1.3) * 0.02 + L.sz,
       );
+      const s = k * L.scale * (1 + L.bob);
+      L.mesh.scale.set(s, -s, s);
+      L.mesh.position.y = -L.py + Math.sin(a * 0.9) * L.ph * 0.006;
     });
   }
 
   return {
-    scene, camera, layout, update,
+    scene, camera, layout, update, poke,
     dispose() { letters.forEach((L) => L.mesh.geometry.dispose()); material.dispose(); env.dispose(); },
   };
 }

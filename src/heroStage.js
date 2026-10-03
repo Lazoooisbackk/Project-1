@@ -23,7 +23,10 @@ const MIX_F = `precision highp float;
 varying vec2 vUv;
 uniform sampler2D tDye;     // Maske aus der Simulation
 uniform sampler2D tBase;    // weiß mit schwarzen Buchstaben
-uniform sampler2D tReveal;  // schwarz mit den Ballon-Buchstaben (fertige sRGB-Farben)
+uniform sampler2D tReveal;  // schwarz mit den Ballon-Buchstaben (fertige sRGB-Farben), nur im Rechteck der Wortmarke
+uniform vec4 uRevealRect;   // dieses Rechteck in uv: links, unten, rechts, oben
+uniform float uGloss;       // Glanz auf der Tinte (nasse Oberfläche)
+uniform vec2 uLight;        // Richtung des Glanzlichts, folgt leicht dem Zeiger
 uniform vec2 uDyeTexel;
 uniform float uThreshold;   // Kante der Tinte
 uniform float uMaskOn;
@@ -60,7 +63,23 @@ void main(){
 
   vec3 col = base;
   if (m > 0.0005) {
-    vec3 reveal = uRevealOn > 0.5 ? texture2D(tReveal, vUv).rgb : vec3(0.0);
+    vec3 reveal = vec3(0.0);
+    vec2 ru = (vUv - uRevealRect.xy) / (uRevealRect.zw - uRevealRect.xy);
+    if (uRevealOn > 0.5 && ru.x > 0.0 && ru.x < 1.0 && ru.y > 0.0 && ru.y < 1.0) reveal = texture2D(tReveal, ru).rgb;
+
+    /* Nasse Tinte: die Oberfläche wölbt sich am Rand (Meniskus) und spiegelt ein schmales Licht */
+    if (uGloss > 0.0 && uMaskOn > 0.5) {
+      /* Höhe = gesättigte Tinte: innen flach, nur am Rand gewölbt; so zeichnet der Glanz nur die Kante nach */
+      vec2 e = uDyeTexel * 3.0;
+      float lo = uThreshold - 0.04, hi = uThreshold + 0.32;
+      float hl = smoothstep(lo, hi, texture2D(tDye, vUv - vec2(e.x, 0.0)).r), hr = smoothstep(lo, hi, texture2D(tDye, vUv + vec2(e.x, 0.0)).r);
+      float hd = smoothstep(lo, hi, texture2D(tDye, vUv - vec2(0.0, e.y)).r), hu = smoothstep(lo, hi, texture2D(tDye, vUv + vec2(0.0, e.y)).r);
+      vec3 nrm = normalize(vec3(-(hr - hl) * 1.6, -(hu - hd) * 1.6, 1.0));
+      vec3 L = normalize(vec3(-0.45 + uLight.x * 0.35, 0.6 + uLight.y * 0.25, 0.65));
+      float spec = pow(max(dot(reflect(-L, nrm), vec3(0.0, 0.0, 1.0)), 0.0), 48.0);
+      float bg = 1.0 - clamp(dot(reveal, vec3(0.333)) * 3.0, 0.0, 1.0);   // nicht über den Ballons
+      reveal += vec3(spec * uGloss * bg);
+    }
     col = mix(base, reveal, m);
   }
   gl_FragColor = vec4(col, 1.0);
@@ -105,7 +124,7 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
   const canFluid = !reduce && fluidSupported(renderer);
   /* Handy: der Pinsel misst sich an der Höhe der Fläche, im Hochformat deshalb kleiner.
      Die Kraft wird mit der halben Simulationsauflösung halbiert, sonst fließt die Fläche doppelt so weit. */
-  const fluid = canFluid ? createFluid(renderer, mobile ? { simResolution: 128, dyeResolution: 512, splatRadius: 0.0019, velocityRadius: 0.0008, splatForce: 2950 } : {}) : null;
+  const fluid = canFluid ? createFluid(renderer, mobile ? { simResolution: 128, dyeResolution: 768, splatRadius: 0.0042, velocityRadius: 0.0008, splatForce: 2950 } : {}) : null;
 
   /* Ballon-Buchstaben: eigene Szene, gezeichnet in ein Render-Target (mit Tiefe, Kantenglättung).
      Der Code dafür wird erst nachgeladen, damit der Start schnell bleibt. */
@@ -142,11 +161,12 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
     uniforms: {
       tDye: { value: fluid ? fluid.texture : null }, tBase: { value: baseTex }, tReveal: { value: null },
       uDyeTexel: { value: new THREE.Vector2(1 / 1024, 1 / 1024) }, uThreshold: { value: 0.16 },
+      uRevealRect: { value: new THREE.Vector4(0, 0, 1, 1) }, uGloss: { value: 0.5 }, uLight: { value: new THREE.Vector2() },
       uMaskOn: { value: 0 }, uRevealOn: { value: 0 }, uFill: { value: 0 },
       uSh: { value: new THREE.Vector4(0.5, 0.5, 0.2, 0.1) }, uShA: { value: 0 }, uAspect: { value: 1 },
     },
   });
-  if (fluid) mixMat.uniforms.uDyeTexel.value.set(1 / fluid.dyeResolution, 1 / fluid.dyeResolution);
+  if (fluid) mixMat.uniforms.uDyeTexel.value = fluid.dyeTexel;   // wächst mit dem Seitenverhältnis mit
   const quadScene = new THREE.Scene();
   const quadCam = new THREE.Camera();
   const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mixMat);
@@ -179,14 +199,22 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
   }
 
   /* Ballons genau auf die flachen Buchstaben legen (gleiche Lage wie in drawBase) */
+  /* Das Ballon-Bild deckt nur die Wortmarke (mit Rand für Wölbung und Neigung) statt der ganzen Fläche:
+     ein Bruchteil der Pixel, deshalb volle Schärfe auch auf dem Handy */
+  let revealScale = Math.min(window.devicePixelRatio || 1, 2);
   function layoutBalloons() {
     if (!balloons) return;
     const w = stage.clientWidth, h = stage.clientHeight;
     if (!w || !h) return;
     const sr = stage.getBoundingClientRect(), r = svg.getBoundingClientRect();
-    balloons.layout(w, h, { left: r.left - sr.left, top: r.top - sr.top, width: r.width });
-    const pr = Math.min(window.devicePixelRatio || 1, 2) * (mobile ? 0.5 : 1);
-    revealRT.setSize(Math.max(2, Math.round(w * pr)), Math.max(2, Math.round(h * pr)));
+    const mark = { left: r.left - sr.left, top: r.top - sr.top, width: r.width, height: r.height };
+    const m = mark.height * 0.4;
+    const x0 = Math.max(0, mark.left - m), y0 = Math.max(0, mark.top - m);
+    const x1 = Math.min(w, mark.left + mark.width + m), y1 = Math.min(h, mark.top + mark.height + m);
+    const rect = { x: x0, y: y0, w: Math.max(1, x1 - x0), h: Math.max(1, y1 - y0) };
+    balloons.layout(mark, rect);
+    revealRT.setSize(Math.max(2, Math.round(rect.w * revealScale)), Math.max(2, Math.round(rect.h * revealScale)));
+    mixMat.uniforms.uRevealRect.value.set(rect.x / w, 1 - (rect.y + rect.h) / h, (rect.x + rect.w) / w, 1 - rect.y / h);
   }
 
   function layout() {
@@ -226,36 +254,81 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
   };
   api.fill = (v) => { mixMat.uniforms.uFill.value = v; if (!state.running) renderFrame(performance.now(), 0); };
 
-  /* Zeiger */
+  /* Zeiger: alle Zwischenpunkte (getCoalescedEvents) sammeln, im Bild geglättet als Linienzug malen */
   const ptr = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
-  let last = null;
-  const toUv = (e) => {
-    const r = stage.getBoundingClientRect();
-    return { x: (e.clientX - r.left) / r.width, y: 1 - (e.clientY - r.top) / r.height };
-  };
+  const raw = [];                 // neue Zeigerpunkte seit dem letzten Bild (uv)
+  let pPrev = null, pMid = null;  // Zustand der Glättung
+  let pokeLast = null;
+  const toUv = (e, r) => ({ x: (e.clientX - r.left) / r.width, y: 1 - (e.clientY - r.top) / r.height });
   const onMove = (e) => {
     ptr.x = (e.clientX / innerWidth) * 2 - 1; ptr.y = (e.clientY / innerHeight) * 2 - 1;
-    if (!state.fluid) return;
-    const p = toUv(e);
-    if (p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) { last = null; return; }
-    if (last) {
-      const dx = p.x - last.x, dy = p.y - last.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist > 0.0004) {
-        /* schnelle Bewegung: mehrere Tupfer auf der Strecke, damit die Spur nicht abreißt */
-        const n = Math.min(8, Math.max(1, Math.ceil(dist / 0.02)));
-        for (let i = 1; i <= n; i++) fluid.addSplat(last.x + (dx * i) / n, last.y + (dy * i) / n, dx / n, dy / n, 1.0);
-        lastInk = performance.now();
-      }
+    if (!state.fluid || !state.running) return;
+    if (raw.length > 512) raw.length = 0;
+    const r = stage.getBoundingClientRect();
+    const list = e.getCoalescedEvents ? e.getCoalescedEvents() : null;
+    const evs = list && list.length ? list : [e];
+    for (const ev of evs) {
+      const p = toUv(ev, r);
+      if (p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1) { raw.push(null); continue; }
+      raw.push(p);
     }
-    last = p;
+    /* Ballons unter dem Zeiger bekommen einen Stoß und federn nach */
+    if (balloons) {
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      if (pokeLast) balloons.poke(x, y, x - pokeLast.x, y - pokeLast.y);
+      pokeLast = { x, y };
+    }
   };
   window.addEventListener('pointermove', onMove, { passive: true });
-  stage.addEventListener('pointerleave', () => { last = null; });
-  stage.addEventListener('pointerdown', (e) => { last = toUv(e); }, { passive: true });
+  stage.addEventListener('pointerleave', () => { raw.push(null); pokeLast = null; });
+  stage.addEventListener('pointerdown', () => { raw.push(null); }, { passive: true });
+
+  /* Punkte → Teilstrecken: Kurven über die Mittelpunkte (quadratisch), dadurch ohne Ecken */
+  function flushStroke() {
+    if (!raw.length) return;
+    /* langsames Bild mit vielen Punkten: ausdünnen, damit der Linienzug in einen Durchgang passt */
+    if (raw.length > 16) {
+      const keep = [], step = raw.length / 16;
+      for (let i = 0; i < raw.length; i++) if (!raw[i] || Math.floor(i / step) !== Math.floor((i + 1) / step) || i === raw.length - 1) keep.push(raw[i]);
+      raw.length = 0; raw.push(...keep);
+    }
+    const sub = Math.max(1, Math.min(6, Math.floor(30 / raw.length)));
+    let drew = false;
+    const seg = (a, b) => { fluid.addSegment(a.x, a.y, b.x, b.y); drew = true; };
+    for (const p of raw) {
+      if (!p) { pPrev = null; pMid = null; continue; }
+      if (!pPrev) { pPrev = p; pMid = p; seg(p, { x: p.x + 1e-5, y: p.y }); continue; }
+      if (Math.hypot(p.x - pPrev.x, p.y - pPrev.y) < 0.0008) continue;
+      const mid = { x: (pPrev.x + p.x) / 2, y: (pPrev.y + p.y) / 2 };
+      const len = Math.hypot(mid.x - pMid.x, mid.y - pMid.y);
+      const n = Math.min(sub, Math.max(1, Math.ceil(len / 0.012)));
+      let q = pMid;
+      for (let i = 1; i <= n; i++) {
+        const t = i / n, u = 1 - t;
+        const pt = { x: u * u * pMid.x + 2 * u * t * pPrev.x + t * t * mid.x, y: u * u * pMid.y + 2 * u * t * pPrev.y + t * t * mid.y };
+        seg(q, pt); q = pt;
+      }
+      pMid = mid; pPrev = p;
+    }
+    raw.length = 0;
+    /* das letzte halbe Stück bis zum Zeiger gleich mitmalen, damit die Spur nicht hinterherhinkt */
+    if (pPrev && pMid && drew) seg(pMid, pPrev);
+    if (drew) lastInk = performance.now();
+  }
 
   let spin = null, seed = 0;
   api.crumpleAgain = () => { if (!spin) spin = { t: performance.now(), s0: seed }; };
+
+  /* Wird es zu langsam (schwache Grafik), rechnet das Ballon-Bild mit weniger Pixeln: lieber flüssig als scharf */
+  let slow = 0;
+  function adapt(dtRaw) {
+    slow = dtRaw > 1 / 40 ? slow + 1 : Math.max(0, slow - 2);
+    if (slow > 45 && revealScale > 1) {
+      slow = 0;
+      revealScale = Math.max(1, revealScale - 0.25);
+      layoutBalloons();
+    }
+  }
 
   const T0 = performance.now();
   let lastT = T0, raf = 0;
@@ -283,11 +356,14 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
 
     /* Tinte und Ballons nur rechnen, solange Tinte sichtbar sein kann (oder ?foil=1) */
     const fill = mixMat.uniforms.uFill.value > 0;
+    if (fluid && state.fluid) flushStroke();
     const inked = fluid && state.fluid && now - lastInk < INK_LIFE;
     if (inked) { fluid.step(dt); mixMat.uniforms.tDye.value = fluid.texture; }
     mixMat.uniforms.uMaskOn.value = inked ? 1 : 0;
+    mixMat.uniforms.uLight.value.set(cur.x, -cur.y);
+    if (inked && dtRaw > 0) adapt(dtRaw);
     if (balloons && (inked || fill)) {
-      balloons.update(t, cur, state.reduce);
+      balloons.update(t, dt, cur, state.reduce);
       renderer.setRenderTarget(revealRT);
       renderer.setClearColor(0x000000, 1);
       renderer.clear();
