@@ -51,7 +51,7 @@
   visibility: hidden; opacity: 0;
 }
 .menu__list { display: grid; gap: .05em; }
-.menu__item { font-family: var(--serif); font-weight: 500; font-optical-sizing: auto; font-size: clamp(44px, 9vw, 120px); line-height: 1.02; letter-spacing: -.03em; }
+.menu__item { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 9vw, 120px); line-height: 1; letter-spacing: -.045em; }
 .menu__item .line-mask { padding-bottom: .18em; margin-bottom: -.18em; }
 .menu__link { display: inline-block; transition: opacity .3s; }
 .menu__list:hover .menu__link { opacity: .45; }

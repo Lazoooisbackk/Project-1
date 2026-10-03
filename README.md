@@ -37,7 +37,7 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
 - Text unter der Tinte wird dunkel (`src/inkText.js`); Prüfansicht mit voller Tinte: `?inkdebug=1`
 - Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
 - Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):
-  Newsreader (Wortmarke, Display), Geist (Text), Geist Mono (Labels, Zähler)
+  Newsreader (nur Wortmarke und Chrom-O), Geist 100–900 (Hauptschrift: Headlines 600, Physik-Buchstaben 800, Text), Geist Mono (Labels, Zähler)
 
 ## Bilder und Medien
 
@@ -46,6 +46,7 @@ npm run preview   # dist/ lokal ansehen, http://localhost:4173
 | `public/intro/`  | `o-01-wolke`, `o-02-moos`, `o-03-pixel`, `o-04-puffy` (je `.webp` und `.png`) | Das O in vier Materialien: im Loader-Karussell und schwebend in „Leistungen“. |
 | `public/works/`  | `ounji.jpg`, `fleischerei-guskic.jpg`                | Screenshots der Projekte. Fehlen sie, zeigt die Karte einen markierten Platzhalter. |
 | `public/hero/`   | `reveal.mp4` (optional)                              | Schicht unter dem Papier beim Tinten-Effekt im Hero. Ohne Video: dunkle Chromfolie. |
+| `public/reel/`   | `reel.mp4` (H.264/AAC), `reel.webm` (VP9/Opus), `reel.jpg` (Poster) | Showreel nach dem Manifest, mit Buchstaben-Wolke und Ton-Schalter. **Aktuell ein Platzhalter** (Stern-Bilder mit Ton-Fläche): durch das eigene Video ersetzen, gleiche Dateinamen, 16:9, mit Tonspur. |
 | `public/studio/` | `lazar.jpg` (optional, Hochformat 4:5)               | Portrait in „Studio“. Ohne Bild: Platzhalter. |
 | `public/`        | `og.jpg`, `favicon.png`, `favicon.svg`               | Vorschaubild für Links und Favicon (Chrom-O). |
 
@@ -81,7 +82,7 @@ src/starfield.js          Sternenstaub (WebGL, CSS-Fallback), wiederverwendbar
 src/siteBackground.js     Sternenstaub fest hinter der ganzen Seite
 src/miniO.js              Kleines Chrom-O für Loader, Leistungen, Projektkarte
 src/fluidReveal.js        Fluid-Simulation (Stable Fluids) als Maske
-src/sections/*.js         Manifest, Arbeiten, Leistungen, Studio, Kontakt, Footer
+src/sections/*.js         Manifest, Showreel (reel.js), Arbeiten, Leistungen, Studio, Anfassen (play.js, matter-js), Kontakt, Footer
 src/nav.js, cursor.js, transitions.js, sound.js, grain.js, scroll.js, interactions.js
 src/utils/split.js        Text-Splitting (Zeilen, Wörter, Buchstaben mit Masken)
 src/styles/*.css          Tokens, Basis, Loader, Nav, Hero, Sektionen, Footer, Cursor, Seiten

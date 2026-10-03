@@ -16,6 +16,8 @@ import { initManifest } from './sections/manifest.js';
 import { initWorks } from './sections/works.js';
 import { initServices } from './sections/services.js';
 import { initStudio } from './sections/studio.js';
+import { initReel } from './sections/reel.js';
+import { initPlay } from './sections/play.js';
 import { initContact } from './sections/contact.js';
 import { initFooter } from './sections/footer.js';
 
@@ -23,8 +25,8 @@ document.documentElement.classList.add('js');
 
 const fonts = Promise.all([
   document.fonts.load('500 100px "Newsreader"'),
-  document.fonts.load('italic 400 20px "Newsreader"'),
   document.fonts.load('400 16px "Geist"'),
+  document.fonts.load('600 100px "Geist"'),
   document.fonts.load('400 11px "Geist Mono"'),
 ]).catch(() => {});
 
@@ -42,9 +44,11 @@ const hero = initHero();
 initSiteBackground({ waitFor: 'loader:hero-reveal-start' });
 
 initManifest();
+initReel();
 initWorks({ cursor });
 initServices();
 initStudio();
+initPlay({ cursor });
 initContact({ sound });
 initFooter();
 initMagnetic();

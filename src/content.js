@@ -111,6 +111,20 @@ export const content = {
     ],
   },
 
+  reel: {
+    label: '( Showreel )',
+    cloud: 'Webdesign von Wien aus, für überall.',
+    soundOn: 'Ton an',
+    soundOff: 'Ton aus',
+    soundOnAria: 'Ton ausschalten',
+    soundOffAria: 'Ton einschalten',
+  },
+  play: {
+    label: '( Anfassen )',
+    word: 'anfassen',
+    hint: 'Ziehen · Werfen',
+    cursor: 'Ziehen',
+  },
   studio: {
     label: 'Studio',
     text: 'Ich bin Lazar, 17, aus Maria Ellend. Ich baue Websites mit Gefühl für Details, weil der erste Eindruck heute online passiert.',

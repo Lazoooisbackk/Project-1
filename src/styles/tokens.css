@@ -11,6 +11,7 @@
 
   --serif: "Newsreader", "Iowan Old Style", "Times New Roman", serif;
   --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: var(--sans);
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --pad: clamp(16px, 3.2vw, 44px);
