@@ -15,11 +15,13 @@ void main(){
 }`;
 
 const SPLAT = `precision highp float; varying vec2 vUv;
-uniform sampler2D uTarget; uniform float uAspect; uniform vec3 uColor; uniform vec2 uPoint; uniform float uRadius;
+uniform sampler2D uTarget; uniform float uAspect; uniform vec3 uColor; uniform vec2 uPoint; uniform float uRadius; uniform float uCap;
 void main(){
   vec2 p = vUv - uPoint; p.x *= uAspect;
   vec3 splat = exp(-dot(p, p) / uRadius) * uColor;
-  gl_FragColor = vec4(texture2D(uTarget, vUv).xyz + splat, 1.0);
+  vec3 c = texture2D(uTarget, vUv).xyz + splat;
+  if (uCap > 0.0) c = min(c, vec3(uCap));   // Tinte nicht endlos anhäufen: so verschwindet die Fläche nach 2–3 s
+  gl_FragColor = vec4(c, 1.0);
 }`;
 
 const DIVERGENCE = `precision highp float; varying vec2 vUv;
@@ -65,11 +67,13 @@ void main(){ gl_FragColor = uValue * texture2D(uTexture, vUv); }`;
 
 export const FLUID_DEFAULTS = {
   simResolution: 256,
-  dyeResolution: 512,
+  dyeResolution: 1024,          // feine Tinte für eine glatte, scharfe Kante (Handy: 512)
   velocityDissipation: 0.962,   // pro Bild bei 60 fps
-  dyeDissipation: 0.988,
+  dyeDissipation: 0.986,
+  dyeCap: 1.5,                  // höchste Tintenmenge an einer Stelle
   pressureIterations: 20,
-  splatRadius: 0.0011,
+  splatRadius: 0.0044,          // dicker Pinsel: ein Strich ist bei 1440 px Breite ca. 250–400 px breit
+  velocityRadius: 0.0014,       // Schub nur in der Mitte des Strichs: die Fläche fließt etwas, zerreißt aber nicht
   splatForce: 5900,
 };
 
@@ -107,7 +111,7 @@ export function createFluid(renderer, options = {}) {
 
   const mat = (frag, uniforms) => new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: frag, uniforms, depthTest: false, depthWrite: false });
   const advect = mat(ADVECT, { uVelocity: { value: null }, uSource: { value: null }, uTexel: { value: simTexel }, uDt: { value: 0 }, uDissipation: { value: 1 } });
-  const splat = mat(SPLAT, { uTarget: { value: null }, uAspect: { value: 1 }, uColor: { value: new THREE.Vector3() }, uPoint: { value: new THREE.Vector2() }, uRadius: { value: o.splatRadius } });
+  const splat = mat(SPLAT, { uTarget: { value: null }, uAspect: { value: 1 }, uColor: { value: new THREE.Vector3() }, uPoint: { value: new THREE.Vector2() }, uRadius: { value: o.splatRadius }, uCap: { value: 0 } });
   const diverge = mat(DIVERGENCE, { uVelocity: { value: null }, uTexel: { value: simTexel } });
   const press = mat(PRESSURE, { uPressure: { value: null }, uDivergence: { value: null }, uTexel: { value: simTexel } });
   const gradient = mat(GRADIENT, { uPressure: { value: null }, uVelocity: { value: null }, uTexel: { value: simTexel } });
@@ -133,12 +137,15 @@ export function createFluid(renderer, options = {}) {
       const s = queue.shift();
       splat.uniforms.uAspect.value = aspect;
       splat.uniforms.uPoint.value.set(s.x, s.y);
-      splat.uniforms.uRadius.value = o.splatRadius;
+      splat.uniforms.uRadius.value = o.velocityRadius;
       splat.uniforms.uTarget.value = velocity.read.texture;
       splat.uniforms.uColor.value.set(s.dx * o.splatForce, s.dy * o.splatForce, 0);
+      splat.uniforms.uCap.value = 0;
       pass(splat, velocity.write); velocity.swap();
+      splat.uniforms.uRadius.value = o.splatRadius;
       splat.uniforms.uTarget.value = dye.read.texture;
       splat.uniforms.uColor.value.set(s.amount, s.amount, s.amount);
+      splat.uniforms.uCap.value = o.dyeCap;
       pass(splat, dye.write); dye.swap();
     }
   }
@@ -188,6 +195,7 @@ export function createFluid(renderer, options = {}) {
     step,
     setAspect(a) { aspect = a; },
     get texture() { return dye.read.texture; },
+    get dyeResolution() { return o.dyeResolution; },
     dispose() {
       velocity.dispose(); pressure.dispose(); dye.dispose(); divergence.dispose();
       [advect, splat, diverge, press, gradient, clear].forEach((m) => m.dispose());

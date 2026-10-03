@@ -22,7 +22,7 @@ Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.g
 ## Aufbau der Seite
 
 1. **Intro** (`src/loader.js`): schwarze Fläche, „g“ und „O“, dazwischen wechseln Folien-Ballons, der Zähler läuft von 100 auf 000. Spielt einmal pro Sitzung.
-2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger löst die weiße Seite auf; darunter steht der Name als Folien-Ballons auf Schwarz. Das O ist immer das Chrom-O.
+2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger hinterlässt eine feste schwarze Fläche wie verschüttete Tinte, die nach 2–3 Sekunden wieder verschwindet; darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
 3. **Manifest**: Aussage, Showreel im Rahmen, kleiner Absatz mit fallenden Buchstaben.
 4. **Arbeiten**: wandernde Überschrift, versetzte Projekt-Karten.
 5. **Showreel** über die ganze Breite mit dem Schalter „Sound“.
@@ -42,7 +42,7 @@ Noch Platzhalter: die E-Mail-Adresse `hallo@guskic.studio`, der Instagram-Link `
 | Ordner | Inhalt |
 | --- | --- |
 | `public/objects/` | Folien-Ballons, je 1200 × 1200 px als WebP und PNG, auf reinem Schwarz |
-| `public/hero/` | Folien-Schleife für den Wisch-Effekt (`foil.mp4`, Standbild `foil.webp`/`foil.jpg`) |
+| `public/hero/` | Folien-Schleife (`foil.mp4`, Standbild `foil.webp`/`foil.jpg`), läuft in der Video-Kachel im Manifest |
 | `public/video/` | `reel-ounji.mp4`, `showreel.mp4`, `manifest.mp4`, jeweils mit Standbild |
 | `public/works/` | Screenshots der Kundenseiten |
 | `public/studio/` | die beiden Bilder im Abschnitt „Studio“ |
@@ -77,6 +77,10 @@ ffmpeg -framerate 30 -i _assets/rec/ounji-frames/f%04d.jpg -vf "scale=1280:720,f
   `node scripts/wordmark.mjs` (nur nötig, wenn sich Schrift, Laufweite oder Text ändern).
 - Das O ist ein three.js-Objekt aus zerknitterter Chromfolie (`src/chromeO.js`). Im SVG liegt an seiner Stelle ein unsichtbarer O-Pfad; daran wird das Chrom-O in Größe und Position ausgerichtet. Die Dicke des Rings steht in `buildO()` (`rMax`, `rMin`).
 - Ohne WebGL erscheint das O als normaler Buchstabe und der Wisch-Effekt entfällt.
+
+## Ballon-Buchstaben beim Wischen
+
+Jeder Buchstabe von „guskic studi“ ist ein eigenes 3D-Objekt aus glänzender orchidfarbener Folie: Der SVG-Pfad wird über ein Distanzfeld zu einer runden Röhre aufgeblasen, mit gepresster Naht und Knittern am Rand, leicht gekippt, vergrößert und überlappend wie echte Buchstaben-Ballons. Form, Farbe und Glanz stehen oben in `src/balloonLetters.js` (`BALLOON`), Dicke und Lebensdauer der schwarzen Fläche in `src/fluid.js` (`FLUID_DEFAULTS`).
 
 ## Prüfen
 

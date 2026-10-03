@@ -45,7 +45,6 @@ export function initHero() {
     stage.classList.add('is-settled');
     if (api.bake()) {
       gsap.set(letters, { autoAlpha: 0 });
-      api.loadVideo();
       /* ?foil=1 zeigt die ganze Fläche als Folienwelt (zum Prüfen und für das Vorschaubild) */
       if (new URLSearchParams(location.search).get('foil') === '1') api.fill(1);
     }
