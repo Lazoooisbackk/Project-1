@@ -24,9 +24,11 @@ export const BALLOON = {
   soften: 12,           // Rundung der Ecken (Weichzeichner des Distanzfelds)
   dome: 34,             // Glättung der Wölbung im Inneren
   wrinkle: 5,           // Stärke der Knitter an der Naht
-  color: 0xf588d8,      // Orchid-Pink wie die Folien-Ballons in public/objects
-  roughness: 0.14,
-  envMapIntensity: 1.5,
+  color: 0xe9e6e3,      // Perlweiße Folie, schillert (Dünnfilm) wie das Chrom-O
+  metalness: 0.45,
+  roughness: 0.17,
+  iridescence: 0.9,
+  envMapIntensity: 1.3,
 };
 
 const rnd = (seed) => { let s = seed; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; };
@@ -218,7 +220,8 @@ function makeBalloonEnv(renderer) {
     vertexShader: 'varying vec3 vP; void main(){ vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
     fragmentShader: `varying vec3 vP; void main(){
       float y=normalize(vP).y;
-      vec3 c=y>0.0?mix(vec3(0.05,0.045,0.055),vec3(0.012),pow(y,0.5)):mix(vec3(0.05,0.045,0.055),vec3(0.14,0.13,0.14),pow(-y,0.6));
+      /* heller Raum, damit die weiße Folie weiß bleibt; oben dunkler für Kontrast in den Spiegelungen */
+      vec3 c=y>0.0?mix(vec3(0.22,0.21,0.24),vec3(0.05,0.05,0.07),pow(y,0.6)):mix(vec3(0.22,0.21,0.24),vec3(0.46,0.44,0.44),pow(-y,0.6));
       gl_FragColor=vec4(c,1.0); }`,
   })));
   const panel = (w, h, col, p) => {
@@ -241,8 +244,9 @@ function makeBalloonEnv(renderer) {
 function makeMaterial(env) {
   const B = BALLOON;
   const mat = new THREE.MeshPhysicalMaterial({
-    color: B.color, metalness: 1, roughness: B.roughness,
-    clearcoat: 1, clearcoatRoughness: 0.06,
+    color: B.color, metalness: B.metalness, roughness: B.roughness,
+    clearcoat: 1, clearcoatRoughness: 0.08,
+    iridescence: B.iridescence, iridescenceIOR: 1.4, iridescenceThicknessRange: [220, 620],
     envMap: env, envMapIntensity: B.envMapIntensity,
   });
   const uniforms = { uWrinkle: { value: B.wrinkle } };

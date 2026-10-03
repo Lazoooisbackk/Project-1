@@ -113,8 +113,8 @@ export const FLUID_DEFAULTS = {
   dyeCap: 1.5,                  // höchste Tintenmenge an einer Stelle
   tension: 0.18,                // Oberflächenspannung: rundet die Kante, glättet Zacken
   pressureIterations: 20,
-  splatRadius: 0.0095,          // dicker Pinsel: ein Strich ist bei 1440 px Breite ca. 250–350 px breit
-  velocityRadius: 0.0016,       // Schub nur in der Mitte des Strichs: die Fläche fließt etwas, zerreißt aber nicht
+  splatRadius: 0.0040,          // Pinsel: ein Strich ist bei 1440 px Breite ca. 170–220 px breit
+  velocityRadius: 0.0011,       // Schub nur in der Mitte des Strichs: die Fläche fließt etwas, zerreißt aber nicht
   splatForce: 5900,
 };
 

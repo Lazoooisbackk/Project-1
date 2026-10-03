@@ -124,7 +124,7 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
   const canFluid = !reduce && fluidSupported(renderer);
   /* Handy: der Pinsel misst sich an der Höhe der Fläche, im Hochformat deshalb kleiner.
      Die Kraft wird mit der halben Simulationsauflösung halbiert, sonst fließt die Fläche doppelt so weit. */
-  const fluid = canFluid ? createFluid(renderer, mobile ? { simResolution: 128, dyeResolution: 768, splatRadius: 0.0042, velocityRadius: 0.0008, splatForce: 2950 } : {}) : null;
+  const fluid = canFluid ? createFluid(renderer, mobile ? { simResolution: 128, dyeResolution: 768, splatRadius: 0.0018, velocityRadius: 0.0006, splatForce: 2950 } : {}) : null;
 
   /* Ballon-Buchstaben: eigene Szene, gezeichnet in ein Render-Target (mit Tiefe, Kantenglättung).
      Der Code dafür wird erst nachgeladen, damit der Start schnell bleibt. */

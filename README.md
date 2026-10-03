@@ -80,7 +80,7 @@ ffmpeg -framerate 30 -i _assets/rec/ounji-frames/f%04d.jpg -vf "scale=1280:720,f
 
 ## Ballon-Buchstaben beim Wischen
 
-Jeder Buchstabe von „guskic studi“ ist ein eigenes 3D-Objekt aus glänzender orchidfarbener Folie: Der SVG-Pfad wird über ein Distanzfeld zu einer runden Röhre aufgeblasen, mit gepresster Naht und Knittern am Rand, leicht gekippt, vergrößert und überlappend wie echte Buchstaben-Ballons. Form, Farbe und Glanz stehen oben in `src/balloonLetters.js` (`BALLOON`), Dicke und Lebensdauer der schwarzen Fläche in `src/fluid.js` (`FLUID_DEFAULTS`).
+Jeder Buchstabe von „guskic studi“ ist ein eigenes 3D-Objekt aus perlweißer, schillernder Folie: Der SVG-Pfad wird über ein Distanzfeld zu einer runden Röhre aufgeblasen, mit gepresster Naht und Knittern am Rand, leicht gekippt, vergrößert und überlappend wie echte Buchstaben-Ballons. Form, Farbe und Glanz stehen oben in `src/balloonLetters.js` (`BALLOON`), Dicke und Lebensdauer der schwarzen Fläche in `src/fluid.js` (`FLUID_DEFAULTS`).
 
 ## Prüfen
 
