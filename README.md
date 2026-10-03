@@ -73,9 +73,10 @@ ffmpeg -framerate 30 -i _assets/rec/ounji-frames/f%04d.jpg -vf "scale=1280:720,f
 
 ## Wortmarke und Chrom-O
 
-- Die Buchstaben „guskic studi“ sind SVG-Pfade in `src/wordmark.js`. Die Datei wird aus Geist Bold erzeugt:
+- Die Buchstaben „guskic studi“ sind SVG-Pfade in `src/wordmark.js`, erzeugt aus Geist Bold:
   `node scripts/wordmark.mjs` (nur nötig, wenn sich Schrift, Laufweite oder Text ändern).
-- Das O ist ein three.js-Objekt aus zerknitterter Chromfolie (`src/chromeO.js`). Im SVG liegt an seiner Stelle ein unsichtbarer O-Pfad; daran wird das Chrom-O in Größe und Position ausgerichtet. Die Dicke des Rings steht in `buildO()` (`rMax`, `rMin`).
+- Das O hat die Form des alten Logos: das Serifen-O aus Newsreader (wght 500, opsz 18). Seine Kontur liegt in `scripts/newsreader-o.json` (erzeugt mit `python3 scripts/newsreader-o.py`, braucht `pip install fonttools brotli`). `scripts/wordmark.mjs` skaliert es auf die Versalhöhe von Geist und setzt es auf dieselbe Grundlinie. Die Schrift selbst wird nicht ausgeliefert.
+- Das O ist ein three.js-Objekt aus zerknitterter Chromfolie (`src/chromeO.js`): eine Röhre mit dicken Seiten und dünnem Scheitel wie eine Antiqua (`rMax`, `rMin`, `stress` in `buildO()`). Im SVG liegt an seiner Stelle ein unsichtbarer O-Pfad; daran wird das Chrom-O in Größe und Position ausgerichtet. Im Intro ist das weiße O dieselbe Kontur als SVG, damit der Übergang zum Chrom-O deckungsgleich ist.
 - Ohne WebGL erscheint das O als normaler Buchstabe und der Wisch-Effekt entfällt.
 
 ## Ballon-Buchstaben beim Wischen

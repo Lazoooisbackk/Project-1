@@ -1,13 +1,14 @@
 /*
   Intro: schwarze Fläche, „g“ und „O“, dazwischen öffnet sich ein Fenster mit wechselnden Folien-Ballons.
   Am Ende wird das weiße O zum Chrom-O, dann hebt sich der Vorhang. Spielt einmal pro Sitzung.
+  Das weiße O ist dieselbe Kontur wie das O der Wortmarke (Newsreader), als SVG, damit der Übergang
+  zum Chrom-O deckungsgleich ist.
 */
 import { gsap } from './utils/gsap.js';
 import { $, pad3, session, reducedMotion, isMobile } from './utils/dom.js';
 import { lockScroll, unlockScroll } from './scroll.js';
 import { preloadBalloons, balloonPicture } from './objects.js';
 import { createMiniO } from './miniO.js';
-import { MARK_FONT } from './chromeO.js';
 import { content } from './content.js';
 import { WORDMARK } from './wordmark.js';
 
@@ -15,11 +16,31 @@ const KEY = 'gs-intro-seen';
 const within = (p, ms, fallback) => Promise.race([p, new Promise((r) => setTimeout(() => r(fallback), ms))]);
 
 export const introWillPlay = () => !session.get(KEY) && !reducedMotion();
+
+/* Das weiße O als SVG vor die Grundlinien-Marke setzen: Höhe und Lage in em aus den Wortmarken-Einheiten */
+function makeO(el) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const b = WORDMARK.o.box;
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'loader__o');
+  svg.setAttribute('viewBox', `${b.x} ${b.y} ${b.w} ${b.h}`);
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  const p = document.createElementNS(NS, 'path');
+  p.setAttribute('d', WORDMARK.o.d);
+  p.setAttribute('fill', 'currentColor');
+  svg.appendChild(p);
+  svg.style.height = `${b.h / 1000}em`;
+  svg.style.verticalAlign = `${-(b.y + b.h - WORDMARK.baseline) / 1000}em`;   // Überhang unter die Grundlinie
+  $('.loader__o-wrap', el).insertBefore(svg, $('.loader__bl', el));
+  return svg;
+}
 export const preloadIntro = () => preloadBalloons(content.objects.intro);
 
 export async function runLoader({ hero, fonts }) {
   const el = $('#loader');
-  const g = $('.loader__g', el), o = $('.loader__o', el), win = $('.loader__win', el), bl = $('.loader__bl', el);
+  const g = $('.loader__g', el), win = $('.loader__win', el), bl = $('.loader__bl', el);
+  const o = makeO(el);
   const counter = $('.loader__counter', el), chromeCanvas = $('.loader__chrome', el);
 
   const finish = () => {
@@ -62,16 +83,13 @@ export async function runLoader({ hero, fonts }) {
   });
   await Promise.all(items.map((p) => p.querySelector('img').decode().catch(() => {})));
 
-  /* Chrom-O deckungsgleich über das weiße O legen */
+  /* Chrom-O deckungsgleich über das weiße O legen (Maße aus der Kontur, unabhängig von Transformationen) */
   const placeChrome = () => {
     const fs = parseFloat(getComputedStyle(o).fontSize);
-    const ctx = document.createElement('canvas').getContext('2d');
-    ctx.font = MARK_FONT(fs);
-    const m = ctx.measureText('O');
-    let L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight, A = m.actualBoundingBoxAscent, D = m.actualBoundingBoxDescent;
-    if (!(R > 0 && A > 0)) { L = -0.04 * fs; R = 0.76 * fs; A = 0.72 * fs; D = 0.012 * fs; }
-    const h = A + D, size = h * 1.9;
-    const cx = o.offsetLeft + (R - L) / 2, cy = bl.offsetTop - (A - D) / 2;
+    const b = WORDMARK.o.box, k = fs / 1000;
+    const w = b.w * k, h = b.h * k, size = h * 1.9;
+    const cx = w / 2;
+    const cy = bl.offsetTop + (b.y + b.h - WORDMARK.baseline) * k - h / 2;   // Grundlinie liegt bei bl
     Object.assign(chromeCanvas.style, { width: `${size}px`, height: `${size}px`, left: `${cx - size / 2}px`, top: `${cy - size / 2}px` });
     return h / size;
   };

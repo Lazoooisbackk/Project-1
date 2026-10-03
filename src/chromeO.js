@@ -4,15 +4,14 @@
 */
 import * as THREE from 'three';
 import { NOISE, CRUMPLE } from './shaders.js';
+import { WORDMARK } from './wordmark.js';
 
-/* Schrift der Wortmarke: daran wird das Chrom-O ausgemessen (Hero, Intro, kleine Os) */
-export const MARK_FONT = (px) => `700 ${px}px Geist`;
-
-/* Das O der fetten Grotesk als Röhre: fast gleichmäßig dick, oben und unten eine Spur dünner */
+/* Das O der Wortmarke ist das Serifen-O aus Newsreader (Form des alten Logos, siehe scripts/wordmark.mjs).
+   Als Röhre: dicke Seiten, dünn oben und unten, leicht geneigte Achse (Strichkontrast einer Antiqua). */
 export function buildO(aspect) {
   const segU = 320, segV = 64;
   const A = aspect / 2, B = 0.5;
-  const rMax = 0.116, rMin = 0.102, stress = 0;
+  const rMax = 0.108, rMin = 0.044, stress = -0.22;
   const rt = (th) => rMin + (rMax - rMin) * Math.pow(Math.cos(th - stress), 2);
   const center = (th) => { const r = rt(th); return [(A - r) * Math.cos(th), (B - r) * Math.sin(th)]; };
   const pos = new Float32Array(segU * segV * 3), aT = new Float32Array(segU * segV);
@@ -46,14 +45,9 @@ export function buildO(aspect) {
   return g;
 }
 
-/* Seitenverhältnis (Breite / Höhe) des O der Wortmarke, wie im Hero gemessen */
-export function oAspect() {
-  const ctx = document.createElement('canvas').getContext('2d');
-  ctx.font = MARK_FONT(100);
-  const m = ctx.measureText('O');
-  const L = m.actualBoundingBoxLeft, R = m.actualBoundingBoxRight, A = m.actualBoundingBoxAscent, D = m.actualBoundingBoxDescent;
-  return R > 0 && A > 0 ? (L + R) / (A + D) : 0.933;
-}
+/* Seitenverhältnis (Breite / Höhe) des O der Wortmarke, aus der Kontur in src/wordmark.js */
+export const O_ASPECT = WORDMARK.o.box.w / WORDMARK.o.box.h;
+export function oAspect() { return O_ASPECT; }
 
 /* Studio für die Spiegelungen: dunkle Decke, heller Papierboden, Softboxen, ein kobaltblauer und ein warmer Streifen */
 export function makeEnv(renderer) {
