@@ -14,12 +14,13 @@ html.lenis, html.lenis body { height: auto; }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--sans);
   font-weight: 500;
-  font-size: 17px;
-  line-height: 1.5;
+  font-size: var(--text);
+  line-height: 1.22;
+  letter-spacing: -.012em;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -27,12 +28,13 @@ body {
 body.is-loading { overflow: hidden; }
 
 h1, h2, h3, p, ul, ol, figure { margin: 0; }
+h1, h2, h3 { font-weight: 500; font-size: inherit; }
 ul, ol { padding: 0; list-style: none; }
 img, video, canvas, svg { display: block; max-width: 100%; }
-button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button { font: inherit; color: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 
-:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -42,32 +44,46 @@ a { color: inherit; text-decoration: none; }
 .skip-link {
   position: fixed; top: 0; left: 0; z-index: calc(var(--z-loader) + 1);
   padding: 12px 16px; background: var(--ink); color: var(--paper);
-  font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .07em;
+  font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .05em;
   transform: translateY(-120%);
 }
 .skip-link:focus { transform: none; }
 
-/* Labels */
+/* Schwarze Abschnitte: ab „Arbeiten“ bis zum Seitenende */
+.on-dark { background: var(--black); color: var(--white); }
+
+/* Kleine Mono-Labels */
 .label {
-  font: 500 11px/1.4 var(--mono);
-  letter-spacing: .07em;
+  font: 500 10px/1.3 var(--mono);
+  letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--muted);
 }
-@media (min-width: 1200px) { .label { font-size: 12px; } }
-.on-dark .label { color: rgba(245, 243, 238, .62); }
+.on-dark .label { color: rgba(255, 255, 255, .5); }
 
-/* Display / Statement */
+/* „( Das Studio )“ */
+.paren { font-size: var(--small); line-height: 1.2; white-space: nowrap; }
+
+/* Große Aussagen */
 .statement {
-  font-family: var(--display);
-  font-weight: 600;
+  font-family: var(--sans);
+  font-weight: 500;
   font-size: var(--h1);
-  line-height: .98;
-  letter-spacing: -.045em;
-  text-wrap: balance;
+  line-height: 1.02;
+  letter-spacing: -.04em;
 }
 
-/* Underline links: draws from left to right */
+/* Kleines Kästchen wie „EN“ bei Nothin' */
+.pill {
+  display: inline-grid; place-items: center;
+  height: 17px; padding: 0 5px;
+  border-radius: 5px;
+  background: var(--ink); color: var(--paper);
+  font: 700 9px/1 var(--sans); letter-spacing: .02em; text-transform: uppercase;
+}
+.on-dark .pill { background: var(--white); color: var(--black); }
+
+/* Links: Strich zieht sich von links nach rechts */
 .u-link {
   position: relative;
   display: inline-block;
@@ -75,37 +91,48 @@ a { color: inherit; text-decoration: none; }
 .u-link::after {
   content: "";
   position: absolute; left: 0; right: 0; bottom: -.12em;
-  height: 1px; background: var(--orchid);
+  height: 1px; background: currentColor;
   transform: scaleX(0); transform-origin: right;
   transition: transform .5s cubic-bezier(.76, 0, .24, 1);
 }
 .u-link:hover::after, .u-link:focus-visible::after { transform: scaleX(1); transform-origin: left; }
 
-/* Buttons */
+/* Buttons: kleine Pillen mit Mono-Schrift */
 .btn {
-  position: relative;
-  display: inline-flex; align-items: center; justify-content: center;
-  height: 52px; padding: 0 26px;
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  height: 36px; padding: 0 16px;
   border-radius: 999px;
   border: 1px solid currentColor;
-  font: 500 14px/1 var(--sans);
+  font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   transition: color .45s cubic-bezier(.76, 0, .24, 1);
 }
 .btn::before {
-  content: ""; position: absolute; inset: 0; background: currentColor;
+  content: ""; position: absolute; inset: 0;
   transform: translateY(101%); transition: transform .5s cubic-bezier(.76, 0, .24, 1);
   z-index: -1;
 }
-.btn span { position: relative; z-index: 1; }
-.btn--solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
-.btn--solid:hover { color: var(--paper); }
-.btn--solid::before { background: var(--ink); }
-.btn--ghost:hover { color: var(--ink); }
-.btn--ghost::before { background: var(--paper); }
+.btn:hover::before, .btn:focus-visible::before { transform: none; }
+.btn span, .btn i { position: relative; font-style: normal; }
+.btn i { font-family: var(--sans); font-size: 13px; line-height: 1; transition: transform .45s cubic-bezier(.76, 0, .24, 1); }
+.btn:hover i { transform: translateX(3px); }
+/* schwarz gefüllt (auf Weiß) */
+.btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn--solid::before { background: var(--paper); }
+.btn--solid:hover, .btn--solid:focus-visible { color: var(--ink); }
+/* im Start-Bereich: weiß mit „difference“ gemischt (wirkt auf Weiß schwarz, auf Schwarz weiß) */
+.btn--blend { background: var(--white); color: var(--black); border-color: var(--white); }
+.btn--blend::before { background: var(--black); }
+.btn--blend:hover, .btn--blend:focus-visible { color: var(--white); }
+.no-gl .btn--blend { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* nur Rand (auf Schwarz) */
+.btn--ghost { color: var(--white); }
+.btn--ghost::before { background: var(--white); }
+.btn--ghost:hover, .btn--ghost:focus-visible { color: var(--black); }
 
-/* Split-Text masks. Child gets padding-bottom, mask a negative margin, so descenders survive. */
+/* Split-Text-Masken. Das Kind bekommt padding-bottom, die Maske einen negativen Rand: Unterlängen bleiben ganz. */
 .line-mask, .w-mask, .ch-mask {
   display: inline-block;
   overflow: hidden;
@@ -119,22 +146,10 @@ a { color: inherit; text-decoration: none; }
 .ch-mask--space { width: .25em; }
 .w-block { display: inline-block; white-space: nowrap; }
 
-/* Sternenstaub hinter der ganzen Seite (src/siteBackground.js) */
-.site-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-
-/* Grain */
-.grain {
-  position: fixed; inset: 0; z-index: var(--z-grain);
-  width: 100%; height: 100%;
-  pointer-events: none;
-  opacity: .04;
-  mix-blend-mode: multiply;
-}
-
-/* Magnetic wrapper */
+/* Magnetischer Rahmen */
 .magnetic { display: inline-block; }
 
-/* Reduced motion */
+/* Weniger Bewegung */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }

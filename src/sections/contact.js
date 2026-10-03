@@ -11,8 +11,8 @@ export function initContact({ sound } = {}) {
 
   const title = $('.contact__title', section);
   const { chars } = splitChars(title);
-  gsap.set(chars, { yPercent: reduce ? 0 : 120 });
-  if (!reduce) ScrollTrigger.create({ trigger: title, start: 'top 80%', once: true, onEnter: () => gsap.to(chars, { yPercent: 0, duration: 1.4, ease: 'power4.inOut', stagger: { each: 0.03, from: 'random' } }) });
+  gsap.set(chars, { yPercent: reduce ? 0 : 125 });
+  if (!reduce) ScrollTrigger.create({ trigger: title, start: 'top 80%', once: true, onEnter: () => gsap.to(chars, { yPercent: 0, duration: 1.4, ease: 'power4.inOut', stagger: { each: 0.03, from: 'start' } }) });
 
   /* Formular-Overlay */
   const overlay = $('.form-overlay'), closeBtn = $('.form-overlay__close'), form = $('.form', overlay);
@@ -34,6 +34,7 @@ export function initContact({ sound } = {}) {
     progress = target = 0;
   };
   closeBtn.addEventListener('click', closeForm);
+  $$('[data-open-form]').forEach((b) => b.addEventListener('click', openForm));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) closeForm(); });
   form.addEventListener('submit', (e) => {
     e.preventDefault();

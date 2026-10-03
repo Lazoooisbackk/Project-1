@@ -1,40 +1,32 @@
 :root {
-  --paper: #F5F3EE;          /* helle Schrift */
-  --bg: #0B0B0C;             /* Grundfläche des Sternenstaubs */
-  --ink: #0B0B0C;            /* dunkle Schrift auf hellen Flächen (Buttons, Cursor) */
-  --muted: #9A968F;          /* gedämpfte Labels */
-  --black: #0B0B0C;
+  --paper: #FFFFFF;          /* helle Fläche, helle Schrift auf Schwarz */
+  --ink: #000000;            /* dunkle Schrift, dunkle Fläche */
+  --bg: #FFFFFF;
+  --muted: #8C8C8C;          /* gedämpfte Labels */
+  --black: #000000;
   --white: #FFFFFF;
   --orchid: #DA70D6;
-  --line: rgba(245, 243, 238, 0.18);
-  --line-light: rgba(245, 243, 238, 0.18);
+  --line: rgba(255, 255, 255, 0.2);
+  --line-dark: rgba(0, 0, 0, 0.14);
+  --tile: #0B0B0C;           /* Kachel für die Material-Os (sie sind gegen diesen Ton freigestellt) */
 
-  --serif: "Newsreader", "Iowan Old Style", "Times New Roman", serif;
-  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --display: var(--sans);
-  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Wortmarke und Überschriften. Bei Nothin' ist es PP Neue Montreal (kostenpflichtig);
+     Geist ist die nächste freie Schrift. Mit Lizenz: Datei in public/fonts legen und hier vorne eintragen. */
+  --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: var(--sans);
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --pad: clamp(16px, 3.2vw, 44px);
-  --h1: clamp(40px, 6vw, 96px);
-  --nav-h: 64px;
+  --pad: clamp(14px, 1.25vw, 22px);
+  --h1: clamp(30px, 3.3vw, 54px);     /* große Aussagen */
+  --text: clamp(14px, 1.05vw, 16px);  /* Fließtext */
+  --small: clamp(12px, 0.9vw, 13.5px);
+  --nav-h: 56px;
 
-  /* Milchglas für „Arbeiten“ und „Leistungen“ */
-  --glass-opacity: 0.3;                          /* dunkle Tönung: weniger = durchsichtiger */
-  --glass-frost: rgba(245, 243, 238, 0.06);      /* heller Milchglas-Schleier: mehr = heller */
-  --glass-blur: 20px;
-  --glass-fade: clamp(120px, 16vw, 220px);        /* weicher Übergang Glas ↔ Sternenstaub */
-
-  --z-grain: 900;
   --z-cursor: 950;
   --z-menu: 800;
   --z-form: 850;
   --z-curtain: 990;
   --z-loader: 1000;
 
-  color-scheme: dark;
-}
-
-/* Handy: weniger Blur, damit das Scrollen flüssig bleibt */
-@media (max-width: 991px) {
-  :root { --glass-blur: 12px; }
+  color-scheme: light;
 }

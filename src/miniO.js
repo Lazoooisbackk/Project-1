@@ -1,6 +1,6 @@
 /*
   Kleines, freistehendes Chrom-O (gleiche Geometrie und gleiches Material wie im Hero).
-  Für den Loader, die Leistungen-Sektion und die Karte „Dein Projekt?“.
+  Für das Intro und die Wortmarke in der Fußzeile. opts.aspect = Breite / Höhe des O.
   Rendert nur, solange es sichtbar ist und der Tab aktiv ist.
 */
 import * as THREE from 'three';
@@ -29,7 +29,7 @@ export function createMiniO(canvas, opts = {}) {
 
   const U = { uAmt: { value: o.crumple }, uSeed: { value: Math.random() * 10 } };
   const mat = makeFoilMaterial(U);
-  const geo = buildO(oAspect());
+  const geo = buildO(o.aspect || oAspect());
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
 

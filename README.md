@@ -1,10 +1,10 @@
 # guskic studiO
 
-Webdesign-Studio von Lazar Guskic (Maria Ellend / Wien).
+Website des Webdesign-Studios von Lazar Guskic (Maria Ellend / Wien).
 Schreibweise immer **guskic studiO**: alles klein, nur das O am Ende groß.
 Spruch: „Websites, die man anfassen möchte.“
 
-Der vollständige Auftrag steht in `PROMPT-website.md`.
+Die Seite folgt in Aufbau, Schriftbild und Bewegung dem Vorbild noth.in. Code, Bilder, Videos und Texte sind eigene.
 
 ## Starten
 
@@ -17,83 +17,69 @@ npm run build     # fertige Seite nach dist/
 npm run preview   # dist/ lokal ansehen, http://localhost:4173
 ```
 
-## Logo
+Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.github/workflows/deploy.yml`).
 
-- Die ursprüngliche Logo-Seite liegt unverändert in `reference/logo.html` (Referenz, nicht Teil des Builds).
-- Das O ist ein three.js-Objekt aus zerknitterter Chromfolie über zerknittertem Papier.
-  Es dreht sich zum Zeiger, Klick zerknittert es neu. Der Code dafür steckt jetzt in `src/chromeO.js`
-  (Hero) und `src/miniO.js` (kleine Chrom-Os im Loader, in „Leistungen“ und in der Karte „Dein Projekt?“).
-- Stilvorbild: noth.in (nur Technik und Anspruch, kein Code, keine Texte, keine Bilder).
+## Aufbau der Seite
 
-## Design
-
-- Hintergrund: Sternenstaub auf Schwarz `#0B0B0C` (Weiß `#F5F3EE`, Frozen `#A0BDDB`, Orchid `#DA70D6`),
-  Sterne fallen beim Scrollen mit, Sternschnuppen, Orchid-/Frozen-Lichtschein. „Arbeiten“ und „Leistungen“ bleiben Schwarz.
-- Schrift: `#F5F3EE`, Labels `#9A968F`, Gewicht 500
-- Sternenstaub anpassen: `DEFAULTS` oben in `src/starfield.js` (Anzahl, Farbmix, Fallen, Streifen, Sternschnuppe, Glow, Lichtschein)
-- Milchglas („Arbeiten“, „Leistungen“): Werte in `src/styles/tokens.css` (`--glass-opacity`, `--glass-frost`, `--glass-blur`, `--glass-fade`);
-  die Sterne bleiben auf dem Glas scharf sichtbar, Helligkeit dort über `glassStars` in `src/starfield.js`
-- Tinte im Hero (Perlmutt, Glitzer, Bloom): `INK` in `src/chromeO.js`
-- Text unter der Tinte wird dunkel (`src/inkText.js`); Prüfansicht mit voller Tinte: `?inkdebug=1`
-- Einziger UI-Akzent: Orchid `#DA70D6` (Zähler bei 000, Unterstreichung beim Link-Hover)
-- Schriften, selbst gehostet in `public/fonts` (keine Google-Fonts-Anfragen, DSGVO):
-  Newsreader (nur Wortmarke und Chrom-O), Geist 100–900 (Hauptschrift: Headlines 600, Physik-Buchstaben 800, Text), Geist Mono (Labels, Zähler)
-
-## Bilder und Medien
-
-| Ordner           | Dateien                                              | Wirkung |
-| ---------------- | ---------------------------------------------------- | ------- |
-| `public/intro/`  | `o-01-wolke`, `o-02-moos`, `o-03-pixel`, `o-04-puffy` (je `.webp` und `.png`) | Das O in vier Materialien: im Loader-Karussell und schwebend in „Leistungen“. |
-| `public/works/`  | `ounji.jpg`, `fleischerei-guskic.jpg`                | Screenshots der Projekte. Fehlen sie, zeigt die Karte einen markierten Platzhalter. |
-| `public/hero/`   | `reveal.mp4` (optional)                              | Schicht unter dem Papier beim Tinten-Effekt im Hero. Ohne Video: dunkle Chromfolie. |
-| `public/reel/`   | `reel.mp4` (H.264/AAC), `reel.webm` (VP9/Opus), `reel.jpg` (Poster) | Showreel nach dem Manifest, mit Buchstaben-Wolke und Ton-Schalter. **Aktuell ein Platzhalter** (Stern-Bilder mit Ton-Fläche): durch das eigene Video ersetzen, gleiche Dateinamen, 16:9, mit Tonspur. |
-| `public/studio/` | `lazar.jpg` (optional, Hochformat 4:5)               | Portrait in „Studio“. Ohne Bild: Platzhalter. |
-| `public/`        | `og.jpg`, `favicon.png`, `favicon.svg`               | Vorschaubild für Links und Favicon (Chrom-O). |
-
-**Material-Os:** freigestellt, ca. 800 px hoch, die weichen Kanten sind gegen Schwarz vormultipliziert.
-Sie werden deshalb nur auf `#0B0B0C` gezeigt (Loader, „Leistungen“), nie auf dem Papier.
-Reihenfolge im Intro: Wolke → Moos → Pixel → Puffy, zweimal, dann das echte 3D-Chrom-O.
-Neue Versionen mit gleichem Dateinamen einfach ersetzen. Neue Maße in `src/content.js` unter `intro.materials` eintragen.
+1. **Intro** (`src/loader.js`): schwarze Fläche, „g“ und „O“, dazwischen wechseln Folien-Ballons, der Zähler läuft von 100 auf 000. Spielt einmal pro Sitzung.
+2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger löst die weiße Seite auf; darunter steht der Name als Folien-Ballons auf Schwarz. Das O ist immer das Chrom-O.
+3. **Manifest**: Aussage, Showreel im Rahmen, kleiner Absatz mit fallenden Buchstaben.
+4. **Arbeiten**: wandernde Überschrift, versetzte Projekt-Karten.
+5. **Showreel** über die ganze Breite mit dem Schalter „Sound“.
+6. **Studio**: Text und zwei Bilder.
+7. **Leistungen**: Folien-Ballons und die Buchstaben g u s k i c, die dem Zeiger ausweichen.
+8. **Video** mit der Figur im Folien-Kostüm, darüber Textblöcke und zwei Bildkarten.
+9. **Kontakt** und **Fußzeile** mit der Wortmarke.
 
 ## Texte ändern
 
-Alle Texte stehen gesammelt in `src/content.js` (Marke, Navigation, Hero, Manifest, Arbeiten,
-Leistungen inkl. Position der schwebenden Os, Studio, Kontakt, Footer). Für eine englische Version dort
-ein zweites Objekt anlegen. Die Sektionen in `index.html` enthalten die deutschen Texte zusätzlich im Markup;
-wer dort etwas ändert, ändert beide Stellen.
+Die sichtbaren Texte stehen in `index.html`. Listen, die das JavaScript braucht (Ballons im Intro, Positionen der Ballons, die Zeile über dem Video, E-Mail-Adresse des Formulars), stehen in `src/content.js`.
 
-Impressum und Datenschutz: `impressum.html` und `datenschutz.html`, Platzhalter in eckigen Klammern ausfüllen.
+Noch Platzhalter: die E-Mail-Adresse `hallo@guskic.studio`, der Instagram-Link `https://www.instagram.com/` und die Adresse in `impressum.html` und `datenschutz.html`.
 
-## Struktur
+## Bilder und Videos
+
+| Ordner | Inhalt |
+| --- | --- |
+| `public/objects/` | Folien-Ballons, je 1200 × 1200 px als WebP und PNG, auf reinem Schwarz |
+| `public/hero/` | Folien-Schleife für den Wisch-Effekt (`foil.mp4`, Standbild `foil.webp`/`foil.jpg`) |
+| `public/video/` | `reel-ounji.mp4`, `showreel.mp4`, `manifest.mp4`, jeweils mit Standbild |
+| `public/works/` | Screenshots der Kundenseiten |
+| `public/studio/` | die beiden Bilder im Abschnitt „Studio“ |
+| `public/manifest/` | die beiden Bildkarten über dem Video |
+| `public/og.jpg` | Vorschaubild für geteilte Links |
+
+Die Ballons sind auf Schwarz freigestellt. Sie stehen deshalb nur auf schwarzen Flächen und werden per CSS mit `mix-blend-mode: lighten` gemischt. Welche Ballons wo erscheinen, steht in `src/content.js` unter `objects`.
+
+Woher jedes Bild und Video stammt, steht in `docs/assets.md`.
+
+### Kundenseiten neu aufnehmen
 
 ```
-index.html                Startseite
-impressum.html            Impressum (ECG und MedienG)
-datenschutz.html          Datenschutz
-reference/logo.html       Original-Logo-Seite (Referenz)
-src/content.js            Alle Texte
-src/main.js, src/page.js  Einstieg Startseite / Unterseiten
-src/loader.js             Intro „Ein O, viele Materialien“ (einmal pro Session)
-src/materials.js          Laden der vier Material-Os (WebP + PNG-Fallback)
-src/hero.js               Hero: Wortmarke, Chrom-O, Tinten-Reveal, Übergabe vom Loader
-src/chromeO.js            Chrom-O (aus dem Logo) und Hero-Fläche mit Perlmutt-Tinte
-src/inkText.js            Dunkle Textkopie unter der Tinte (Hero und Navigation)
-src/starfield.js          Sternenstaub (WebGL, CSS-Fallback), wiederverwendbar
-src/siteBackground.js     Sternenstaub fest hinter der ganzen Seite
-src/miniO.js              Kleines Chrom-O für Loader, Leistungen, Projektkarte
-src/fluidReveal.js        Fluid-Simulation (Stable Fluids) als Maske
-src/sections/*.js         Manifest, Showreel (reel.js), Arbeiten, Leistungen, Studio, Anfassen (play.js, matter-js), Kontakt, Footer
-src/nav.js, cursor.js, transitions.js, sound.js, grain.js, scroll.js, interactions.js
-src/utils/split.js        Text-Splitting (Zeilen, Wörter, Buchstaben mit Masken)
-src/styles/*.css          Tokens, Basis, Loader, Nav, Hero, Sektionen, Footer, Cursor, Seiten
-.github/workflows/deploy.yml   Deploy auf GitHub Pages
+PW=/pfad/zu/playwright-core node scripts/record.mjs ounji https://ounji.webflow.io
 ```
 
-## Deploy (GitHub Pages)
+Das Skript legt einen Screenshot und 300 Einzelbilder ab. Aus den Einzelbildern macht ffmpeg das Video:
 
-Jeder Push auf `main` baut die Seite und veröffentlicht `dist/` über GitHub Actions.
-Einmalig in den Repo-Einstellungen: Settings → Pages → Source „GitHub Actions“.
-Adresse: https://lazoooisbackk.github.io/Project-1/
+```
+ffmpeg -framerate 30 -i _assets/rec/ounji-frames/f%04d.jpg -vf "scale=1280:720,format=yuv420p" -an -c:v libx264 -crf 27 -movflags +faststart public/video/reel-ounji.mp4
+```
 
-Der Build nutzt relative Pfade und läuft deshalb auch unter `/Project-1/`.
-Nach dem Umzug auf eine eigene Domain `og:image` in `index.html` auf die absolute URL ändern.
+## Schrift
+
+- **Geist** (variabel, 100–900) für alles. Das Vorbild nutzt PP Neue Montreal, die kostet Geld. Mit einer Lizenz: Datei nach `public/fonts` legen, in `public/fonts/fonts.css` eintragen und in `src/styles/tokens.css` bei `--sans` nach vorne stellen.
+- **IBM Plex Mono** für kleine Labels und Zähler.
+- Beide Schriften liegen in `public/fonts`. Die Seite lädt nichts von Google oder anderen Schrift-Anbietern.
+
+## Wortmarke und Chrom-O
+
+- Die Buchstaben „guskic studi“ sind SVG-Pfade in `src/wordmark.js`. Die Datei wird aus Geist Bold erzeugt:
+  `node scripts/wordmark.mjs` (nur nötig, wenn sich Schrift, Laufweite oder Text ändern).
+- Das O ist ein three.js-Objekt aus zerknitterter Chromfolie (`src/chromeO.js`). Im SVG liegt an seiner Stelle ein unsichtbarer O-Pfad; daran wird das Chrom-O in Größe und Position ausgerichtet. Die Dicke des Rings steht in `buildO()` (`rMax`, `rMin`).
+- Ohne WebGL erscheint das O als normaler Buchstabe und der Wisch-Effekt entfällt.
+
+## Prüfen
+
+- `?foil=1` an die Adresse hängen: der Start-Bereich zeigt die ganze Folienwelt (so entsteht auch `og.jpg`).
+- Das Intro spielt nur einmal pro Sitzung. Zum Wiederholen den Tab schließen oder im Browser den Session Storage leeren.
+- Bei „Bewegung reduzieren“ im Betriebssystem gibt es kein Intro-Karussell, keinen Wisch-Effekt und kein Parallax.

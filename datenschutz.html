@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B0B0C">
+<meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist-mono-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/geist-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
 <title>Datenschutz – guskic studiO</title>
@@ -20,21 +19,20 @@
 <header class="nav">
   <a class="nav__mark" href="./#stage" aria-label="guskic studiO – zur Startseite">gO</a>
   <div class="nav__right">
-    <button class="sound" type="button" aria-pressed="false" aria-label="Sound ein- oder ausschalten">
-      <span class="sound__label">Sound off</span>
-      <span class="sound__track" aria-hidden="true"><span class="sound__tick"></span></span>
-    </button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__text" aria-hidden="true">Menü</span>
+      <span class="menu-btn__dots" aria-hidden="true">
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+      </span>
       <span class="menu-btn__label sr-only">Menü öffnen</span>
     </button>
   </div>
 </header>
 
-<nav class="menu on-dark" id="menu" aria-hidden="true" aria-label="Menü">
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Menü">
   <ul class="menu__list">
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#arbeiten">Arbeiten</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#leistungen">Leistungen</a></span></li>

@@ -1,19 +1,25 @@
+/* Fußzeile (schwarz): die Wortmarke über die ganze Breite mit einem zweiten Chrom-O, darunter eine winzige Zeile */
 .footer {
   position: relative;
-  padding: clamp(48px, 8vw, 100px) var(--pad) 28px;
+  padding: clamp(20px, 2.6vw, 44px) var(--pad) 14px;
   overflow: hidden;
 }
 .footer__mark {
-  font-family: var(--serif); font-weight: 500; font-optical-sizing: auto;
-  line-height: 1.08; letter-spacing: -.035em;
-  white-space: nowrap; overflow: clip; padding-bottom: .14em;
-  margin: 0 0 clamp(24px, 4vw, 48px);
+  position: relative;
+  margin: 0 0 10px;
+  font-size: 0; line-height: 0;
+  color: var(--white);
 }
-.footer__mark .ch-mask { padding-bottom: .14em; margin-bottom: -.14em; cursor: default; }
-.footer__mark .ch { transform-origin: 50% 100%; }
-.footer__mark .ch-mask--space { width: .22em; }
+.footer__mark .wm { overflow: hidden; }
+.footer__mark .wm__l { cursor: default; }
+.footer__o {
+  position: absolute; left: 0; top: 0;
+  width: 0; height: 0; max-width: none;
+  pointer-events: none;
+}
 .footer__links {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
-  padding-top: 20px; border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px;
+  font-size: 10.5px; line-height: 1.3; letter-spacing: 0;
 }
-.footer__links ul { display: flex; flex-wrap: wrap; gap: 20px; }
+.footer__links ul { display: flex; flex-wrap: wrap; gap: 16px; }
+.footer__links > span { display: inline-flex; align-items: center; gap: 8px; }

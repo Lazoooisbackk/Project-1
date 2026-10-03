@@ -1,10 +1,9 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
-import { $, $$, rand, reducedMotion, isMobile } from '../utils/dom.js';
+import { $, $$, rand, reducedMotion } from '../utils/dom.js';
 import { content } from '../content.js';
-import { MATERIALS, STARS, materialPicture } from '../materials.js';
-import { createMiniO } from '../miniO.js';
+import { balloonPicture } from '../objects.js';
 
-/* Leistungen auf Schwarz, umgeben von den eigenen Os. Nichts anderes: die Marke hat nur ihre Os. */
+/* Leistungen: Text oben, darunter die Folien-Ballons und die Buchstaben g u s k i c. Alle weichen dem Zeiger aus. */
 export function initServices() {
   const section = $('.services');
   if (!section) return;
@@ -23,77 +22,88 @@ export function initServices() {
   if (!layer) return;
   const objs = [];
 
-  content.services.objects.forEach((spec) => {
-    const el = document.createElement('div');
-    el.className = 'float-obj';
+  const add = (el, spec) => {
     el.style.setProperty('--x', `${spec.x}%`);
     el.style.setProperty('--y', `${spec.y}%`);
     el.style.setProperty('--mx', `${spec.mx ?? spec.x}%`);
     el.style.setProperty('--my', `${spec.my ?? spec.y}%`);
-    const inner = document.createElement('div');
-    inner.className = 'float-obj__inner';
-    el.appendChild(inner);
-    const obj = { el, base: spec.rot, inside: false };
-
-    if (spec.type === 'material' || spec.type === 'star') {
-      const m = (spec.type === 'star' ? STARS : MATERIALS).find((x) => x.id === spec.id);
-      if (!m) return;
-      /* Nie über 100 % der Pixelgröße bei DPR 2 skalieren */
-      const cap = Math.floor(Math.max(m.w, m.h) / 2);
-      el.style.setProperty('--size', `min(${spec.size}vw, ${cap}px)`);
-      const pic = materialPicture(m, { lazy: true });
-      pic.querySelector('img').addEventListener('error', () => {
-        el.remove();
-        const i = objs.indexOf(obj);
-        if (i > -1) objs.splice(i, 1);
-      });
-      inner.appendChild(pic);
-    } else {
-      el.style.setProperty('--size', `clamp(56px, ${spec.size}vw, 220px)`);
-      el.classList.add('float-obj--chrome');
-      const canvas = document.createElement('canvas');
-      canvas.setAttribute('aria-hidden', 'true');
-      inner.appendChild(canvas);
-      layer.appendChild(el);
-      if (!createMiniO(canvas, { fill: 0.86, observe: true, spin: 0.45 })) { el.remove(); return; }
-    }
-
     layer.appendChild(el);
     gsap.set(el, { rotation: spec.rot });
-    if (!reduce) {
+    const inner = el.firstElementChild;
+    if (!reduce && inner) {
       gsap.to(inner, { y: rand(-16, 16), rotation: rand(-6, 6), duration: rand(3, 5), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: rand(0, 2) });
     }
+    const obj = { el, base: spec.rot, inside: false };
     objs.push(obj);
+    return obj;
+  };
+
+  content.objects.cluster.forEach((spec) => {
+    const el = document.createElement('div');
+    el.className = 'float-obj';
+    el.style.setProperty('--size', `min(${spec.size}vw, 600px)`);
+    el.style.setProperty('--msize', `min(${Math.round(spec.size * 2.1)}vw, 300px)`);
+    const inner = document.createElement('div');
+    inner.className = 'float-obj__inner';
+    const pic = balloonPicture(spec.id, { lazy: true });
+    inner.appendChild(pic);
+    el.appendChild(inner);
+    const obj = add(el, spec);
+    pic.querySelector('img').addEventListener('error', () => {
+      el.remove();
+      const i = objs.indexOf(obj);
+      if (i > -1) objs.splice(i, 1);
+    });
+  });
+
+  content.objects.letters.forEach((spec) => {
+    const el = document.createElement('div');
+    el.className = 'float-obj float-obj--letter';
+    const inner = document.createElement('span');
+    inner.className = 'float-obj__inner';
+    inner.textContent = spec.ch;
+    el.appendChild(inner);
+    add(el, { ...spec, mx: spec.x, my: spec.y });
   });
 
   if (reduce) return;
 
-  /* Cursor-Abstoßung */
-  const mob = isMobile();
-  const R = mob ? 260 : 460, MAX = mob ? 110 : 380, ROT = mob ? 12 : 30;
+  /* Zeiger-Abstoßung: innerhalb des Radius werden die Dinge weggeschoben, danach federn sie zurück */
+  const params = () => (window.matchMedia('(max-width: 767px)').matches
+    ? { R: 260, MAX: 110, ROT: 12, SC: 0.1 }
+    : { R: 460, MAX: 380, ROT: 30, SC: 0.2 });
   let active = false;
   new IntersectionObserver(([e]) => { active = e.isIntersecting; }, { threshold: 0 }).observe(section);
 
+  const release = (o) => {
+    o.inside = false;
+    gsap.to(o.el, { x: 0, y: 0, rotation: o.base, scale: 1, duration: 1.2, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' });
+  };
   const onMove = (x, y) => {
     if (!active) return;
+    const { R, MAX, ROT, SC } = params();
     objs.forEach((o) => {
       const r = o.el.getBoundingClientRect();
-      const dx = r.left + r.width / 2 - x, dy = r.top + r.height / 2 - y;
+      const tx = gsap.getProperty(o.el, 'x'), ty = gsap.getProperty(o.el, 'y');
+      /* Abstand zur Ruhe-Position, damit ein weggeschobenes Ding nicht zittert */
+      const cx = r.left + r.width / 2 - tx, cy = r.top + r.height / 2 - ty;
+      const dx = cx - x, dy = cy - y;
       const d = Math.hypot(dx, dy) || 1;
       if (d < R) {
         o.inside = true;
         const k = Math.pow((R - d) / R, 1.6);
         gsap.to(o.el, {
           x: (dx / d) * MAX * k, y: (dy / d) * MAX * k,
-          rotation: o.base + (dx > 0 ? 1 : -1) * ROT * k, scale: 1 + 0.2 * k,
+          rotation: o.base + (dx > 0 ? 1 : -1) * ROT * k, scale: 1 + SC * k,
           duration: 0.45, ease: 'power4.out', overwrite: 'auto',
         });
       } else if (o.inside) {
-        o.inside = false;
-        gsap.to(o.el, { x: 0, y: 0, rotation: o.base, scale: 1, duration: 1.2, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' });
+        release(o);
       }
     });
   };
-  window.addEventListener('pointermove', (e) => onMove(e.clientX, e.clientY), { passive: true });
-  window.addEventListener('touchmove', (e) => { const t = e.touches[0]; if (t) onMove(t.clientX, t.clientY); }, { passive: true });
+  section.addEventListener('pointermove', (e) => onMove(e.clientX, e.clientY), { passive: true });
+  section.addEventListener('pointerleave', () => objs.forEach((o) => { if (o.inside) release(o); }));
+  section.addEventListener('touchmove', (e) => { const t = e.touches[0]; if (t) onMove(t.clientX, t.clientY); }, { passive: true });
+  section.addEventListener('touchend', () => objs.forEach((o) => { if (o.inside) release(o); }), { passive: true });
 }

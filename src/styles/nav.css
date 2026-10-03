@@ -1,3 +1,4 @@
+/* Navigation: weiß mit „difference“, dadurch schwarz auf Weiß und weiß auf Schwarz */
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: calc(var(--z-menu) + 1);
@@ -5,56 +6,60 @@
   display: flex; align-items: center; justify-content: space-between;
   padding-inline: var(--pad);
   pointer-events: none;
-  color: var(--paper);
+  color: var(--white);
+  mix-blend-mode: difference;
 }
 .nav > * { pointer-events: auto; }
 
 .nav__mark {
-  font-family: var(--serif); font-weight: 500; font-optical-sizing: auto;
-  font-size: 28px; line-height: 1; letter-spacing: -.035em;
+  font-family: var(--sans); font-weight: 700;
+  font-size: 21px; line-height: 1; letter-spacing: -.05em;
+  transition: opacity .4s, visibility .4s;
 }
+/* Auf der Startseite steht oben links zuerst der Text; das Zeichen kommt nach dem Start */
+.has-hero .nav__mark { opacity: 0; visibility: hidden; }
+.has-hero.is-past-hero .nav__mark, .has-hero.menu-open .nav__mark { opacity: 1; visibility: visible; }
 
 .nav__right { display: flex; align-items: center; gap: 18px; }
 
-/* Four dots that morph into an X */
+/* „MENÜ ::“ – vier Punkte, die zum X werden */
 .menu-btn {
-  position: relative;
-  width: 44px; height: 44px;
-  margin-right: -10px;
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 44px; padding: 0 2px 0 10px;
+  margin-right: -4px;
+  font: 700 10px/1 var(--sans); letter-spacing: .02em; text-transform: uppercase;
 }
+.menu-btn__dots { position: relative; display: block; width: 14px; height: 14px; }
 .menu-btn__dot {
   position: absolute; left: 50%; top: 50%;
-  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+  width: 2.5px; height: 2.5px;
   border-radius: 999px;
   background: currentColor;
   transform-origin: 50% 50%;
 }
 
-/* Sound pill */
-.sound {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 28px; padding: 0 6px 0 10px;
-  border: 1px solid currentColor; border-radius: 999px;
-  font: 500 10px/1 var(--mono); letter-spacing: .07em; text-transform: uppercase;
-}
-.sound__track { position: relative; width: 22px; height: 12px; border-radius: 999px; border: 1px solid currentColor; }
-.sound__tick { position: absolute; top: 2px; left: 2px; width: 6px; height: 6px; border-radius: 999px; background: currentColor; transition: transform .35s cubic-bezier(.76, 0, .24, 1); }
-.sound[aria-pressed="true"] .sound__tick { transform: translateX(10px); }
-@media (max-width: 600px) { .sound__label { display: none; } .sound { padding-left: 6px; } }
-
-/* Full-screen menu */
+/* Menü über die ganze Fläche */
 .menu {
   position: fixed; inset: 0; z-index: var(--z-menu);
-  background: var(--ink); color: var(--paper);
+  background: var(--black); color: var(--white);
   display: grid; align-content: center;
   padding: var(--nav-h) var(--pad);
   visibility: hidden; opacity: 0;
 }
-.menu__list { display: grid; gap: .05em; }
-.menu__item { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 9vw, 120px); line-height: 1; letter-spacing: -.045em; }
-.menu__item .line-mask { padding-bottom: .18em; margin-bottom: -.18em; }
+.menu__list { display: grid; gap: .02em; }
+.menu__item { font-family: var(--sans); font-weight: 500; font-size: clamp(44px, 8.4vw, 124px); line-height: 1; letter-spacing: -.05em; }
+.menu__item .line-mask { padding-bottom: .22em; margin-bottom: -.22em; }
 .menu__link { display: inline-block; transition: opacity .3s; }
-.menu__list:hover .menu__link { opacity: .45; }
+.menu__list:hover .menu__link { opacity: .4; }
 .menu__list .menu__link:hover { opacity: 1; }
+.menu__side {
+  position: absolute; right: var(--pad); top: 50%;
+  transform: translateY(-50%);
+  display: grid; gap: 4px; justify-items: start;
+  width: min(34vw, 300px);
+  font-size: clamp(15px, 1.3vw, 19px); letter-spacing: -.02em;
+}
+.menu__side .label { margin-bottom: 8px; color: rgba(255, 255, 255, .55); }
+@media (max-width: 800px) { .menu__side { position: static; transform: none; width: auto; margin-top: clamp(24px, 6vw, 40px); } }
 .menu__foot { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: clamp(24px, 4vw, 48px); }
-.menu__foot .label { color: rgba(245, 243, 238, .6); }
+.menu__foot .label { color: rgba(255, 255, 255, .55); }

@@ -1,6 +1,9 @@
-import { gsap, ScrollTrigger, Flip } from '../utils/gsap.js';
+import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, $$, debounce, reducedMotion } from '../utils/dom.js';
-import { createMiniO } from '../miniO.js';
+
+/* Drei Arten, wie sich ein Bild freischiebt: von unten, von unten links, von unten rechts */
+const CLIPS = ['inset(100% 0% 0% 0%)', 'inset(100% 100% 0% 0%)', 'inset(100% 0% 0% 100%)'];
+const OPEN = 'inset(0% 0% 0% 0%)';
 
 export function initWorks({ cursor } = {}) {
   const section = $('.works');
@@ -17,46 +20,44 @@ export function initWorks({ cursor } = {}) {
     img.addEventListener('error', missing);
   });
 
-  /* Überschrift: Buchstaben wandern per Flip von der Zeile in den Stapel am linken Rand und zurück */
-  let master = null, trigger = null;
-  function buildFlip() {
-    if (master) { master.kill(); master = null; }
-    if (trigger) { trigger.kill(); trigger = null; }
-    gsap.set(letters, { clearProps: 'all' });
-    if (reduce || window.innerWidth < 900) return;
+  /* Überschrift: bleibt oben stehen und wandert beim Scrollen Buchstabe für Buchstabe
+     an den rechten Rand und wieder zurück */
+  let master = null;
+  function buildTravel() {
+    if (master) { master.scrollTrigger.kill(); master.kill(); master = null; }
+    gsap.set(letters, { clearProps: 'transform' });
+    if (reduce || window.innerWidth < 800) return;
+    const pad = parseFloat(getComputedStyle(section).paddingLeft) || 0;
+    const travel = section.clientWidth - pad * 2 - title.offsetWidth;
+    if (travel < 40) return;
+    master = gsap.timeline({
+      scrollTrigger: { trigger: section, start: 'top 20%', end: 'bottom 80%', scrub: 2.5 },
+    });
+    master
+      .to(letters, { x: travel, duration: 1, ease: 'power2.inOut', stagger: { each: 0.07, from: 'end' } }, 0.25)
+      .to(letters, { x: 0, duration: 1, ease: 'power2.inOut', stagger: { each: 0.07, from: 'start' } }, 2.1)
+      .to({}, { duration: 0.2 });
+  }
+  buildTravel();
+  window.addEventListener('resize', debounce(buildTravel, 250));
 
-    title.classList.add('works__title--row');
-    const rowState = Flip.getState(letters);
-    title.classList.remove('works__title--row');
-
-    /* Reihenfolge wichtig: Flip.to zuerst aufnehmen (natürlicher Stapel), dann Flip.from (rendert die Zeile sofort) */
-    const back = Flip.to(rowState, { duration: 1, ease: 'none', stagger: { each: 0.06, from: 'end' } });
-    const forth = Flip.from(rowState, { duration: 1, ease: 'none', stagger: { each: 0.06, from: 'end' } });
-    const squash = (at) => gsap.to(letters, { keyframes: [{ scale: 0.2, ease: 'power2.in' }, { scale: 1, ease: 'power2.out' }], duration: 1, stagger: { each: 0.06, from: 'end' } });
-
-    master = gsap.timeline({ paused: true });
-    master.add(forth, 0).add(squash(), 0);
-    master.add(back, 2.2).add(squash(), 2.2);
-
-    trigger = ScrollTrigger.create({
-      trigger: section, start: 'top 60%', end: 'bottom 40%', scrub: 3, animation: master,
+  /* Aussage rechts oben */
+  const statement = $('.works__statement', section);
+  if (statement && !reduce) {
+    gsap.fromTo(statement, { opacity: 0, y: 24 }, {
+      opacity: 1, y: 0, duration: 1.1, ease: 'power4.out',
+      scrollTrigger: { trigger: statement, start: 'top 88%', once: true },
     });
   }
-  buildFlip();
-  window.addEventListener('resize', debounce(buildFlip, 250));
 
-  /* Projekte: Clip-Reveal von unten, Parallax im Bild */
+  /* Projekte: Bild schiebt sich frei, leichtes Parallax im Bild und zwischen den Karten */
   $$('.work', section).forEach((card, i) => {
     const media = $('.work__media', card), img = $('.work__img', card);
-    if (card.classList.contains('work--cta')) {
-      gsap.set(media, { clipPath: 'inset(100% 0 0 0)' });
-      ScrollTrigger.create({ trigger: card, start: 'top 88%', once: true, onEnter: () => gsap.to(media, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: 'power4.inOut' }) });
-      return;
-    }
-    if (reduce) { gsap.set(media, { clipPath: 'inset(0% 0 0 0)' }); return; }
+    if (reduce) return;
+    gsap.set(media, { clipPath: CLIPS[i % CLIPS.length] });
     ScrollTrigger.create({
       trigger: card, start: 'top 88%', once: true,
-      onEnter: () => gsap.to(media, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: 'power4.inOut' }),
+      onEnter: () => gsap.to(media, { clipPath: OPEN, duration: 1, ease: 'power4.inOut' }),
     });
     if (img) {
       gsap.fromTo(img, { yPercent: -4.5 }, {
@@ -64,11 +65,13 @@ export function initWorks({ cursor } = {}) {
         scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: 1.5 + (i % 3) * 0.6 },
       });
     }
+    if (window.innerWidth >= 800 && i % 2 === 1) {
+      gsap.fromTo(card, { y: 60 }, {
+        y: -60, ease: 'none',
+        scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+      });
+    }
   });
-
-  /* Pulsierendes Chrom-O in der CTA-Karte; ohne WebGL steht das Newsreader-O */
-  const pulse = $('.work__pulse canvas', section);
-  if (pulse && !createMiniO(pulse, { fill: 0.8, observe: true, spin: 0.4 })) pulse.remove();
 
   if (cursor) cursor.bind(section);
 }

@@ -1,49 +1,61 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, $$, reducedMotion } from '../utils/dom.js';
-import { splitChars } from '../utils/split.js';
+import { buildWordmark } from '../utils/wordmarkSvg.js';
+import { createMiniO } from '../miniO.js';
+import { WORDMARK } from '../wordmark.js';
 
 export function initFooter() {
   const footer = $('.footer');
   if (!footer) return;
   const reduce = reducedMotion();
   const mark = $('.footer__mark', footer);
-  const { chars, masks } = splitChars($('.footer__mark-text', mark));
 
-  /* Wortmarke auf Viewport-Breite */
-  const fit = () => {
-    mark.style.fontSize = '100px';
-    const w = $('.footer__mark-text', mark).offsetWidth;
-    mark.style.fontSize = `${Math.min((mark.clientWidth / w) * 100 * 0.995, window.innerHeight * 0.4).toFixed(2)}px`;
+  /* Wortmarke: dieselben SVG-Buchstaben wie oben, am Ende ein zweites Chrom-O */
+  const { svg, letters, o } = buildWordmark();
+  mark.appendChild(svg);
+  const canvas = document.createElement('canvas');
+  canvas.className = 'footer__o';
+  canvas.setAttribute('aria-hidden', 'true');
+  mark.appendChild(canvas);
+
+  const FILL = 0.6;                       // Anteil der Leinwand-Höhe, den das O füllt (Rest ist Platz für den Knitter)
+  const place = () => {
+    const m = mark.getBoundingClientRect(), g = o.getBoundingClientRect();
+    if (!g.width) return;
+    const size = g.height / FILL;
+    Object.assign(canvas.style, {
+      width: `${size}px`, height: `${size}px`,
+      left: `${g.left - m.left + g.width / 2 - size / 2}px`,
+      top: `${g.top - m.top + g.height / 2 - size / 2}px`,
+    });
   };
-  fit();
-  window.addEventListener('resize', fit, { passive: true });
-  document.fonts.ready.then(fit);
+  place();
+  const chrome = createMiniO(canvas, { fill: FILL, crumple: 1, scale: reduce ? 1 : 0, spin: 0, observe: true, aspect: WORDMARK.o.box.w / WORDMARK.o.box.h });
+  if (!chrome) { canvas.remove(); footer.classList.add('is-flat'); }
+  window.addEventListener('resize', place, { passive: true });
+  document.fonts.ready.then(place);
 
-  const oChar = chars[chars.length - 1];
-  const others = chars.slice(0, -1);
-  gsap.set(others, { yPercent: reduce ? 0 : 120 });
-  gsap.set(oChar, { yPercent: 0, scale: reduce ? 1 : 0, transformOrigin: '50% 60%' });
+  gsap.set(letters, { yPercent: reduce ? 0 : 125 });
   if (!reduce) {
     ScrollTrigger.create({
-      trigger: mark, start: 'top 90%', once: true,
+      trigger: mark, start: 'top 92%', once: true,
       onEnter: () => {
-        gsap.to(others, { yPercent: 0, duration: 1.2, ease: 'power4.inOut', stagger: { each: 0.03, from: 'random' } });
-        gsap.to(oChar, { scale: 1, duration: 1.1, ease: 'back.out(0.9)', delay: 0.9 });
+        place();
+        gsap.to(letters, { yPercent: 0, duration: 1.2, ease: 'power4.inOut', stagger: 0.04 });
+        if (chrome) gsap.to(chrome.state, { scale: 1, duration: 1.1, ease: 'back.out(0.9)', delay: 0.9 });
       },
     });
 
-    /* Hover: Buchstabe quetscht sich zusammen und federt zurück */
-    masks.forEach((m, i) => {
-      const ch = chars[i];
-      if (!ch) return;
-      m.addEventListener('pointerenter', () => {
-        gsap.timeline({ overwrite: true })
-          .to(ch, { scale: 0.05, duration: 0.6, ease: 'power2.inOut', transformOrigin: '50% 100%' })
-          .to(ch, { scale: 1, duration: 1.8, ease: 'elastic.out(1, 0.8)' });
+    /* Hover: der Buchstabe quetscht sich zusammen und federt zurück */
+    letters.forEach((l) => {
+      l.addEventListener('pointerenter', () => {
+        gsap.killTweensOf(l, 'scale');
+        gsap.timeline()
+          .to(l, { scale: 0.05, duration: 0.6, ease: 'power2.inOut', transformOrigin: '50% 100%' })
+          .to(l, { scale: 1, duration: 1.8, ease: 'elastic.out(1, 0.8)' });
       });
     });
   }
 
-  const year = $('[data-year]', footer);
-  if (year) year.textContent = String(new Date().getFullYear());
+  $$('[data-year]').forEach((y) => { y.textContent = String(new Date().getFullYear()); });
 }

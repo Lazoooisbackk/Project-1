@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B0B0C">
+<meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="256x256">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist-mono-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/geist-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-mono-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
 <title>guskic studiO – Websites, die man anfassen möchte.</title>
 <meta name="description" content="guskic studiO ist das Webdesign-Studio von Lazar Guskic aus Wien: individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
@@ -18,10 +17,10 @@
 <meta property="og:image" content="/og.jpg">
 <meta property="og:locale" content="de_AT">
 <meta name="twitter:card" content="summary_large_image">
-<style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#0B0B0C;z-index:1000}.loader[hidden]{display:none}</style>
+<style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#000;z-index:1000}.loader[hidden]{display:none}</style>
 <script type="module" src="/src/main.js"></script>
 </head>
-<body class="is-loading">
+<body class="is-loading has-hero">
 <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
 <div class="loader" id="loader" aria-hidden="true">
@@ -36,27 +35,31 @@
 <header class="nav">
   <a class="nav__mark" href="./#stage" aria-label="guskic studiO – zur Startseite">gO</a>
   <div class="nav__right">
-    <button class="sound" type="button" aria-pressed="false" aria-label="Sound ein- oder ausschalten">
-      <span class="sound__label">Sound off</span>
-      <span class="sound__track" aria-hidden="true"><span class="sound__tick"></span></span>
-    </button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
-      <span class="menu-btn__dot" aria-hidden="true"></span>
+      <span class="menu-btn__text" aria-hidden="true">Menü</span>
+      <span class="menu-btn__dots" aria-hidden="true">
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+        <span class="menu-btn__dot"></span>
+      </span>
       <span class="menu-btn__label sr-only">Menü öffnen</span>
     </button>
   </div>
 </header>
 
-<nav class="menu on-dark" id="menu" aria-hidden="true" aria-label="Menü">
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Menü">
   <ul class="menu__list">
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#arbeiten">Arbeiten</a></span></li>
-    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#leistungen">Leistungen</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#studio">Studio</a></span></li>
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#leistungen">Leistungen</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#kontakt">Kontakt</a></span></li>
   </ul>
+  <div class="menu__side">
+    <span class="label">Lass uns reden</span>
+    <a class="u-link" href="mailto:hallo@guskic.studio">hallo@guskic.studio</a>
+    <a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+  </div>
   <div class="menu__foot">
     <a class="label u-link" href="impressum.html">Impressum</a>
     <a class="label u-link" href="datenschutz.html">Datenschutz</a>
@@ -66,105 +69,161 @@
 
 <main id="main">
 
+  <!-- Start: weiß. Wischen mit dem Zeiger legt die Folien-Version des Namens frei. Das O ist das Chrom-O. -->
   <section class="hero" id="stage" data-hero aria-label="guskic studiO">
     <canvas class="hero__gl" id="gl" aria-hidden="true"></canvas>
-    <video class="hero__video" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
 
-    <div class="hero__bar hero__bar--top label">
-      <span>Webdesign · Wien</span>
-      <span>N°01 — 2026</span>
+    <div class="hero__top">
+      <p class="hero__tag">
+        <span class="line-mask"><span class="line">Webdesign aus Wien.</span></span>
+        <span class="line-mask"><span class="line">Websites, die man anfassen möchte.</span></span>
+      </p>
+      <span class="magnetic"><a class="btn btn--blend" href="#kontakt"><span>Projekt anfragen</span><i aria-hidden="true">→</i></a></span>
     </div>
 
     <div class="hero__center">
-      <h1 class="mark" id="mark" aria-label="guskic studiO"><span class="mark__inner" id="markInner" aria-hidden="true"><span class="mark__chars" id="markChars">guskic studi</span><span class="bl" id="bl"></span><span class="o-ghost" id="oGhost">O</span></span></h1>
-      <p class="hero__tag">Websites, die man anfassen möchte.</p>
+      <h1 class="mark" id="mark" aria-label="guskic studiO"><span class="mark__text">guskic studiO</span></h1>
     </div>
 
-    <div class="hero__bar hero__bar--bottom label">
-      <span>Scroll<span class="sr-only" id="hint"> · Maus bewegen · Klicken zum Zerknittern</span></span>
-      <span class="readout" id="readout">Laden 000</span>
+    <div class="hero__bar">
+      <span>Webdesign-Studio in Wien</span>
+      <span class="hero__links">
+        <a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <i aria-hidden="true">/</i>
+        <a class="u-link" href="mailto:hallo@guskic.studio">E-Mail</a>
+        <span class="pill" aria-hidden="true">DE</span>
+      </span>
     </div>
   </section>
 
+  <!-- Aussage, Showreel im Rahmen, kleiner Absatz mit Folien-Kachel -->
   <section class="manifest" id="manifest" aria-label="Manifest">
-    <p class="manifest__statement" style="--rows: 4; --rows-m: 8;">
-      <span class="manifest__word line-mask"><span class="line">Die</span></span>
-      <span class="manifest__word line-mask"><span class="line">meisten</span></span>
-      <span class="manifest__word line-mask"><span class="line">Websites</span></span>
-      <span class="manifest__word line-mask"><span class="line">werden</span></span>
-      <span class="manifest__word line-mask"><span class="line">weggescrollt.</span></span>
-      <span class="manifest__word line-mask"><span class="line">Meine</span></span>
-      <span class="manifest__word line-mask"><span class="line">werden</span></span>
-      <span class="manifest__word line-mask"><span class="line">angefasst.</span></span>
+    <p class="manifest__statement statement">
+      <span class="line-mask"><span class="line">Die meisten Websites werden weggescrollt.</span></span>
+      <span class="line-mask"><span class="line">Meine werden angefasst.</span></span>
     </p>
-    <p class="manifest__side">Ich baue Websites für Menschen, die nicht wie alle anderen aussehen wollen: von Wien aus, für überall.</p>
-  </section>
 
-  <section class="reel" id="reel" aria-label="Showreel">
-    <div class="reel__pin">
-      <div class="reel__frame">
-        <div class="reel__media">
-          <video class="reel__video" muted playsinline loop preload="metadata" poster="./reel/reel.jpg" aria-label="Showreel"><source src="./reel/reel.mp4" type="video/mp4; codecs=avc1.64001F,mp4a.40.2"><source src="./reel/reel.webm" type="video/webm; codecs=vp9,opus"></video>
-        </div>
-        <span class="reel__label label">( Showreel )</span>
-        <button class="reel__sound label" type="button" aria-pressed="false" aria-label="Ton einschalten"><span class="reel__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="reel__sound-text">Ton aus</span></button>
-      </div>
-      <p class="reel__cloud">Webdesign von Wien aus, für überall.</p>
+    <figure class="manifest__reel">
+      <video data-auto muted playsinline loop preload="none" poster="./video/reel-ounji.jpg" aria-label="Die Website von OUNJI, beim Durchscrollen aufgenommen">
+        <source data-src="./video/reel-ounji.mp4" type="video/mp4">
+      </video>
+      <figcaption class="manifest__reel-cap">
+        <span class="label">OUNJI · Brow &amp; Lash Studio</span>
+        <span class="label">Webflow · 2026</span>
+      </figcaption>
+    </figure>
+
+    <div class="manifest__aside">
+      <span class="paren">( Der Unterschied )</span>
+      <p class="manifest__side">Ich baue Websites für Menschen, die nicht wie alle anderen aussehen wollen: von Wien aus, für überall.</p>
+      <figure class="manifest__tile" aria-hidden="true">
+        <video data-auto muted playsinline loop preload="none" poster="./hero/foil.jpg" tabindex="-1">
+          <source data-src="./hero/foil.mp4" type="video/mp4">
+        </video>
+      </figure>
     </div>
   </section>
 
+  <!-- Arbeiten -->
   <section class="works on-dark" id="arbeiten" aria-labelledby="works-title">
-    <div class="works__grid">
-      <h2 class="works__title" id="works-title" aria-label="Arbeiten">
-        <span class="works__letter" aria-hidden="true">A</span><span class="works__letter" aria-hidden="true">R</span><span class="works__letter" aria-hidden="true">B</span><span class="works__letter" aria-hidden="true">E</span><span class="works__letter" aria-hidden="true">I</span><span class="works__letter" aria-hidden="true">T</span><span class="works__letter" aria-hidden="true">E</span><span class="works__letter" aria-hidden="true">N</span>
-      </h2>
+    <h2 class="works__title" id="works-title" aria-label="Arbeiten">
+      <span class="works__letter" aria-hidden="true">A</span><span class="works__letter" aria-hidden="true">r</span><span class="works__letter" aria-hidden="true">b</span><span class="works__letter" aria-hidden="true">e</span><span class="works__letter" aria-hidden="true">i</span><span class="works__letter" aria-hidden="true">t</span><span class="works__letter" aria-hidden="true">e</span><span class="works__letter" aria-hidden="true">n</span>
+    </h2>
 
-      <div class="works__list">
-        <a class="work" href="https://ounji.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
-          <div class="work__media">
-            <img class="work__img" src="./works/ounji.jpg" alt="Screenshot der Website von OUNJI, Brow & Lash Studio" loading="lazy" decoding="async" width="1600" height="1200">
-            <div class="work__placeholder label"><span>Screenshot folgt · public/works/ounji.jpg</span></div>
-          </div>
-          <div class="work__meta">
-            <span class="work__num label">W'01</span>
-            <h3 class="work__title">OUNJI</h3>
-            <p class="work__line">Ein Studio, das man spürt, bevor man es betritt.</p>
-            <span class="work__tags label">Brow &amp; Lash Studio · Webflow · 2026</span>
-          </div>
-        </a>
+    <p class="works__statement">Gute Websites zeigen etwas. Meine lassen sich anfassen.</p>
 
-        <a class="work" href="https://fleischerei-guskic.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
-          <div class="work__media">
-            <img class="work__img" src="./works/fleischerei-guskic.jpg" alt="Screenshot der Website der Fleischerei Guskic am Hannovermarkt" loading="lazy" decoding="async" width="1600" height="1200">
-            <div class="work__placeholder label"><span>Screenshot folgt · public/works/fleischerei-guskic.jpg</span></div>
-          </div>
-          <div class="work__meta">
-            <span class="work__num label">W'02</span>
-            <h3 class="work__title">Fleischerei Guskic</h3>
-            <p class="work__line">Tradition seit Generationen, jetzt online.</p>
-            <span class="work__tags label">Fleischerei am Hannovermarkt, Wien · Webflow · 2026</span>
-          </div>
-        </a>
+    <div class="works__list">
+      <a class="work" href="https://ounji.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
+        <div class="work__meta">
+          <h3 class="work__name">OUNJI</h3>
+          <p class="work__line">Ein Studio, das man spürt, bevor man es betritt.</p>
+        </div>
+        <div class="work__media">
+          <picture>
+            <source type="image/webp" srcset="./works/ounji.webp">
+            <img class="work__img" src="./works/ounji.jpg" alt="Screenshot der Website von OUNJI, Brow &amp; Lash Studio" loading="lazy" decoding="async" width="1600" height="1000">
+          </picture>
+          <div class="work__placeholder label"><span>Screenshot folgt</span></div>
+        </div>
+      </a>
 
-        <a class="work work--cta" href="#kontakt">
-          <div class="work__media">
-            <div class="work__pulse" aria-hidden="true"><canvas></canvas><span class="work__o">O</span></div>
-          </div>
-          <div class="work__meta">
-            <span class="work__num label">W'03</span>
-            <h3 class="work__title">Dein Projekt?</h3>
-            <p class="work__line">Hier könnte deine Marke stehen.</p>
-          </div>
-        </a>
-      </div>
+      <a class="work" href="https://fleischerei-guskic.webflow.io" target="_blank" rel="noopener" data-cursor="Ansehen">
+        <div class="work__meta">
+          <h3 class="work__name">Fleischerei Guskic</h3>
+          <p class="work__line">Tradition seit Generationen, jetzt online.</p>
+        </div>
+        <div class="work__media">
+          <picture>
+            <source type="image/webp" srcset="./works/fleischerei-guskic.webp">
+            <img class="work__img" src="./works/fleischerei-guskic.jpg" alt="Screenshot der Website der Fleischerei Guskic am Hannovermarkt" loading="lazy" decoding="async" width="1600" height="1000">
+          </picture>
+          <div class="work__placeholder label"><span>Screenshot folgt</span></div>
+        </div>
+      </a>
+
+      <a class="work work--cta" href="#kontakt">
+        <div class="work__meta">
+          <h3 class="work__name">Dein Projekt?</h3>
+          <p class="work__line">Hier könnte deine Marke stehen.</p>
+        </div>
+        <div class="work__media">
+          <picture class="work__pulse" aria-hidden="true">
+            <source type="image/webp" srcset="./objects/cursor.webp">
+            <img src="./objects/cursor.png" alt="" loading="lazy" decoding="async" width="1200" height="1200">
+          </picture>
+        </div>
+      </a>
     </div>
-    <div class="works__all"><a class="u-link" href="#kontakt">Alle ansehen (03)</a></div>
+
+    <div class="works__all">
+      <a class="u-link" href="#kontakt">Alle ansehen<i aria-hidden="true">↪</i></a>
+      <span class="label">(03)</span>
+      <span class="label">© <span data-year>2026</span></span>
+    </div>
   </section>
 
+  <!-- Showreel über die ganze Breite -->
+  <section class="showreel on-dark" id="showreel" aria-label="Showreel">
+    <div class="showreel__frame">
+      <video data-auto muted playsinline loop preload="none" poster="./video/showreel.jpg" aria-label="Showreel: die Websites von OUNJI und der Fleischerei Guskic, beim Durchscrollen aufgenommen">
+        <source data-src="./video/showreel.mp4" type="video/mp4">
+      </video>
+    </div>
+    <button class="sound" type="button" aria-pressed="false" aria-label="Sound ein- oder ausschalten">
+      <span class="sound__label">Sound off</span>
+      <span class="sound__track" aria-hidden="true"><span class="sound__tick"></span></span>
+    </button>
+  </section>
+
+  <!-- Studio -->
+  <section class="studio on-dark" id="studio" aria-labelledby="studio-title">
+    <span class="paren">( Das Studio )</span>
+    <h2 class="studio__text" id="studio-title">Ich bin Lazar, 17, aus Maria Ellend. Ich baue Websites mit Gefühl für Details, weil der erste Eindruck heute online passiert.</h2>
+
+    <figure class="studio__big">
+      <picture>
+        <source type="image/webp" srcset="./studio/big.webp">
+        <img src="./studio/big.jpg" alt="Ein großer orchidfarbener Folien-Ballon in Wolkenform schwebt knapp über einer Wiese." loading="lazy" decoding="async" width="1920" height="1072">
+      </picture>
+    </figure>
+
+    <figure class="studio__small">
+      <div class="studio__frame">
+        <picture>
+          <source type="image/webp" srcset="./studio/small.webp">
+          <img src="./studio/small.jpg" alt="Ein silberner Folien-Ballon in Wolkenform liegt auf einem Betonwürfel." loading="lazy" decoding="async" width="1200" height="1200">
+        </picture>
+      </div>
+      <figcaption class="studio__caption">oder etwas Unerwartetes.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Leistungen -->
   <section class="services on-dark" id="leistungen" aria-labelledby="services-title">
-    <div class="services__objects" aria-hidden="true"></div>
+    <h2 class="services__statement statement" id="services-title">Form folgt Gefühl.</h2>
+
     <div class="services__grid">
-      <h2 class="services__lead" id="services-title">Ich gestalte:</h2>
+      <p class="services__lead">Ich gestalte :</p>
       <ul class="services__list">
         <li class="services__item line-mask"><span class="line">Websites</span></li>
         <li class="services__item line-mask"><span class="line">Landingpages</span></li>
@@ -174,42 +233,65 @@
       </ul>
       <p class="services__note">Perspektive ist, wo Strategie auf Gestaltung trifft.</p>
     </div>
-  </section>
 
-  <section class="studio" id="studio" aria-labelledby="studio-title">
-    <div class="studio__grid">
-      <figure class="studio__portrait">
-        <img class="studio__img" src="./studio/lazar.jpg" alt="Lazar Guskic" loading="lazy" decoding="async" width="1200" height="1500">
-        <figcaption class="studio__placeholder label"><span>Portrait folgt · public/studio/lazar.jpg</span></figcaption>
-      </figure>
-      <div>
-        <span class="label">Studio</span>
-        <h2 class="studio__text" id="studio-title">Ich bin Lazar, 17, aus Maria Ellend. Ich baue Websites mit Gefühl für Details, weil der erste Eindruck heute online passiert.</h2>
+    <div class="services__objects" aria-hidden="true"></div>
+
+    <div class="services__people">
+      <p class="services__lead">guskic studiO, das ist :</p>
+      <div class="services__col">
+        <span class="label">Design &amp; Code</span>
+        <span>Lazar Guskic</span>
+      </div>
+      <div class="services__col">
+        <span class="label">Ort</span>
+        <span>Maria Ellend · Wien</span>
       </div>
     </div>
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
-      <div class="marquee__track marquee__track--ghost"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
-      <div class="marquee__track marquee__track--ghost marquee__track--ghost2"><span>guskic studiO — Websites, die man anfassen möchte —</span></div>
+  </section>
+
+  <!-- Vollbild-Video: die Figur im Folien-Kostüm -->
+  <section class="mvideo on-dark" aria-label="guskic studiO in Bewegung">
+    <div class="mvideo__bg">
+      <video data-auto muted playsinline loop preload="none" poster="./video/manifest.jpg" aria-label="Eine Figur in einem Kostüm aus silberner Folie tanzt in einer Halle voller Folien-Ballons und winkt.">
+        <source data-src="./video/manifest.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="sr-only">das ist guskic studiO</p>
+    <p class="mvideo__note" aria-hidden="true" style="--x: 12%; --y: 13%;"></p>
+    <p class="mvideo__note" aria-hidden="true" style="--x: 74%; --y: 19%;"></p>
+    <p class="mvideo__note" aria-hidden="true" style="--x: 27%; --y: 44%;"></p>
+    <p class="mvideo__note" aria-hidden="true" style="--x: 80%; --y: 53%;"></p>
+    <p class="mvideo__note" aria-hidden="true" style="--x: 9%; --y: 64%;"></p>
+
+    <div class="mvideo__cards">
+      <figure class="mvideo__card mvideo__card--a">
+        <picture>
+          <source type="image/webp" srcset="./manifest/card-1.webp">
+          <img src="./manifest/card-1.jpg" alt="Ein halb leerer silberner Smiley-Ballon liegt auf einem weißen Tisch." loading="lazy" decoding="async" width="1160" height="1440">
+        </picture>
+      </figure>
+      <p class="mvideo__say">Ich baue Websites für alle, die mehr wollen als eine Vorlage.</p>
+      <figure class="mvideo__card mvideo__card--b">
+        <picture>
+          <source type="image/webp" srcset="./manifest/card-2.webp">
+          <img src="./manifest/card-2.jpg" alt="Ein orchidfarbener Folien-Ballon in Form eines Mauszeigers hängt unter einer Bürodecke." loading="lazy" decoding="async" width="1200" height="1200">
+        </picture>
+      </figure>
     </div>
   </section>
 
-  <section class="play" id="anfassen" aria-labelledby="play-title">
-    <div class="play__head">
-      <span class="label">( Anfassen )</span>
-      <span class="label play__hint">Ziehen · Werfen</span>
-    </div>
-    <h2 class="sr-only" id="play-title">anfassen</h2>
-    <div class="play__field" aria-hidden="true" data-word="anfassen"></div>
-  </section>
-
-  <section class="contact" id="kontakt" aria-labelledby="contact-title">
-    <span class="label">Kontakt</span>
+  <!-- Kontakt -->
+  <section class="contact on-dark" id="kontakt" aria-labelledby="contact-title">
     <h2 class="contact__title statement" id="contact-title">Lass uns anfangen.</h2>
     <div class="contact__actions">
-      <span class="magnetic"><a class="btn btn--solid" href="mailto:hallo@guskic.studio"><span>Projekt anfragen</span></a></span>
-      <span class="magnetic"><a class="btn btn--ghost" href="https://www.instagram.com/" target="_blank" rel="noopener"><span>Instagram</span></a></span>
+      <span class="magnetic"><button class="btn btn--ghost" type="button" data-open-form><span>Projekt anfragen</span><i aria-hidden="true">→</i></button></span>
+      <span class="magnetic"><a class="btn btn--ghost" href="mailto:hallo@guskic.studio"><span>E-Mail schreiben</span><i aria-hidden="true">⊕</i></a></span>
     </div>
+    <ul class="contact__links">
+      <li><a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a class="u-link" href="mailto:hallo@guskic.studio">E-Mail</a></li>
+      <li><a class="u-link" href="impressum.html">Impressum</a></li>
+    </ul>
     <div class="contact__bar">
       <span class="label">Weiter scrollen öffnet das Formular</span>
       <div class="contact__timeline" aria-hidden="true"><i></i></div>
@@ -227,20 +309,20 @@
       <div class="form__field"><label class="label" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
       <div class="form__field"><label class="label" for="f-email">E-Mail</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
       <div class="form__field"><label class="label" for="f-message">Worum geht es?</label><textarea id="f-message" name="message" rows="4"></textarea></div>
-      <span class="magnetic"><button class="btn btn--solid" type="submit"><span>Absenden</span></button></span>
+      <span class="magnetic"><button class="btn btn--ghost" type="submit"><span>Absenden</span><i aria-hidden="true">→</i></button></span>
     </form>
   </div>
 </div>
 
-<footer class="footer" aria-label="Fußzeile">
-  <p class="footer__mark" aria-label="guskic studiO"><span class="footer__mark-text" aria-hidden="true">guskic studiO</span></p>
-  <div class="footer__links label">
+<footer class="footer on-dark" aria-label="Fußzeile">
+  <p class="footer__mark" aria-label="guskic studiO"></p>
+  <div class="footer__links">
+    <span>©<span data-year>2026</span> — guskic studiO</span>
     <ul>
       <li><a class="u-link" href="impressum.html">Impressum</a></li>
       <li><a class="u-link" href="datenschutz.html">Datenschutz</a></li>
-      <li><a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span>© <span data-year>2026</span> guskic studiO</span>
+    <span>Maria Ellend · Wien <span class="pill" aria-hidden="true">DE</span></span>
   </div>
 </footer>
 </body>
