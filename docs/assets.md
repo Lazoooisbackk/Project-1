@@ -40,8 +40,6 @@ Sterne und Herzen wurden auf Wunsch entfernt.
 
 | Datei | Motiv | Job-ID |
 | --- | --- | --- |
-| `public/studio/small` | silberner Wolken-Ballon auf einem Betonwürfel | 68c168ec-f6bf-4485-a42a-21c2e2237c1b |
-| `public/studio/big` | orchidfarbener Wolken-Ballon über einer Wiese | 4948462c-75d1-4f1d-b929-2d1c957be323 |
 | `public/manifest/card-1` | halb leerer Smiley-Ballon auf weißem Tisch | 368efc8d-9ea0-4c60-b1b1-211470a46ddd |
 | `public/manifest/card-2` | Mauszeiger-Ballon unter einer Bürodecke | 7307c177-5631-422c-bf24-3de436f5f2d8 |
 

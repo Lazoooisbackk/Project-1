@@ -26,7 +26,7 @@ Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.g
 3. **Manifest**: Aussage, Showreel im Rahmen, kleiner Absatz mit fallenden Buchstaben.
 4. **Arbeiten**: wandernde Überschrift, versetzte Projekt-Karten.
 5. **Showreel** über die ganze Breite mit dem Schalter „Sound“.
-6. **Studio**: Text und zwei Bilder.
+6. **Studio**: Text und eine leere weiße Form mit runden Ecken.
 7. **Leistungen**: Folien-Ballons und die Buchstaben g u s k i c, die dem Zeiger ausweichen.
 8. **Video** mit der Figur im Folien-Kostüm, darüber Textblöcke und zwei Bildkarten.
 9. **Kontakt** und **Fußzeile** mit der Wortmarke.
@@ -45,7 +45,6 @@ Noch Platzhalter: die E-Mail-Adresse `hallo@guskic.studio`, der Instagram-Link `
 | `public/hero/` | Folien-Schleife (`foil.mp4`, Standbild `foil.webp`/`foil.jpg`), läuft in der Video-Kachel im Manifest |
 | `public/video/` | `reel-ounji.mp4`, `showreel.mp4`, `manifest.mp4`, jeweils mit Standbild |
 | `public/works/` | Screenshots der Kundenseiten |
-| `public/studio/` | die beiden Bilder im Abschnitt „Studio“ |
 | `public/manifest/` | die beiden Bildkarten über dem Video |
 | `public/og.jpg` | Vorschaubild für geteilte Links |
 
