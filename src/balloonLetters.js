@@ -282,6 +282,7 @@ float wrinkleAt(vec3 p){
 }
 
 export async function createBalloonLetters(renderer, { seed = 11 } = {}) {
+  if (window.innerWidth <= 991) BALLOON.step = 9;
   const scene = new THREE.Scene();
   const env = makeBalloonEnv(renderer);
   scene.environment = env;

@@ -22,10 +22,10 @@ export function initManifest() {
     onEnter: () => gsap.to(lines, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }),
   });
 
-  /* Showreel: der Rahmen öffnet sich beim Hereinscrollen */
+  /* Showreel: der Rahmen wächst beim Hereinscrollen auf die volle Breite */
   if (reel) {
-    gsap.fromTo(reel, { clipPath: 'inset(8% 4% 0% 4%)' }, {
-      clipPath: 'inset(0% 0% 0% 0%)', ease: 'none',
+    gsap.fromTo(reel, { scale: 0.92, transformOrigin: '50% 100%' }, {
+      scale: 1, ease: 'none',
       scrollTrigger: { trigger: reel, start: 'top 95%', end: 'top 35%', scrub: 1 },
     });
   }

@@ -330,6 +330,15 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
     }
   }
 
+  /* Solange Tinte zu sehen ist, mischt das CSS die Texte über der Leinwand mit „difference“ (body.is-inked).
+     Sonst nicht: dauerhaftes Mischen kostet beim Scrollen viel Leistung, vor allem in Safari und auf Handys. */
+  let inkedNow = false;
+  function setInked(v) {
+    if (v === inkedNow) return;
+    inkedNow = v;
+    document.body.classList.toggle('is-inked', v);
+  }
+
   const T0 = performance.now();
   let lastT = T0, raf = 0;
 
@@ -360,6 +369,7 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
     const inked = fluid && state.fluid && now - lastInk < INK_LIFE;
     if (inked) { fluid.step(dt); mixMat.uniforms.tDye.value = fluid.texture; }
     mixMat.uniforms.uMaskOn.value = inked ? 1 : 0;
+    setInked(inked || fill);
     mixMat.uniforms.uLight.value.set(cur.x, -cur.y);
     if (inked && dtRaw > 0) adapt(dtRaw);
     if (balloons && (inked || fill)) {
@@ -400,7 +410,7 @@ export function createHeroStage({ canvas, stage, svg, ghost, reduce = false }) {
     if (state.running) return;
     state.running = true; lastT = performance.now(); raf = requestAnimationFrame(loop);
   };
-  api.stop = () => { state.running = false; cancelAnimationFrame(raf); };
+  api.stop = () => { state.running = false; cancelAnimationFrame(raf); setInked(false); };
   api.dispose = () => { api.stop(); if (fluid) fluid.dispose(); if (balloons) balloons.dispose(); if (revealRT) revealRT.dispose(); renderer.dispose(); };
 
   layout();

@@ -1,4 +1,5 @@
-/* Navigation: weiß mit „difference“, dadurch schwarz auf Weiß und weiß auf Schwarz */
+/* Navigation: schwarz auf hellen, weiß auf dunklen Abschnitten (Klasse is-light, gesetzt in src/nav.js).
+   Nur während des Wischens im Start-Bereich wird sie mit „difference“ gemischt. */
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: calc(var(--z-menu) + 1);
@@ -6,9 +7,16 @@
   display: flex; align-items: center; justify-content: space-between;
   padding-inline: var(--pad);
   pointer-events: none;
-  color: var(--white);
-  mix-blend-mode: difference;
+  color: var(--ink);
+  transition: color .25s;
 }
+.nav.is-light, .menu-open .nav { color: var(--white); }
+/* weiß über dunklen Abschnitten: ein weicher Schatten hält die Schrift auch über hellen Bildern lesbar */
+.nav.is-light .nav__mark, .nav.is-light .menu-btn__text { text-shadow: 0 0 10px rgba(0, 0, 0, .5), 0 0 2px rgba(0, 0, 0, .5); }
+.nav.is-light .menu-btn__dot { box-shadow: 0 0 6px rgba(0, 0, 0, .55); }
+.menu-open .nav .nav__mark, .menu-open .nav .menu-btn__text { text-shadow: none; }
+.menu-open .nav .menu-btn__dot { box-shadow: none; }
+.is-inked .nav { color: var(--white); mix-blend-mode: difference; transition: none; }
 .nav > * { pointer-events: auto; }
 
 .nav__mark {

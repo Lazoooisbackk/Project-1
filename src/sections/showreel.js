@@ -8,8 +8,8 @@ export function initShowreel() {
   const frame = $('.showreel__frame', section), video = $('video', section), pill = $('.sound', section);
 
   /* Der Rahmen wächst beim Hereinscrollen auf die volle Breite, das Video gleitet leicht mit */
-  gsap.fromTo(frame, { clipPath: 'inset(0% 7% 0% 7%)' }, {
-    clipPath: 'inset(0% 0% 0% 0%)', ease: 'none',
+  gsap.fromTo(frame, { scale: 0.86, transformOrigin: '50% 50%' }, {
+    scale: 1, ease: 'none',
     scrollTrigger: { trigger: section, start: 'top 90%', end: 'top 15%', scrub: 1 },
   });
   if (video) {

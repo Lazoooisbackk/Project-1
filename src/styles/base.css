@@ -11,6 +11,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
+html.is-locked, html.is-locked body { overflow: hidden; }
 
 body {
   margin: 0;
@@ -122,11 +123,14 @@ a { color: inherit; text-decoration: none; }
 .btn--solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .btn--solid::before { background: var(--paper); }
 .btn--solid:hover, .btn--solid:focus-visible { color: var(--ink); }
-/* im Start-Bereich: weiß mit „difference“ gemischt (wirkt auf Weiß schwarz, auf Schwarz weiß) */
-.btn--blend { background: var(--white); color: var(--black); border-color: var(--white); }
-.btn--blend::before { background: var(--black); }
-.btn--blend:hover, .btn--blend:focus-visible { color: var(--white); }
-.no-gl .btn--blend { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* im Start-Bereich: schwarz gefüllt. Nur während des Wischens (body.is-inked) wird er weiß und mit
+   „difference“ gemischt: das sieht auf Weiß gleich aus und bleibt auf der schwarzen Tinte lesbar. */
+.btn--blend { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn--blend::before { background: var(--paper); }
+.btn--blend:hover, .btn--blend:focus-visible { color: var(--ink); }
+.is-inked .btn--blend { background: var(--white); color: var(--black); border-color: var(--white); }
+.is-inked .btn--blend::before { background: var(--black); }
+.is-inked .btn--blend:hover, .is-inked .btn--blend:focus-visible { color: var(--white); }
 /* nur Rand (auf Schwarz) */
 .btn--ghost { color: var(--white); }
 .btn--ghost::before { background: var(--white); }
@@ -141,7 +145,7 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: -.15em;
 }
 .line-mask { display: block; }
-.line, .w, .ch { display: inline-block; will-change: transform; }
+.line, .w, .ch { display: inline-block; }
 .line { display: block; }
 .ch-mask--space { width: .25em; }
 .w-block { display: inline-block; white-space: nowrap; }

@@ -29,7 +29,7 @@ export function initHero() {
     const on = revealed && inView && !document.hidden;
     if (on) api.start(); else api.stop();
   };
-  new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); }, { threshold: 0.01 }).observe(stage);
+  new IntersectionObserver(([entry]) => { inView = entry.intersectionRatio > 0.12; sync(); }, { threshold: [0, 0.12, 0.3] }).observe(stage);
   document.addEventListener('visibilitychange', sync);
   document.fonts.ready.then(() => api.layout());
 

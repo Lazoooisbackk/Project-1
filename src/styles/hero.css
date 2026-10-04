@@ -20,13 +20,13 @@
 .hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .no-gl .hero__gl { display: none; }
 
-/* Texte über der Leinwand: weiß mit „difference“, so bleiben sie auf Weiß und auf Schwarz lesbar */
+/* Texte über der Leinwand: normal schwarz. Nur während des Wischens (body.is-inked) weiß mit „difference“,
+   so bleiben sie auch auf der schwarzen Tinte lesbar. Dauerhaftes Mischen würde das Scrollen bremsen. */
 .hero__top, .hero__bar {
   position: relative; z-index: 1;
-  color: var(--white);
-  mix-blend-mode: difference;
+  color: var(--ink);
 }
-.no-gl .hero__top, .no-gl .hero__bar { color: var(--ink); mix-blend-mode: normal; }
+.is-inked .hero__top, .is-inked .hero__bar { color: var(--white); mix-blend-mode: difference; }
 
 .hero__top {
   display: grid; justify-items: start; gap: clamp(12px, 1.2vw, 18px);
@@ -51,7 +51,6 @@
 
 /* Wortmarke als SVG: Buchstaben in der Schriftfarbe, das O unsichtbar (dort sitzt das Chrom-O) */
 .wm { display: block; width: 100%; height: auto; overflow: hidden; fill: currentColor; }
-.wm__l { will-change: transform; }
 .wm__o { fill: transparent; }
 .no-gl .wm__o, .is-flat .wm__o { fill: currentColor; }
 
@@ -64,8 +63,8 @@
   font: 700 10px/1 var(--sans); letter-spacing: .02em; text-transform: uppercase;
 }
 .hero__links i { font-style: normal; font-weight: 500; }
-.hero__links .pill { margin-left: 4px; background: var(--white); color: var(--black); }
-.no-gl .hero__links .pill { background: var(--ink); color: var(--paper); }
+.hero__links .pill { margin-left: 4px; }
+.is-inked .hero__links .pill { background: var(--white); color: var(--black); }
 
 @media (max-width: 600px) {
   .hero__top { padding-right: 84px; }

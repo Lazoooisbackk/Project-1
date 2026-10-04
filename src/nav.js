@@ -1,4 +1,4 @@
-import { gsap } from './utils/gsap.js';
+import { gsap, ScrollTrigger } from './utils/gsap.js';
 import { $, $$ } from './utils/dom.js';
 import { lockScroll, unlockScroll, scrollTo } from './scroll.js';
 import { content } from './content.js';
@@ -37,6 +37,30 @@ export function initNav({ sound } = {}) {
         .add(() => { unlockScroll(); gsap.set(links, { yPercent: 110 }); });
     }
     if (sound) sound.click();
+  }
+
+  /* Farbe der Navigation: weiß über dunklen Abschnitten, schwarz über hellen */
+  const nav = $('.nav');
+  if (nav) {
+    let ranges = [], queued = false;
+    const measure = () => {
+      ranges = $$('main .on-dark:not([data-nav="dark"]), footer.on-dark').map((el) => {
+        const r = el.getBoundingClientRect();
+        return [r.top + window.scrollY, r.bottom + window.scrollY];
+      });
+      update();
+    };
+    const update = () => {
+      queued = false;
+      const y = window.scrollY + nav.offsetHeight / 2;
+      nav.classList.toggle('is-light', ranges.some(([a, b]) => y >= a && y < b));
+    };
+    const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
+    window.addEventListener('load', measure);
+    ScrollTrigger.addEventListener('refresh', measure);
+    measure();
   }
 
   btn.addEventListener('click', () => toggle());

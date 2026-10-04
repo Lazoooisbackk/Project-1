@@ -26,10 +26,9 @@
   position: absolute; z-index: 1;
   left: clamp(12px, 1.4vw, 22px); right: clamp(12px, 1.4vw, 22px); bottom: clamp(10px, 1.2vw, 18px);
   display: flex; justify-content: space-between; gap: 16px;
-  mix-blend-mode: difference;
   pointer-events: none;
 }
-.manifest__reel-cap .label { color: var(--white); }
+.manifest__reel-cap .label { color: var(--white); background: var(--black); padding: 4px 7px; border-radius: 999px; }
 
 .manifest__aside {
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -39,7 +38,6 @@
 }
 .manifest__aside .paren { grid-column: 1 / span 2; align-self: start; }
 .manifest__side { grid-column: 3 / span 3; align-self: start; font-size: var(--small); line-height: 1.22; max-width: 31ch; }
-.manifest__side .ch { will-change: transform, opacity; }
 .manifest__tile {
   position: relative;
   grid-column: 9 / span 4;
@@ -67,10 +65,10 @@
   font-family: var(--sans); font-weight: 700;
   font-size: clamp(15px, 1.3vw, 19px); line-height: 1; letter-spacing: -.01em;
   text-transform: uppercase;
-  color: var(--white); mix-blend-mode: difference;
+  color: var(--white); text-shadow: 0 0 10px rgba(0, 0, 0, .55), 0 0 2px rgba(0, 0, 0, .6);
   pointer-events: none;
 }
-.works__letter { display: inline-block; will-change: transform; }
+.works__letter { display: inline-block; }
 
 .works__statement {
   width: min(100%, 17em);
@@ -111,7 +109,6 @@
   position: absolute; left: 0; top: -5%;
   width: 100%; height: 110%; max-width: none;
   object-fit: cover; object-position: top;
-  will-change: transform;
 }
 .work__placeholder {
   position: absolute; inset: 0;
@@ -130,7 +127,6 @@
 .work__pulse {
   display: block;
   width: 62%; aspect-ratio: 1;
-  mix-blend-mode: lighten;
   transform-origin: 50% 50%;
   animation: pulse 2.8s cubic-bezier(.76, 0, .24, 1) infinite;
 }
@@ -203,7 +199,6 @@
   position: absolute; left: 0; top: -6%;
   width: 100%; height: 112%; max-width: none;
   object-fit: cover;
-  will-change: transform;
 }
 .studio__small {
   grid-column: 3 / span 2; grid-row: 2;
@@ -258,11 +253,9 @@
   width: var(--size, 160px); height: var(--size, 160px);
   left: var(--x, 50%); top: var(--y, 50%);
   margin: calc(var(--size, 160px) / -2) 0 0 calc(var(--size, 160px) / -2);
-  mix-blend-mode: lighten;
   pointer-events: none;
-  will-change: transform;
 }
-.float-obj__inner { position: relative; display: block; width: 100%; height: 100%; will-change: transform; }
+.float-obj__inner { position: relative; display: block; width: 100%; height: 100%; }
 @media (max-width: 991px) {
   .float-obj { left: var(--mx, var(--x)); top: var(--my, var(--y)); }
   .float-obj:not(.float-obj--letter) { --size: var(--msize, 160px); }
@@ -272,7 +265,6 @@
 .float-obj img { object-fit: contain; }
 .float-obj--letter {
   --size: clamp(22px, 2.6vw, 40px);
-  mix-blend-mode: normal;
   display: grid; place-items: center;
   font: 700 var(--size)/1 var(--sans);
   color: var(--white);
@@ -315,7 +307,7 @@
   align-items: end;
   padding: 0 var(--pad) clamp(60px, 9vw, 150px);
 }
-.mvideo__card { overflow: hidden; background: #111112; will-change: transform; }
+.mvideo__card { overflow: hidden; background: #111112; }
 .mvideo__card img { display: block; width: 100%; height: auto; }
 .mvideo__card--a { grid-column: 3 / span 3; }
 .mvideo__say {
@@ -323,7 +315,6 @@
   align-self: start;
   font-size: var(--small); line-height: 1.15;
   max-width: 16ch;
-  will-change: transform;
 }
 .mvideo__card--b { grid-column: 8 / span 2; margin-bottom: clamp(60px, 9vw, 150px); }
 @media (max-width: 800px) {

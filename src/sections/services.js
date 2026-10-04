@@ -21,6 +21,7 @@ export function initServices() {
   const layer = $('.services__objects', section);
   if (!layer) return;
   const objs = [];
+  const floats = [];
 
   const add = (el, spec) => {
     el.style.setProperty('--x', `${spec.x}%`);
@@ -31,7 +32,7 @@ export function initServices() {
     gsap.set(el, { rotation: spec.rot });
     const inner = el.firstElementChild;
     if (!reduce && inner) {
-      gsap.to(inner, { y: rand(-16, 16), rotation: rand(-6, 6), duration: rand(3, 5), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: rand(0, 2) });
+      floats.push(gsap.to(inner, { y: rand(-16, 16), rotation: rand(-6, 6), duration: rand(3, 5), yoyo: true, repeat: -1, ease: 'sine.inOut', delay: rand(0, 2), paused: true }));
     }
     const obj = { el, base: spec.rot, inside: false };
     objs.push(obj);
@@ -73,7 +74,10 @@ export function initServices() {
     ? { R: 260, MAX: 110, ROT: 12, SC: 0.1 }
     : { R: 460, MAX: 380, ROT: 30, SC: 0.2 });
   let active = false;
-  new IntersectionObserver(([e]) => { active = e.isIntersecting; }, { threshold: 0 }).observe(section);
+  new IntersectionObserver(([e]) => {
+    active = e.isIntersecting;
+    floats.forEach((f) => (active ? f.resume() : f.pause()));
+  }, { threshold: 0 }).observe(section);
 
   const release = (o) => {
     o.inside = false;

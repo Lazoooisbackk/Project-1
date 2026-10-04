@@ -49,7 +49,7 @@ Noch Platzhalter: die E-Mail-Adresse `hallo@guskic.studio`, der Instagram-Link `
 | `public/manifest/` | die beiden Bildkarten über dem Video |
 | `public/og.jpg` | Vorschaubild für geteilte Links |
 
-Die Ballons sind auf Schwarz freigestellt. Sie stehen deshalb nur auf schwarzen Flächen und werden per CSS mit `mix-blend-mode: lighten` gemischt. Welche Ballons wo erscheinen, steht in `src/content.js` unter `objects`.
+Die Ballons haben einen durchsichtigen Hintergrund. Ihre Kanten sind für dunkle Flächen gemacht, deshalb stehen sie nur auf Schwarz. Welche Ballons wo erscheinen, steht in `src/content.js` unter `objects`.
 
 Woher jedes Bild und Video stammt, steht in `docs/assets.md`.
 
@@ -82,6 +82,13 @@ ffmpeg -framerate 30 -i _assets/rec/ounji-frames/f%04d.jpg -vf "scale=1280:720,f
 ## Ballon-Buchstaben beim Wischen
 
 Jeder Buchstabe von „guskic studi“ ist ein eigenes 3D-Objekt aus perlweißer, schillernder Folie: Der SVG-Pfad wird über ein Distanzfeld zu einer runden Röhre aufgeblasen, mit gepresster Naht und Knittern am Rand, leicht gekippt, vergrößert und überlappend wie echte Buchstaben-Ballons. Form, Farbe und Glanz stehen oben in `src/balloonLetters.js` (`BALLOON`), Dicke und Lebensdauer der schwarzen Fläche in `src/fluid.js` (`FLUID_DEFAULTS`).
+
+## Flüssig bleiben
+
+- **Scrollen:** Das weiche Scrollen (Lenis) läuft nur, solange der Browser schnell genug zeichnet. `src/scroll.js` misst die Bildrate; fällt sie unter etwa 42 Bilder pro Sekunde (Safari im Energiesparmodus, iPhone im Stromsparmodus, schwache Geräte), übernimmt das normale Scrollen des Browsers. Das bleibt auch dann flüssig.
+- **Kein dauerhaftes Mischen:** `mix-blend-mode` ist nur aktiv, solange im Start-Bereich Tinte zu sehen ist (`body.is-inked`). Die Navigation wechselt ihre Farbe sonst über die Klasse `is-light` (`src/nav.js`).
+- **Keine erzwungenen Ebenen:** kein `will-change` auf Buchstaben und Bildern.
+- **Videos und 3D** laufen nur, solange sie zu sehen sind. Auf dem Handy haben die Ballon-Buchstaben ein gröberes Gitter.
 
 ## Prüfen
 

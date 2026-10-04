@@ -42,8 +42,6 @@
   height: 86%;
   aspect-ratio: 1;
   opacity: 0;
-  mix-blend-mode: lighten;
-  will-change: transform, opacity;
 }
 .loader__item img {
   display: block;
