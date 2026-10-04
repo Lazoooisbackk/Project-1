@@ -37,6 +37,12 @@
   line-height: 1.08;
   letter-spacing: -.03em;
 }
+/* Knopf im Start-Bereich in derselben Schrift wie die Zeile darüber (Geist, nicht Mono) */
+.hero__top .btn {
+  height: auto; padding: .42em 1em .5em; gap: .45em;
+  font: 500 clamp(16px, 1.45vw, 22px)/1 var(--sans); letter-spacing: -.03em; text-transform: none;
+}
+.hero__top .btn i { font-size: 1em; }
 
 .hero__center {
   position: relative; z-index: 1;
