@@ -182,16 +182,18 @@
   font-size: var(--text); font-weight: 500; line-height: 1.2; letter-spacing: -.015em;
   max-width: 37ch;
 }
-/* Eine leere weiße Form mit runden Ecken an der Stelle des großen Bilds */
+/* Das Krokodil-Video aus Jitter an der Stelle des großen Bilds: quadratisch und eckig wie in Jitter */
 .studio__shape {
   grid-column: 6 / span 5; grid-row: 2;
   display: grid; gap: 12px;
 }
 .studio__blob {
-  aspect-ratio: 16 / 9.4;
-  background: var(--white);
-  border-radius: clamp(32px, 4.5vw, 72px);
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #FD7800;          /* Orange des Videos, bis es geladen ist */
+  overflow: hidden;
 }
+.studio__blob video { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
 .studio__caption { font-size: var(--small); line-height: 1.15; max-width: 14ch; }
 @media (max-width: 800px) {
   .studio > .paren { grid-column: 1 / -1; }
