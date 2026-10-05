@@ -1,4 +1,4 @@
-/* ---------- Pakete, Notiz, Website-Check und Erstgespräch (schwarz) ---------- */
+/* ---------- Drei Wege, Notiz, Website-Check und Erstgespräch (schwarz) ---------- */
 .offer {
   position: relative;
   padding: clamp(90px, 12vw, 200px) var(--pad) clamp(72px, 9vw, 140px);
@@ -7,69 +7,80 @@
   align-items: start;
 }
 .offer [hidden], .form-overlay [hidden] { display: none !important; }
-.offer > .paren { grid-column: 1 / span 3; grid-row: 1; }
-.offer__title { grid-column: 5 / -1; grid-row: 1; }
+.offer__title { grid-column: 1 / -1; text-align: center; }
 
-/* Drei Pakete nebeneinander, jedes unter einer feinen Linie */
+/* Drei Wege nebeneinander: nur der Name und ein Satz */
 .offer__packs {
   grid-column: 1 / -1;
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: var(--pad); row-gap: 40px;
+  column-gap: var(--pad); row-gap: 36px;
 }
-.pack, .more {
-  display: grid; gap: 14px; align-content: start; justify-items: start;
-  padding-top: 14px; border-top: 1px solid var(--line);
-}
+.pack, .pack__text { display: grid; gap: 12px; align-content: start; justify-items: start; }
 .pack__name { font: 500 var(--h1) / 1 var(--sans); letter-spacing: -.04em; }
 .pack__price { font-variant-numeric: tabular-nums; }
-.pack__lead { max-width: 26ch; min-height: 2.44em; }      /* zwei Zeilen Platz, damit Listen und Knöpfe in einer Linie stehen */
-.pack__list { font-size: var(--small); line-height: 1.4; color: rgba(255, 255, 255, .7); }
-.pack__list li::before { content: "•"; display: inline-block; width: 1.1em; }
-.pack .magnetic, .more .magnetic { margin-top: 6px; }
+.pack__lead { max-width: 26ch; }
+/* bei „Betreuung“ sitzt rechts der Pfeil, der zur Notiz führt */
+.pack--last { grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: center; }
 
-/* Die Notiz: eine Tabelle zum Hineinschreiben. Links steht, worum es geht, rechts schreibt der Besucher. */
+/* Runde Knöpfe mit Pfeil, wie man sie von Apple kennt */
+.round {
+  flex: none; width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  transition: transform .35s cubic-bezier(.76, 0, .24, 1), background-color .3s, color .3s;
+}
+.round svg { width: 20px; height: 20px; }
+.round--light { background: #F5F5F7; color: #1D1D1F; }
+.round--light:hover { background: var(--white); transform: translateY(3px); }
+.round--dark { background: #1D1D1F; color: var(--white); }
+.round--dark:hover { background: #000; transform: translateY(-2px); }
+.round:active { transform: scale(.94); }
+.round:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.round--light:focus-visible { outline-color: var(--white); }
+
+/* Die Notiz: Überschrift in einer Zeile, darunter ein leerer weißer Kasten zum Hineinschreiben */
 .note {
-  grid-column: 1 / -1;
-  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--pad); row-gap: clamp(24px, 2.6vw, 40px);
-  padding-top: 14px; border-top: 1px solid var(--line);
-  align-items: start;
-  scroll-margin-top: 80px;
+  grid-column: 3 / span 8;
+  display: grid; gap: 16px;
+  scroll-margin-top: 90px;
 }
-.note > .paren { grid-column: 1 / span 3; }
-.note__head { grid-column: 5 / -1; display: grid; gap: 18px; }
-.note__title { max-width: 13em; }
-.note__intro { max-width: 44ch; color: rgba(255, 255, 255, .7); }
-.note__sheet, .note__done { grid-column: 5 / -1; }
-.note__row {
-  display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 6fr);
-  column-gap: var(--pad); row-gap: 6px; align-items: start;
-  padding: 16px 0;
-  border-top: 1px solid var(--line);
-  transition: border-color .3s;
+.note__title {
+  font: 500 clamp(22px, 2.5vw, 40px) / 1.05 var(--sans); letter-spacing: -.035em;
+  white-space: nowrap; margin-bottom: 6px;
 }
-.note__row:focus-within { border-top-color: var(--white); }
-.note__row > .label { padding-top: 7px; }
-.note__row input, .note__row textarea {
-  grid-column: 2;
-  display: block; width: 100%; min-height: 30px; padding: 2px 0;
-  border: 0; border-radius: 0; background: transparent; color: inherit;
-  font: 500 clamp(16px, 1.4vw, 20px) / 1.3 var(--sans); letter-spacing: -.02em;
-  resize: none; overflow: hidden;
+.note__bubble {
+  position: relative;
+  display: grid; gap: 0;
+  padding: 18px 20px 66px;
+  background: var(--white); color: #1D1D1F; color-scheme: light;
+  border-radius: 22px;
+  cursor: text;
 }
-.note__row input:focus, .note__row textarea:focus { outline: none; }
-.note__row ::placeholder { color: rgba(255, 255, 255, .32); }
-.note__row .chips { grid-column: 2; }
-.note__row.is-wrong { border-top-color: #FF6B5E; }
-.note__row .form__hint { grid-column: 2; }
-.note .form__error { padding: 0 0 16px; }
-.note__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding: 20px 0 0; border-top: 1px solid var(--line); }
-.note.is-sending button[type="submit"] { opacity: .5; pointer-events: none; }
-.note__done { display: grid; gap: 14px; padding: 8px 0 20px; }
+.note__bubble textarea, .note__mail input {
+  display: block; width: 100%; padding: 0;
+  border: 0; border-radius: 0; background: transparent; color: inherit; caret-color: #1D1D1F;
+  font: 500 clamp(16px, 1.4vw, 20px) / 1.35 var(--sans); letter-spacing: -.02em;
+}
+.note__bubble textarea { min-height: 6.75em; resize: none; overflow: hidden; }
+.note__bubble textarea:focus, .note__mail input:focus { outline: none; }
+/* zweiter Schritt im selben Kasten: die Adresse für die Antwort */
+.note__mail { display: grid; gap: 6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #E5E5EA; }
+.note__mail label { font-size: var(--small); color: #6E6E73; }
+.note__mail input::placeholder { color: #AEAEB2; }
+.note__legal { font-size: var(--small); line-height: 1.3; color: #6E6E73; }
+.note__legal a { color: #1D1D1F; text-decoration: underline; text-underline-offset: 3px; }
+.note__send { position: absolute; right: 14px; bottom: 14px; }
+.note.is-empty .note__send { background: #C7C7CC; }          /* grau, solange nichts im Kasten steht */
+.note.is-sending .note__send { opacity: .5; pointer-events: none; }
+.note__hint { font-size: var(--small); line-height: 1.3; color: #FF6B5E; }
+.note__hint a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+.note__intro { color: rgba(255, 255, 255, .7); text-wrap: pretty; }
+.note__done { display: grid; gap: 10px; padding: 22px 20px; background: var(--white); color: #1D1D1F; border-radius: 22px; }
 .note__done:focus { outline: none; }
-.note.is-done .note__intro { display: none; }
+.note.is-done .note__intro { display: none; }          /* nach dem Senden steht nur noch der Dank */
+.note__thanks { font: 500 clamp(20px, 2vw, 30px) / 1.1 var(--sans); letter-spacing: -.03em; }
 
-/* Auswahl-Knöpfe: angeklickt werden sie weiß */
+/* Auswahl-Knöpfe (im Formular): angeklickt werden sie weiß */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   position: relative;
@@ -86,11 +97,6 @@
 .chip:focus-within { outline: 2px solid var(--white); outline-offset: 3px; }
 .chip:focus-within:not(:has(:focus-visible)) { outline: none; }
 
-/* weiß gefüllter Knopf (auf Schwarz) für die wichtigste Aktion */
-.btn--light { background: var(--white); color: var(--black); border-color: var(--white); }
-.btn--light::before { background: var(--black); }
-.btn--light:hover, .btn--light:focus-visible { color: var(--white); }
-
 /* Website-Check und Erstgespräch */
 .offer__more {
   grid-column: 1 / -1;
@@ -99,22 +105,26 @@
   align-items: start;
 }
 .offer__more > .paren { grid-column: 1 / span 3; padding-top: 14px; }
-.more { grid-column: span 4; }
+.more {
+  grid-column: span 4;
+  display: grid; gap: 14px; align-content: start; justify-items: start;
+  padding-top: 14px; border-top: 1px solid var(--line);
+}
 .more:first-of-type { grid-column: 5 / span 4; }
+.more .magnetic { margin-top: 6px; }
 .more__title { font: 500 clamp(22px, 2.2vw, 34px) / 1.05 var(--sans); letter-spacing: -.035em; }
 .more__text { font-size: var(--small); line-height: 1.3; max-width: 34ch; min-height: 3.9em; color: rgba(255, 255, 255, .7); }   /* drei Zeilen Platz: beide Knöpfe auf einer Höhe */
 
+@media (max-width: 1000px) {
+  .note { grid-column: 2 / span 10; }
+}
 @media (max-width: 800px) {
-  .offer > .paren, .offer__title { grid-column: 1 / -1; grid-row: auto; }
   .offer { row-gap: 40px; }
-  .offer > .paren { margin-bottom: -22px; }
+  .offer__title { text-align: left; }
   .offer__packs { grid-template-columns: minmax(0, 1fr); }
-  .pack__lead, .more__text { min-height: 0; }
-  .note > .paren, .note__head, .note__sheet, .note__done { grid-column: 1 / -1; }
-  .note > .paren { margin-bottom: -8px; }
-  .note__row { grid-template-columns: minmax(0, 1fr); }
-  .note__row > .label { padding-top: 0; }
-  .note__row input, .note__row textarea, .note__row .chips, .note__row .form__hint { grid-column: 1; }
+  .note { grid-column: 1 / -1; }
+  .note__title { white-space: normal; }
+  .more__text { min-height: 0; }
   .offer__more > .paren, .more, .more:first-of-type { grid-column: 1 / -1; }
   .offer__more > .paren { padding-top: 0; margin-bottom: -22px; }
 }

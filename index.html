@@ -236,85 +236,56 @@
     </div>
   </section>
 
-  <!-- Pakete, die Notiz zum Hineinschreiben, Website-Check und Erstgespräch. Preise zeigt die Seite nur,
+  <!-- Drei Wege, die Notiz zum Hineinschreiben, Website-Check und Erstgespräch. Preise zeigt die Seite nur,
        wenn src/content.js sie einschaltet (offer.showPrices). -->
   <section class="offer on-dark" id="pakete" aria-labelledby="offer-title">
-    <span class="paren">( Pakete )</span>
     <h2 class="offer__title statement" id="offer-title">Drei Wege zu Ihrer Website.</h2>
 
     <ul class="offer__packs">
       <li class="pack">
-        <span class="label">01</span>
         <h3 class="pack__name">Onepager</h3>
         <p class="pack__price" data-price="onepager" hidden></p>
         <p class="pack__lead">Eine Seite, die alles sagt.</p>
-        <ul class="pack__list">
-          <li>Eine lange Seite mit allen wichtigen Infos</li>
-          <li>Eigenes Design, kein Baukasten</li>
-          <li>Für Handy, Tablet und Computer</li>
-        </ul>
-        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Onepager"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
       </li>
       <li class="pack">
-        <span class="label">02</span>
         <h3 class="pack__name">Website</h3>
         <p class="pack__price" data-price="website" hidden></p>
         <p class="pack__lead">Mehrere Seiten für Betriebe, die mehr zeigen wollen.</p>
-        <ul class="pack__list">
-          <li>Mehrere Seiten, klar gegliedert</li>
-          <li>Eigenes Design mit Bewegung</li>
-          <li>Für Handy, Tablet und Computer</li>
-        </ul>
-        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Website"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
       </li>
-      <li class="pack">
-        <span class="label">03</span>
-        <h3 class="pack__name">Betreuung</h3>
-        <p class="pack__price" data-price="care" hidden></p>
-        <p class="pack__lead">Damit Ihre Seite aktuell bleibt.</p>
-        <ul class="pack__list">
-          <li>Änderungen an Texten und Bildern</li>
-          <li>Technische Pflege und Sicherung</li>
-          <li>Schnelle Hilfe bei Fragen</li>
-        </ul>
-        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Betreuung"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
+      <li class="pack pack--last">
+        <div class="pack__text">
+          <h3 class="pack__name">Betreuung</h3>
+          <p class="pack__price" data-price="care" hidden></p>
+          <p class="pack__lead">Damit Ihre Seite aktuell bleibt.</p>
+        </div>
+        <button class="round round--light pack__down" type="button" data-to-note aria-label="Weiter zur Notiz">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </button>
       </li>
     </ul>
 
+    <!-- Die Notiz: ein leerer weißer Kasten. Erst beim Senden fragt er nach der E-Mail-Adresse für die Antwort. -->
     <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
-      <span class="paren">( Ihre Notiz )</span>
-      <div class="note__head">
-        <h3 class="note__title statement" id="note-title">Schreiben Sie auf, wie Ihre Website werden soll.</h3>
-        <p class="note__intro">Stichworte reichen. Ihre Notiz kommt als E-Mail bei mir an, und ich antworte Ihnen direkt darauf.</p>
-      </div>
-      <div class="note__sheet" data-note-sheet>
-        <div class="note__row">
-          <span class="label" id="n-what">Was brauchen Sie?</span>
-          <div class="chips" role="group" aria-labelledby="n-what">
-            <label class="chip"><input type="checkbox" name="what" value="Onepager"><span>Onepager</span></label>
-            <label class="chip"><input type="checkbox" name="what" value="Website"><span>Website</span></label>
-            <label class="chip"><input type="checkbox" name="what" value="Online-Shop"><span>Online-Shop</span></label>
-            <label class="chip"><input type="checkbox" name="what" value="Betreuung"><span>Betreuung</span></label>
-          </div>
+      <h3 class="note__title" id="note-title">Schreiben Sie auf, wie Ihre Website werden soll.</h3>
+      <div class="note__bubble" data-note-bubble>
+        <label class="sr-only" for="n-text">Ihre Notiz</label>
+        <textarea id="n-text" name="notiz" rows="5"></textarea>
+        <div class="note__mail" data-note-mail hidden>
+          <label for="n-email">Wohin darf ich antworten?</label>
+          <input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="Ihre E-Mail-Adresse">
+          <p class="note__legal">Nur für meine Antwort. Mehr in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
         </div>
-        <div class="note__row"><label class="label" for="n-betrieb">Ihr Betrieb</label><textarea id="n-betrieb" name="betrieb" rows="1" placeholder="Zum Beispiel: Friseursalon in Wien"></textarea></div>
-        <div class="note__row"><label class="label" for="n-kann">Das soll die Website können</label><textarea id="n-kann" name="kann" rows="1" placeholder="Öffnungszeiten, Termine, Speisekarte"></textarea></div>
-        <div class="note__row"><label class="label" for="n-aussehen">So soll sie aussehen</label><textarea id="n-aussehen" name="aussehen" rows="1" placeholder="Farben, Stimmung, modern oder klassisch"></textarea></div>
-        <div class="note__row"><label class="label" for="n-beispiele">Websites, die Ihnen gefallen</label><textarea id="n-beispiele" name="beispiele" rows="1" placeholder="Adressen oder Namen"></textarea></div>
-        <div class="note__row"><label class="label" for="n-wann">Bis wann?</label><textarea id="n-wann" name="wann" rows="1" placeholder="Zum Beispiel: bis Dezember"></textarea></div>
-        <div class="note__row"><label class="label" for="n-name">Ihr Name</label><input id="n-name" name="name" type="text" autocomplete="name" required></div>
-        <div class="note__row"><label class="label" for="n-email">Ihre E-Mail</label><input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required></div>
         <div class="form__trap" aria-hidden="true"><label>Dieses Feld bitte leer lassen<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label></div>
-        <p class="form__error" role="alert" data-note-error hidden></p>
-        <div class="note__foot">
-          <span class="magnetic"><button class="btn btn--light" type="submit"><span data-note-submit>Notiz senden</span><i aria-hidden="true">→</i></button></span>
-          <p class="form__legal">Ihre Angaben werden nur verwendet, um Ihnen zu antworten. Mehr in der <a class="u-link" href="datenschutz.html">Datenschutzerklärung</a>.</p>
-        </div>
+        <button class="round round--dark note__send" type="submit" aria-label="Notiz senden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+        </button>
       </div>
       <div class="note__done" data-note-done tabindex="-1" hidden>
-        <p class="statement" data-note-thanks>Danke, Ihre Notiz ist angekommen.</p>
-        <p role="status">Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
+        <p class="note__thanks" data-note-thanks>Danke, Ihre Notiz ist angekommen.</p>
+        <p>Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
       </div>
+      <p class="note__hint" role="alert" data-note-hint hidden></p>
+      <p class="note__intro">Stichworte reichen. Ihre Notiz kommt als E-Mail bei mir an, und ich antworte Ihnen direkt darauf.</p>
     </form>
 
     <div class="offer__more">
