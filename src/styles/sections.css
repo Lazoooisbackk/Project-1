@@ -190,7 +190,7 @@
 .studio__blob {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #FD7800;
+  background: #E9E6E3;          /* Perlweiß wie das Krokodil und die Folien-Buchstaben im Start-Bereich */
   overflow: hidden;
 }
 /* --u ist 1 % der Kachelbreite (setzt das Skript), damit die Schrift mit der Kachel mitwächst */
