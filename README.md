@@ -35,7 +35,7 @@ Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.g
 
 Die sichtbaren Texte stehen in `index.html`. Listen, die das JavaScript braucht (Ballons im Intro, Positionen der Ballons, die Zeile über dem Video, E-Mail-Adresse des Formulars), stehen in `src/content.js`.
 
-Noch Platzhalter: die E-Mail-Adresse `hallo@guskic.studio`, der Instagram-Link `https://www.instagram.com/` und die Adresse in `impressum.html` und `datenschutz.html`.
+Noch Platzhalter: die Adresse und die Telefonnummer in `impressum.html` und `datenschutz.html`.
 
 ## Bilder und Videos
 

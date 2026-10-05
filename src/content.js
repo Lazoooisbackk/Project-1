@@ -40,7 +40,7 @@ export const content = {
 
   contact: {
     form: {
-      mailto: 'hallo@guskic.studio',
+      mailto: 'guskic.studio@gmail.com',
       subject: 'Projektanfrage über guskic.studio',
     },
   },
