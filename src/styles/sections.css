@@ -333,8 +333,9 @@
 .contact__title { grid-column: 1 / span 8; }
 .contact__title .ch-mask { padding-bottom: .24em; margin-bottom: -.24em; }
 .contact__actions { grid-column: 1 / span 8; display: flex; flex-wrap: wrap; gap: 8px; }
-.contact__actions .btn { height: 32px; padding: 0 13px; }
-.contact__actions .btn span { text-transform: none; }      /* die E-Mail-Adresse so, wie sie geschrieben wird */
+.contact__actions .btn { height: 36px; padding: 0 15px; }
+/* die E-Mail-Adresse in der Schrift des Namens „guskic studiO“ und so, wie sie geschrieben wird */
+.contact__actions .btn span { font: 700 14px/1 var(--sans); letter-spacing: -.02em; text-transform: none; }
 /* Instagram-Fläche an der Stelle der früheren Links; die Bewegung macht src/sections/handle.js */
 .contact__handle {
   grid-column: 10 / span 3; grid-row: 1 / span 2;
