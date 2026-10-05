@@ -3,11 +3,13 @@ import { $, $$, clamp, reducedMotion } from '../utils/dom.js';
 import { splitChars } from '../utils/split.js';
 import { lockScroll, unlockScroll } from '../scroll.js';
 import { content } from '../content.js';
+import { initHandle } from './handle.js';
 
 export function initContact({ sound } = {}) {
   const section = $('.contact');
   if (!section) return;
   const reduce = reducedMotion();
+  initHandle(section);
 
   const title = $('.contact__title', section);
   const { chars } = splitChars(title);

@@ -182,7 +182,7 @@
   font-size: var(--text); font-weight: 500; line-height: 1.2; letter-spacing: -.015em;
   max-width: 37ch;
 }
-/* Das Krokodil-Video aus Jitter an der Stelle des großen Bilds: quadratisch und eckig wie in Jitter */
+/* Das Krokodil an der Stelle des großen Bilds: quadratisch und eckig, die Animation malt src/sections/studioKroko.js */
 .studio__shape {
   grid-column: 6 / span 5; grid-row: 2;
   display: grid; gap: 12px;
@@ -190,10 +190,18 @@
 .studio__blob {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #FD7800;          /* Orange des Videos, bis es geladen ist */
+  background: #FD7800;
   overflow: hidden;
 }
-.studio__blob video { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+/* --u ist 1 % der Kachelbreite (setzt das Skript), damit die Schrift mit der Kachel mitwächst */
+.studio__kroko-name {
+  position: absolute; left: calc(var(--u, 4px) * 3.6); bottom: calc(var(--u, 4px) * 1.2);
+  margin: 0; color: #0F0F0F;
+  font: 800 calc(var(--u, 4px) * 17) / .93 var(--sans); letter-spacing: -.035em; white-space: nowrap;
+}
+.studio__kroko-name span { display: block; }
+.studio__kroko-name span + span { margin-left: calc(var(--u, 4px) * 31.1); }
+.studio__kroko { position: absolute; inset: 0; width: 100%; height: 100%; }
 .studio__caption { font-size: var(--small); line-height: 1.15; max-width: 14ch; }
 @media (max-width: 800px) {
   .studio > .paren { grid-column: 1 / -1; }
@@ -322,22 +330,36 @@
   column-gap: var(--pad); row-gap: clamp(16px, 1.5vw, 22px);
   align-items: end;
 }
-.contact__title { grid-column: 1 / span 8; max-width: 6.3em; }
+.contact__title { grid-column: 1 / span 8; }
 .contact__title .ch-mask { padding-bottom: .24em; margin-bottom: -.24em; }
 .contact__actions { grid-column: 1 / span 8; display: flex; flex-wrap: wrap; gap: 8px; }
 .contact__actions .btn { height: 32px; padding: 0 13px; }
-.contact__links {
+/* Instagram-Fläche an der Stelle der früheren Links; die Bewegung macht src/sections/handle.js */
+.contact__handle {
   grid-column: 10 / span 3; grid-row: 1 / span 2;
-  align-self: end;
-  display: grid; gap: 1px; justify-items: start;
-  font-size: var(--text); line-height: 1.25;
+  align-self: end; justify-self: start;
+  display: flex; justify-content: center;
 }
+.handle {
+  --h: clamp(44px, 3.9vw, 58px);
+  position: relative; flex: none;
+  display: inline-flex; align-items: center; gap: calc(var(--h) * .1);
+  height: var(--h); padding: 0 calc(var(--h) * .22) 0 calc(var(--h) * .24);
+  background: #CACACA; color: #626262;
+  border-radius: calc(var(--h) * .38);
+  font: 700 calc(var(--h) * .41) / 1 var(--sans); letter-spacing: -.01em; white-space: nowrap;
+  overflow: hidden;
+}
+.handle__icon { flex: none; width: calc(var(--h) * .47); height: calc(var(--h) * .47); }
+.handle__name i { font-style: normal; }
+/* während der Bewegung hängt der Name am rechten Rand, das Zeichen bleibt links */
+.handle.is-moving .handle__name { position: absolute; right: calc(var(--h) * .22); top: 50%; transform: translateY(-50%); }
 .contact__bar { grid-column: 1 / -1; display: grid; gap: 10px; margin-top: clamp(40px, 6vw, 90px); }
 .contact__timeline { position: relative; height: 1px; background: var(--line); }
 .contact__timeline i { position: absolute; left: 0; top: -1px; height: 3px; width: 100%; background: var(--white); transform: scaleX(0); transform-origin: left; }
 @media (max-width: 800px) {
   .contact__title, .contact__actions { grid-column: 1 / -1; }
-  .contact__links { grid-column: 1 / -1; grid-row: auto; margin-top: 18px; }
+  .contact__handle { grid-column: 1 / -1; grid-row: auto; margin-top: 18px; }
 }
 
 .form-overlay {

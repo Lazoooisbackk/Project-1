@@ -1,11 +1,13 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, reducedMotion, debounce } from '../utils/dom.js';
 import { splitLines } from '../utils/split.js';
+import { initStudioKroko } from './studioKroko.js';
 
 export function initStudio() {
   const section = $('.studio');
   if (!section) return;
   const reduce = reducedMotion();
+  initStudioKroko(section);
 
   const text = $('.studio__text', section);
   let { lines } = splitLines(text);
@@ -16,7 +18,7 @@ export function initStudio() {
 
   if (reduce) return;
 
-  /* Die weiße Form schiebt sich von unten frei und gleitet beim Scrollen leicht mit */
+  /* Die Kachel schiebt sich von unten frei und gleitet beim Scrollen leicht mit */
   const shape = $('.studio__shape', section);
   if (shape) {
     gsap.fromTo(shape, { clipPath: 'inset(100% 0% 0% 0%)' }, {

@@ -198,9 +198,8 @@
 
     <figure class="studio__shape">
       <div class="studio__blob" aria-hidden="true">
-        <video data-auto muted playsinline loop preload="none" poster="./video/kroko.jpg" tabindex="-1">
-          <source data-src="./video/kroko.mp4" type="video/mp4">
-        </video>
+        <p class="studio__kroko-name"><span>guskic</span><span>studiO</span></p>
+        <canvas class="studio__kroko" data-kroko></canvas>
       </div>
       <figcaption class="studio__caption">oder etwas Unerwartetes.</figcaption>
     </figure>
@@ -270,16 +269,25 @@
 
   <!-- Kontakt -->
   <section class="contact on-dark" id="kontakt" aria-labelledby="contact-title">
-    <h2 class="contact__title statement" id="contact-title">Lass uns anfangen.</h2>
+    <h2 class="contact__title statement" id="contact-title">Fangen Sie an!</h2>
     <div class="contact__actions">
-      <span class="magnetic"><button class="btn btn--ghost" type="button" data-open-form><span>Projekt anfragen</span><i aria-hidden="true">→</i></button></span>
-      <span class="magnetic"><a class="btn btn--ghost" href="mailto:hallo@guskic.studio"><span>E-Mail schreiben</span><i aria-hidden="true">⊕</i></a></span>
+      <span class="magnetic"><a class="btn btn--ghost" href="mailto:hallo@guskic.studio"><span>E-Mail</span><i aria-hidden="true">⊕</i></a></span>
     </div>
-    <ul class="contact__links">
-      <li><a class="u-link" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a></li>
-      <li><a class="u-link" href="mailto:hallo@guskic.studio">E-Mail</a></li>
-      <li><a class="u-link" href="impressum.html">Impressum</a></li>
-    </ul>
+    <div class="contact__handle">
+      <a class="handle" href="https://www.instagram.com/guskic.studio/" target="_blank" rel="noopener" aria-label="guskic.studiO auf Instagram" data-handle>
+        <svg class="handle__icon" viewBox="0 0 24 24" fill="none" stroke="url(#handle-ig)" stroke-width="2" aria-hidden="true">
+          <defs>
+            <radialGradient id="handle-ig" gradientUnits="userSpaceOnUse" cx="7" cy="25.5" r="30">
+              <stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/>
+            </radialGradient>
+          </defs>
+          <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.6"/>
+          <circle cx="12" cy="12" r="4.5"/>
+          <circle cx="17.5" cy="6.5" r="1.25" fill="url(#handle-ig)" stroke="none"/>
+        </svg>
+        <span class="handle__name" aria-hidden="true">guskic.studiO</span>
+      </a>
+    </div>
     <div class="contact__bar">
       <span class="label">Weiter scrollen öffnet das Formular</span>
       <div class="contact__timeline" aria-hidden="true"><i></i></div>
