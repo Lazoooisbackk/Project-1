@@ -366,21 +366,45 @@
 
 .form-overlay {
   position: fixed; inset: 0; z-index: var(--z-form);
-  background: var(--black); color: var(--white);
-  display: grid; align-content: center;
-  padding: var(--nav-h) var(--pad);
+  background: var(--black); color: var(--white); color-scheme: dark;
+  display: flex; flex-direction: column;
+  padding: var(--nav-h) var(--pad) 32px;
+  overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   visibility: hidden; opacity: 0;
 }
-.form-overlay__inner { width: min(100%, 720px); margin-inline: auto; display: grid; gap: 28px; }
+/* margin auto: mittig, solange alles passt; ist das Formular höher als der Bildschirm, beginnt es oben und man scrollt */
+.form-overlay__inner { width: min(100%, 720px); margin: auto; display: grid; gap: 24px; }
 .form-overlay__close { position: absolute; top: 20px; right: var(--pad); color: var(--white); }
-.form { display: grid; gap: 22px; justify-items: start; }
-.form__field { display: grid; gap: 8px; width: 100%; }
-.form__field input, .form__field textarea {
-  width: 100%; padding: 12px 0;
+.form { display: grid; gap: 20px; justify-items: start; }
+.form__types { margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px var(--pad); width: 100%; }
+.form__field { display: grid; gap: 6px; width: 100%; align-content: start; }
+.form__field input, .form__field textarea, .form__field select {
+  width: 100%; padding: 10px 0;
   border: 0; border-bottom: 1px solid currentColor;
   background: transparent; color: inherit;
-  font: 500 clamp(18px, 2vw, 26px)/1.3 var(--sans); letter-spacing: -.02em;
+  font: 500 clamp(17px, 1.7vw, 22px)/1.3 var(--sans); letter-spacing: -.02em;
   border-radius: 0;
 }
-.form__field textarea { min-height: 120px; resize: vertical; }
-.form__field input:focus, .form__field textarea:focus { outline: none; border-bottom-width: 2px; }
+.form__field select { -webkit-appearance: none; appearance: none; cursor: pointer; padding-right: 24px; background: no-repeat right 2px center / 12px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E"); }
+.form__field select option { color: #000; background: #fff; }
+.form__field input[type="date"] { min-height: calc(1.3em + 21px); }
+.form__field input::placeholder { color: rgba(255, 255, 255, .35); }
+.form__field textarea { min-height: 96px; resize: vertical; }
+.form__field input:focus, .form__field textarea:focus, .form__field select:focus { outline: none; border-bottom-width: 2px; padding-bottom: 9px; }
+/* Feld mit Fehler: rote Linie und ein Hinweis darunter */
+.form__field.is-wrong input, .form__field.is-wrong textarea { border-bottom-color: #FF6B5E; }
+.form__hint { font-size: var(--small); line-height: 1.25; color: #FF6B5E; }
+.form__error { font-size: var(--small); line-height: 1.3; color: #FF6B5E; max-width: 52ch; }
+.form__error a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+/* Falle für automatische Spam-Programme: Menschen sehen das Feld nicht */
+.form__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+.form__legal { font-size: var(--small); line-height: 1.3; color: rgba(255, 255, 255, .5); max-width: 44ch; }
+.form__legal a { color: var(--white); }
+.form.is-sending button[type="submit"] { opacity: .5; pointer-events: none; }
+.form__done { display: grid; gap: 18px; justify-items: start; }
+.form__done:focus { outline: none; }
+@media (max-width: 600px) {
+  .form__row { grid-template-columns: minmax(0, 1fr); }
+}

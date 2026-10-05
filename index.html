@@ -236,6 +236,104 @@
     </div>
   </section>
 
+  <!-- Pakete, die Notiz zum Hineinschreiben, Website-Check und Erstgespräch. Preise zeigt die Seite nur,
+       wenn src/content.js sie einschaltet (offer.showPrices). -->
+  <section class="offer on-dark" id="pakete" aria-labelledby="offer-title">
+    <span class="paren">( Pakete )</span>
+    <h2 class="offer__title statement" id="offer-title">Drei Wege zu Ihrer Website.</h2>
+
+    <ul class="offer__packs">
+      <li class="pack">
+        <span class="label">01</span>
+        <h3 class="pack__name">Onepager</h3>
+        <p class="pack__price" data-price="onepager" hidden></p>
+        <p class="pack__lead">Eine Seite, die alles sagt.</p>
+        <ul class="pack__list">
+          <li>Eine lange Seite mit allen wichtigen Infos</li>
+          <li>Eigenes Design, kein Baukasten</li>
+          <li>Für Handy, Tablet und Computer</li>
+        </ul>
+        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Onepager"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
+      </li>
+      <li class="pack">
+        <span class="label">02</span>
+        <h3 class="pack__name">Website</h3>
+        <p class="pack__price" data-price="website" hidden></p>
+        <p class="pack__lead">Mehrere Seiten für Betriebe, die mehr zeigen wollen.</p>
+        <ul class="pack__list">
+          <li>Mehrere Seiten, klar gegliedert</li>
+          <li>Eigenes Design mit Bewegung</li>
+          <li>Für Handy, Tablet und Computer</li>
+        </ul>
+        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Website"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
+      </li>
+      <li class="pack">
+        <span class="label">03</span>
+        <h3 class="pack__name">Betreuung</h3>
+        <p class="pack__price" data-price="care" hidden></p>
+        <p class="pack__lead">Damit Ihre Seite aktuell bleibt.</p>
+        <ul class="pack__list">
+          <li>Änderungen an Texten und Bildern</li>
+          <li>Technische Pflege und Sicherung</li>
+          <li>Schnelle Hilfe bei Fragen</li>
+        </ul>
+        <span class="magnetic"><button class="btn btn--ghost" type="button" data-pack="Betreuung"><span>Anfragen</span><i aria-hidden="true">→</i></button></span>
+      </li>
+    </ul>
+
+    <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
+      <span class="paren">( Ihre Notiz )</span>
+      <div class="note__head">
+        <h3 class="note__title statement" id="note-title">Schreiben Sie auf, wie Ihre Website werden soll.</h3>
+        <p class="note__intro">Stichworte reichen. Ihre Notiz kommt als E-Mail bei mir an, und ich antworte Ihnen direkt darauf.</p>
+      </div>
+      <div class="note__sheet" data-note-sheet>
+        <div class="note__row">
+          <span class="label" id="n-what">Was brauchen Sie?</span>
+          <div class="chips" role="group" aria-labelledby="n-what">
+            <label class="chip"><input type="checkbox" name="what" value="Onepager"><span>Onepager</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="Website"><span>Website</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="Online-Shop"><span>Online-Shop</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="Betreuung"><span>Betreuung</span></label>
+          </div>
+        </div>
+        <div class="note__row"><label class="label" for="n-betrieb">Ihr Betrieb</label><textarea id="n-betrieb" name="betrieb" rows="1" placeholder="Zum Beispiel: Friseursalon in Wien"></textarea></div>
+        <div class="note__row"><label class="label" for="n-kann">Das soll die Website können</label><textarea id="n-kann" name="kann" rows="1" placeholder="Öffnungszeiten, Termine, Speisekarte"></textarea></div>
+        <div class="note__row"><label class="label" for="n-aussehen">So soll sie aussehen</label><textarea id="n-aussehen" name="aussehen" rows="1" placeholder="Farben, Stimmung, modern oder klassisch"></textarea></div>
+        <div class="note__row"><label class="label" for="n-beispiele">Websites, die Ihnen gefallen</label><textarea id="n-beispiele" name="beispiele" rows="1" placeholder="Adressen oder Namen"></textarea></div>
+        <div class="note__row"><label class="label" for="n-wann">Bis wann?</label><textarea id="n-wann" name="wann" rows="1" placeholder="Zum Beispiel: bis Dezember"></textarea></div>
+        <div class="note__row"><label class="label" for="n-name">Ihr Name</label><input id="n-name" name="name" type="text" autocomplete="name" required></div>
+        <div class="note__row"><label class="label" for="n-email">Ihre E-Mail</label><input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required></div>
+        <div class="form__trap" aria-hidden="true"><label>Dieses Feld bitte leer lassen<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label></div>
+        <p class="form__error" role="alert" data-note-error hidden></p>
+        <div class="note__foot">
+          <span class="magnetic"><button class="btn btn--light" type="submit"><span data-note-submit>Notiz senden</span><i aria-hidden="true">→</i></button></span>
+          <p class="form__legal">Ihre Angaben werden nur verwendet, um Ihnen zu antworten. Mehr in der <a class="u-link" href="datenschutz.html">Datenschutzerklärung</a>.</p>
+        </div>
+      </div>
+      <div class="note__done" data-note-done tabindex="-1" hidden>
+        <p class="statement" data-note-thanks>Danke, Ihre Notiz ist angekommen.</p>
+        <p role="status">Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
+      </div>
+    </form>
+
+    <div class="offer__more">
+      <span class="paren">( Noch unsicher? )</span>
+      <div class="more">
+        <span class="label">Kostenlos</span>
+        <h3 class="more__title">Gratis Website-Check</h3>
+        <p class="more__text">Sie haben schon eine Website? Ich schaue sie mir an und schicke Ihnen drei konkrete Verbesserungen.</p>
+        <span class="magnetic"><button class="btn btn--ghost" type="button" data-open-form="check"><span>Website prüfen lassen</span><i aria-hidden="true">→</i></button></span>
+      </div>
+      <div class="more">
+        <span class="label">15 Minuten</span>
+        <h3 class="more__title">Erstgespräch</h3>
+        <p class="more__text">Kostenlos und unverbindlich. Sie erzählen, was Sie brauchen, ich sage Ihnen ehrlich, was sinnvoll ist.</p>
+        <span class="magnetic"><button class="btn btn--ghost" type="button" data-open-form="termin"><span>Termin anfragen</span><i aria-hidden="true">→</i></button></span>
+      </div>
+    </div>
+  </section>
+
   <!-- Vollbild-Video: die Figur im Folien-Kostüm -->
   <section class="mvideo on-dark" aria-label="guskic studiO in Bewegung">
     <div class="mvideo__bg">
@@ -296,17 +394,39 @@
 
 </main>
 
-<div class="form-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="form-title">
+<div class="form-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="form-title" data-lenis-prevent>
   <button class="form-overlay__close label u-link" type="button">Schließen</button>
   <div class="form-overlay__inner">
     <span class="label">Kontakt</span>
     <h2 class="statement" id="form-title">Projekt anfragen</h2>
     <form class="form" novalidate>
-      <div class="form__field"><label class="label" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
-      <div class="form__field"><label class="label" for="f-email">E-Mail</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
-      <div class="form__field"><label class="label" for="f-message">Worum geht es?</label><textarea id="f-message" name="message" rows="4"></textarea></div>
-      <span class="magnetic"><button class="btn btn--ghost" type="submit"><span>Absenden</span><i aria-hidden="true">→</i></button></span>
+      <fieldset class="form__types">
+        <legend class="sr-only">Art der Anfrage</legend>
+        <label class="chip"><input type="radio" name="type" value="projekt" checked><span>Projekt</span></label>
+        <label class="chip"><input type="radio" name="type" value="check"><span>Website-Check</span></label>
+        <label class="chip"><input type="radio" name="type" value="termin"><span>Erstgespräch</span></label>
+      </fieldset>
+      <div class="form__row">
+        <div class="form__field"><label class="label" for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+        <div class="form__field"><label class="label" for="f-email">E-Mail</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+      </div>
+      <div class="form__field" data-for="check" hidden><label class="label" for="f-url">Ihre Website</label><input id="f-url" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="www.beispiel.at"></div>
+      <div class="form__row" data-for="termin" hidden>
+        <div class="form__field"><label class="label" for="f-day">Wunschtag</label><input id="f-day" name="day" type="date"></div>
+        <div class="form__field"><label class="label" for="f-time">Uhrzeit</label><select id="f-time" name="time"><option value="">Egal</option><option>Vormittag</option><option>Nachmittag</option><option>Abend</option></select></div>
+      </div>
+      <div class="form__field"><label class="label" for="f-message" data-form-message-label>Worum geht es?</label><textarea id="f-message" name="message" rows="3"></textarea></div>
+      <div class="form__trap" aria-hidden="true"><label>Dieses Feld bitte leer lassen<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <p class="form__error" role="alert" data-form-error hidden></p>
+      <div class="form__foot">
+        <span class="magnetic"><button class="btn btn--ghost" type="submit"><span data-form-submit>Absenden</span><i aria-hidden="true">→</i></button></span>
+        <p class="form__legal">Ihre Angaben werden nur verwendet, um Ihre Anfrage zu beantworten. Mehr in der <a class="u-link" href="datenschutz.html">Datenschutzerklärung</a>.</p>
+      </div>
     </form>
+    <div class="form__done" data-form-done tabindex="-1" hidden>
+      <p role="status">Ich melde mich so schnell wie möglich bei Ihnen.</p>
+      <span class="magnetic"><button class="btn btn--ghost" type="button" data-form-close><span>Schließen</span></button></span>
+    </div>
   </div>
 </div>
 

@@ -1,0 +1,120 @@
+/* ---------- Pakete, Notiz, Website-Check und Erstgespräch (schwarz) ---------- */
+.offer {
+  position: relative;
+  padding: clamp(90px, 12vw, 200px) var(--pad) clamp(72px, 9vw, 140px);
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--pad); row-gap: clamp(44px, 5.5vw, 90px);
+  align-items: start;
+}
+.offer [hidden], .form-overlay [hidden] { display: none !important; }
+.offer > .paren { grid-column: 1 / span 3; grid-row: 1; }
+.offer__title { grid-column: 5 / -1; grid-row: 1; }
+
+/* Drei Pakete nebeneinander, jedes unter einer feinen Linie */
+.offer__packs {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--pad); row-gap: 40px;
+}
+.pack, .more {
+  display: grid; gap: 14px; align-content: start; justify-items: start;
+  padding-top: 14px; border-top: 1px solid var(--line);
+}
+.pack__name { font: 500 var(--h1) / 1 var(--sans); letter-spacing: -.04em; }
+.pack__price { font-variant-numeric: tabular-nums; }
+.pack__lead { max-width: 26ch; min-height: 2.44em; }      /* zwei Zeilen Platz, damit Listen und Knöpfe in einer Linie stehen */
+.pack__list { font-size: var(--small); line-height: 1.4; color: rgba(255, 255, 255, .7); }
+.pack__list li::before { content: "•"; display: inline-block; width: 1.1em; }
+.pack .magnetic, .more .magnetic { margin-top: 6px; }
+
+/* Die Notiz: eine Tabelle zum Hineinschreiben. Links steht, worum es geht, rechts schreibt der Besucher. */
+.note {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--pad); row-gap: clamp(24px, 2.6vw, 40px);
+  padding-top: 14px; border-top: 1px solid var(--line);
+  align-items: start;
+  scroll-margin-top: 80px;
+}
+.note > .paren { grid-column: 1 / span 3; }
+.note__head { grid-column: 5 / -1; display: grid; gap: 18px; }
+.note__title { max-width: 13em; }
+.note__intro { max-width: 44ch; color: rgba(255, 255, 255, .7); }
+.note__sheet, .note__done { grid-column: 5 / -1; }
+.note__row {
+  display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 6fr);
+  column-gap: var(--pad); row-gap: 6px; align-items: start;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  transition: border-color .3s;
+}
+.note__row:focus-within { border-top-color: var(--white); }
+.note__row > .label { padding-top: 7px; }
+.note__row input, .note__row textarea {
+  grid-column: 2;
+  display: block; width: 100%; min-height: 30px; padding: 2px 0;
+  border: 0; border-radius: 0; background: transparent; color: inherit;
+  font: 500 clamp(16px, 1.4vw, 20px) / 1.3 var(--sans); letter-spacing: -.02em;
+  resize: none; overflow: hidden;
+}
+.note__row input:focus, .note__row textarea:focus { outline: none; }
+.note__row ::placeholder { color: rgba(255, 255, 255, .32); }
+.note__row .chips { grid-column: 2; }
+.note__row.is-wrong { border-top-color: #FF6B5E; }
+.note__row .form__hint { grid-column: 2; }
+.note .form__error { padding: 0 0 16px; }
+.note__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; padding: 20px 0 0; border-top: 1px solid var(--line); }
+.note.is-sending button[type="submit"] { opacity: .5; pointer-events: none; }
+.note__done { display: grid; gap: 14px; padding: 8px 0 20px; }
+.note__done:focus { outline: none; }
+.note.is-done .note__intro { display: none; }
+
+/* Auswahl-Knöpfe: angeklickt werden sie weiß */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 9px;
+  min-height: 36px; padding: 6px 14px;
+  border: 1px solid var(--line); border-radius: 999px;
+  font-size: var(--small); line-height: 1.15;
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+  transition: background-color .3s, color .3s, border-color .3s;
+}
+.chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.chip:hover { border-color: var(--white); }
+.chip.is-on { background: var(--white); color: var(--black); border-color: var(--white); }
+.chip:focus-within { outline: 2px solid var(--white); outline-offset: 3px; }
+.chip:focus-within:not(:has(:focus-visible)) { outline: none; }
+
+/* weiß gefüllter Knopf (auf Schwarz) für die wichtigste Aktion */
+.btn--light { background: var(--white); color: var(--black); border-color: var(--white); }
+.btn--light::before { background: var(--black); }
+.btn--light:hover, .btn--light:focus-visible { color: var(--white); }
+
+/* Website-Check und Erstgespräch */
+.offer__more {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--pad); row-gap: 40px;
+  align-items: start;
+}
+.offer__more > .paren { grid-column: 1 / span 3; padding-top: 14px; }
+.more { grid-column: span 4; }
+.more:first-of-type { grid-column: 5 / span 4; }
+.more__title { font: 500 clamp(22px, 2.2vw, 34px) / 1.05 var(--sans); letter-spacing: -.035em; }
+.more__text { font-size: var(--small); line-height: 1.3; max-width: 34ch; min-height: 3.9em; color: rgba(255, 255, 255, .7); }   /* drei Zeilen Platz: beide Knöpfe auf einer Höhe */
+
+@media (max-width: 800px) {
+  .offer > .paren, .offer__title { grid-column: 1 / -1; grid-row: auto; }
+  .offer { row-gap: 40px; }
+  .offer > .paren { margin-bottom: -22px; }
+  .offer__packs { grid-template-columns: minmax(0, 1fr); }
+  .pack__lead, .more__text { min-height: 0; }
+  .note > .paren, .note__head, .note__sheet, .note__done { grid-column: 1 / -1; }
+  .note > .paren { margin-bottom: -8px; }
+  .note__row { grid-template-columns: minmax(0, 1fr); }
+  .note__row > .label { padding-top: 0; }
+  .note__row input, .note__row textarea, .note__row .chips, .note__row .form__hint { grid-column: 1; }
+  .offer__more > .paren, .more, .more:first-of-type { grid-column: 1 / -1; }
+  .offer__more > .paren { padding-top: 0; margin-bottom: -22px; }
+}
