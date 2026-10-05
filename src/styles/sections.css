@@ -168,14 +168,30 @@
 .sound__tick { position: absolute; top: 2px; left: 2px; width: 6px; height: 6px; border-radius: 999px; background: currentColor; transition: transform .35s cubic-bezier(.76, 0, .24, 1); }
 .sound[aria-pressed="true"] .sound__tick { transform: translateX(10px); }
 
-/* ---------- Studio (schwarz) ---------- */
+/* ---------- Studio (perlweiß, schillernd wie das Krokodil) ---------- */
 .studio {
-  position: relative;
+  position: relative; isolation: isolate; overflow: hidden;
+  background: #ECE9E6; color: var(--ink);
   padding: clamp(110px, 15vw, 240px) var(--pad) clamp(40px, 6vw, 100px);
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--pad); row-gap: clamp(18px, 1.8vw, 28px);
   align-items: start;
 }
+/* Das Schillern: zarte Flecken in Rosa, Eisblau und Flieder, die sehr langsam wandern (nur verschoben, das kostet keine Leistung) */
+.studio::before {
+  content: ""; position: absolute; inset: -18% -12%; z-index: -1;
+  background:
+    radial-gradient(52% 44% at 16% 20%, rgba(255, 190, 226, .62), transparent 72%),
+    radial-gradient(48% 42% at 84% 26%, rgba(176, 220, 255, .60), transparent 72%),
+    radial-gradient(56% 50% at 62% 88%, rgba(208, 192, 255, .56), transparent 72%),
+    radial-gradient(40% 36% at 28% 78%, rgba(196, 244, 230, .40), transparent 72%);
+  animation: studio-shimmer 16s ease-in-out infinite alternate;
+}
+@keyframes studio-shimmer {
+  from { transform: translate3d(-5%, -4%, 0) scale(1); }
+  to { transform: translate3d(5%, 4%, 0) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) { .studio::before { animation: none; } }
 .studio > .paren { grid-column: 1 / span 3; grid-row: 1; }
 .studio__text {
   grid-column: 6 / span 5; grid-row: 1;
@@ -190,7 +206,7 @@
 .studio__blob {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #E9E6E3;          /* Perlweiß wie das Krokodil und die Folien-Buchstaben im Start-Bereich */
+  background: #FD7800;
   overflow: hidden;
 }
 /* --u ist 1 % der Kachelbreite (setzt das Skript), damit die Schrift mit der Kachel mitwächst */
