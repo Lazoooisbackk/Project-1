@@ -24,14 +24,7 @@ export const content = {
       { id: 'at', x: 63, y: 86, mx: 72, my: 86, size: 11, rot: 8 },
       { id: 'smiley', x: 24, y: 66, mx: 46, my: 30, size: 10, rot: -6 },
     ],
-    letters: [
-      { ch: 'g', x: 21, y: 22, rot: -24 },
-      { ch: 'u', x: 46, y: 12, rot: 14 },
-      { ch: 's', x: 78, y: 52, rot: 28 },
-      { ch: 'k', x: 30, y: 90, rot: -12 },
-      { ch: 'i', x: 74, y: 78, rot: 20 },
-      { ch: 'c', x: 13, y: 48, rot: 34 },
-    ],
+    letters: [],                                   // einzelne Buchstaben zwischen den Ballons: vorerst keine
   },
 
   manifestVideo: {
