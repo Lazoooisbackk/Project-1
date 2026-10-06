@@ -11,7 +11,7 @@ export function initContact({ sound } = {}) {
   const section = $('.contact');
   if (!section) return;
   const reduce = reducedMotion();
-  initHandle(section);
+  initHandle(document);                         // die Instagram-Fläche sitzt jetzt im Abschnitt „Drei Wege“
 
   const title = $('.contact__title', section);
   const { chars } = splitChars(title);
