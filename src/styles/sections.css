@@ -206,7 +206,7 @@
 .studio__blob {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #FD7800;
+  background: #378A2E;          /* das Grün aus seiner Jitter-Fassung */
   overflow: hidden;
 }
 /* --u ist 1 % der Kachelbreite (setzt das Skript), damit die Schrift mit der Kachel mitwächst */

@@ -9,12 +9,15 @@ export function initStudio() {
   const reduce = reducedMotion();
   initStudioKroko(section);
 
+  /* Textzeilen gibt es in diesem Bereich derzeit nicht; falls wieder welche dazukommen, fahren sie von unten ein */
   const text = $('.studio__text', section);
-  let { lines } = splitLines(text);
-  let shown = reduce;
-  gsap.set(lines, { yPercent: reduce ? 0 : 110 });
-  if (!reduce) ScrollTrigger.create({ trigger: text, start: 'top 85%', once: true, onEnter: () => { shown = true; gsap.to(lines, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }); } });
-  window.addEventListener('resize', debounce(() => { ({ lines } = splitLines(text)); gsap.set(lines, { yPercent: shown ? 0 : 110 }); }, 250));
+  if (text) {
+    let { lines } = splitLines(text);
+    let shown = reduce;
+    gsap.set(lines, { yPercent: reduce ? 0 : 110 });
+    if (!reduce) ScrollTrigger.create({ trigger: text, start: 'top 85%', once: true, onEnter: () => { shown = true; gsap.to(lines, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }); } });
+    window.addEventListener('resize', debounce(() => { ({ lines } = splitLines(text)); gsap.set(lines, { yPercent: shown ? 0 : 110 }); }, 250));
+  }
 
   if (reduce) return;
 
