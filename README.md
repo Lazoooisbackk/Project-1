@@ -37,7 +37,7 @@ Die sichtbaren Texte stehen in `index.html`. Listen, die das JavaScript braucht 
 
 Noch Platzhalter: die Adresse und die Telefonnummer in `impressum.html` und `datenschutz.html`.
 
-Pakete und Notiz: `offer.showPrices` in `src/content.js` schaltet Preise unter den Paketen ein oder aus (Standard: aus, die Seite zeigt keine Zahlen). Die Notiz und das Formular (Projekt, Website-Check, Erstgespräch) senden über den Dienst in `contact.form.endpoint` (`src/utils/send.js`); schlägt das Senden fehl, öffnet sich als Ersatz eine fertige E-Mail.
+Pakete und Notiz: `offer.showPrices` in `src/content.js` schaltet Preise unter den Paketen ein oder aus (Standard: aus, die Seite zeigt keine Zahlen). Die Notiz und das Formular (Projekt, Website-Check, Erstgespräch) senden über Web3Forms (`contact.form.endpoint` und `accessKey`) (`src/utils/send.js`); schlägt das Senden fehl, öffnet sich als Ersatz eine fertige E-Mail.
 
 ## Bilder und Videos
 

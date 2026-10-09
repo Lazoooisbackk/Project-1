@@ -1,6 +1,6 @@
 /*
-  Formulare absenden. Die Angaben kommen als Liste [Bezeichnung, Wert] und gehen an den Dienst aus
-  src/content.js (contact.form.endpoint), der sie als E-Mail weiterleitet. Die Zeile „E-Mail“ wird dabei
+  Formulare absenden. Die Angaben kommen als Liste [Bezeichnung, Wert] und gehen an Web3Forms
+  (src/content.js: contact.form.endpoint und accessKey), der Dienst leitet sie als E-Mail weiter. Die Zeile „E-Mail“ wird dabei
   zur Antwort-Adresse: auf die Nachricht lässt sich direkt antworten.
   Klappt das Senden nicht, liefert mailtoLink() dieselben Angaben als fertige E-Mail.
 */
@@ -16,13 +16,13 @@ export function mailtoLink(subject, rows) {
 }
 
 export async function sendForm(subject, rows) {
-  const data = { _subject: subject, _template: 'table', _captcha: 'false' };
-  rows.forEach(([k, v]) => { data[k === 'E-Mail' ? 'email' : k] = v; });
+  const data = { access_key: cfg.accessKey, subject, from_name: 'guskic studiO Website', botcheck: '' };
+  rows.forEach(([k, v]) => { data[k === 'E-Mail' ? 'email' : k] = v; });   // „email“ nutzt der Dienst als Antwort-Adresse
   const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 12000);
   try {
     const res = await fetch(cfg.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data), signal: stop.signal });
     const answer = await res.json().catch(() => ({}));
-    return res.ok && String(answer.success) === 'true';
+    return res.ok && answer.success === true;
   } catch { return false; } finally { clearTimeout(timer); }
 }
 

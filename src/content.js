@@ -44,9 +44,10 @@ export const content = {
 
   contact: {
     form: {
-      /* Das Formular schickt die Angaben an diesen Dienst, er leitet sie als E-Mail weiter.
+      /* Das Formular schickt die Angaben an Web3Forms, der Dienst leitet sie als E-Mail weiter.
          Klappt das einmal nicht, öffnet sich als Ersatz das E-Mail-Programm mit dem fertigen Text. */
-      endpoint: 'https://formsubmit.co/ajax/guskic.studio@gmail.com',
+      endpoint: 'https://api.web3forms.com/submit',
+      accessKey: '66309881-baef-4ea0-99dd-f8f40d98b2c9',   // öffentlicher Schlüssel von Web3Forms, gehört zu guskic.studio@gmail.com
       mailto: 'guskic.studio@gmail.com',
       subject: 'Projektanfrage über guskic.studio',
       thanks: 'Danke, Ihre Nachricht ist angekommen.',
