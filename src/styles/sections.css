@@ -372,9 +372,6 @@
 .handle__name i { font-style: normal; }
 /* während der Bewegung hängt der Name am rechten Rand, das Zeichen bleibt links */
 .handle.is-moving .handle__name { position: absolute; right: calc(var(--h) * .22); top: 50%; transform: translateY(-50%); }
-.contact__bar { grid-column: 1 / -1; display: grid; gap: 10px; margin-top: clamp(40px, 6vw, 90px); }
-.contact__timeline { position: relative; height: 1px; background: var(--line); }
-.contact__timeline i { position: absolute; left: 0; top: -1px; height: 3px; width: 100%; background: var(--white); transform: scaleX(0); transform-origin: left; }
 @media (max-width: 800px) {
   .contact__title, .contact__actions { grid-column: 1 / -1; }
   .contact__handle { grid-column: 1 / -1; grid-row: auto; margin-top: 18px; }

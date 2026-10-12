@@ -1,5 +1,5 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
-import { $, $$, clamp, reducedMotion } from '../utils/dom.js';
+import { $, $$, reducedMotion } from '../utils/dom.js';
 import { splitChars } from '../utils/split.js';
 import { lockScroll, unlockScroll } from '../scroll.js';
 import { content } from '../content.js';
@@ -66,7 +66,6 @@ export function initContact({ sound } = {}) {
     if (!open) return; open = false;
     overlay.setAttribute('aria-hidden', 'true');
     gsap.to(overlay, { autoAlpha: 0, duration: 0.5, ease: 'studio', onComplete: () => { unlockScroll(); if (!open) { form.hidden = false; done.hidden = true; } } });
-    progress = target = 0;
     if (opener && opener.focus && document.contains(opener)) opener.focus({ preventScroll: true });
     opener = null;
   };
@@ -140,26 +139,6 @@ export function initContact({ sound } = {}) {
     errorBox.appendChild(link);
     errorBox.hidden = false;
     link.focus();
-  });
-
-  /* Weiterscrollen am Seitenende füllt die Zeitleiste; voll = Formular öffnet sich */
-  const bar = $('.contact__timeline i', section);
-  let target = 0, progress = 0, lastTouch = null;
-  const atBottom = () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-  const push = (delta) => { if (open || !atBottom() || delta <= 0) return; target = clamp(target + delta / 2600, 0, 1); };
-  window.addEventListener('wheel', (e) => push(e.deltaY), { passive: true });
-  window.addEventListener('touchstart', (e) => { lastTouch = e.touches[0].clientY; }, { passive: true });
-  window.addEventListener('touchmove', (e) => {
-    const y = e.touches[0].clientY;
-    if (lastTouch !== null) push((lastTouch - y) * 2.5);
-    lastTouch = y;
-  }, { passive: true });
-  gsap.ticker.add(() => {
-    if (!open && target > 0 && !atBottom()) target = 0;
-    if (!open && target > 0) target = Math.max(0, target - 0.0012);
-    progress += (target - progress) * 0.12;
-    bar.style.transform = `scaleX(${progress.toFixed(4)})`;
-    if (progress >= 0.985 && !open) openForm();
   });
 
   return { openForm, closeForm };
