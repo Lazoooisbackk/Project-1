@@ -21,15 +21,17 @@ export function initStudio() {
 
   if (reduce) return;
 
-  /* Die Kachel schiebt sich von unten frei und gleitet beim Scrollen leicht mit */
-  const shape = $('.studio__shape', section);
-  if (shape) {
-    gsap.fromTo(shape, { clipPath: 'inset(100% 0% 0% 0%)' }, {
+  /* Die Kacheln schieben sich von unten frei und gleiten beim Scrollen leicht mit, jede ein wenig anders */
+  const tiles = [['.studio__luma', 24], ['.studio__shape', 48]];
+  tiles.forEach(([sel, drift]) => {
+    const el = $(sel, section);
+    if (!el) return;
+    gsap.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, {
       clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'power4.inOut',
-      scrollTrigger: { trigger: shape, start: 'top 90%', once: true },
+      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
     });
     if (window.innerWidth >= 800) {
-      gsap.fromTo(shape, { y: 40 }, { y: -40, ease: 'none', scrollTrigger: { trigger: shape, start: 'top bottom', end: 'bottom top', scrub: 1.5 } });
+      gsap.fromTo(el, { y: drift }, { y: -drift, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 1.5 } });
     }
-  }
+  });
 }

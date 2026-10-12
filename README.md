@@ -45,7 +45,7 @@ Pakete und Notiz: `offer.showPrices` in `src/content.js` schaltet Preise unter d
 | --- | --- |
 | `public/objects/` | Folien-Ballons, je 1200 × 1200 px als WebP und PNG, auf reinem Schwarz |
 | `public/hero/` | Folien-Schleife (`foil.mp4`, Standbild `foil.webp`/`foil.jpg`), läuft in der Video-Kachel im Manifest |
-| `public/video/` | `reel-ounji.mp4`, `showreel.mp4`, `manifest.mp4`, jeweils mit Standbild |
+| `public/video/` | `reel-ounji.mp4`, `showreel.mp4`, `manifest.mp4`, `luma.mp4` (Jitter-Schleife im Studio-Bereich), jeweils mit Standbild |
 | `public/works/` | Screenshots der Kundenseiten |
 | `public/manifest/` | die beiden Bildkarten über dem Video |
 | `public/og.jpg` | Vorschaubild für geteilte Links |

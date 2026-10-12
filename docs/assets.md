@@ -47,5 +47,6 @@ Sterne und Herzen wurden auf Wunsch entfernt.
 
 - `public/works/ounji.*`, `public/works/fleischerei-guskic.*`: Screenshots der Kundenseiten (1600 × 1000).
 - `public/video/reel-ounji.mp4`, `public/video/showreel.mp4`: Scroll-Aufnahmen der Kundenseiten mit `scripts/record.mjs`.
+- `public/video/luma.mp4`: eigener Export der Jitter-Vorlage „Luma Dot Background“ (1280 × 720, 8 s), mit ffmpeg auf H.264 CRF 28 verkleinert; Standbild `luma.jpg` ist das erste Bild.
 - `public/og.jpg`: Screenshot des Start-Bereichs mit `?foil=1`.
 - Die Wortmarke (`src/wordmark.js`) ist aus der freien Schrift Geist Bold erzeugt; das O aus der freien Schrift Newsreader (SIL OFL 1.1, `scripts/newsreader-o.json`).
