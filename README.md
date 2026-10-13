@@ -25,7 +25,7 @@ Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.g
 2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger hinterlässt eine feste schwarze Fläche wie verschüttete Tinte, die nach 2–3 Sekunden wieder verschwindet; darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
 3. **Manifest**: Aussage, Showreel im Rahmen, kleiner Absatz mit fallenden Buchstaben.
 4. **Arbeiten**: wandernde Überschrift, versetzte Projekt-Karten.
-5. **Showreel** über die ganze Breite mit dem Schalter „Sound“.
+5. **Showreel** über die ganze Breite.
 6. **Studio**: Text und eine leere weiße Form mit runden Ecken.
 7. **Leistungen**: Folien-Ballons und die Buchstaben g u s k i c, die dem Zeiger ausweichen.
 8. **Video** mit der Figur im Folien-Kostüm, darüber Textblöcke und zwei Bildkarten.

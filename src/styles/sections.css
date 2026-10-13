@@ -142,20 +142,6 @@
 }
 .showreel__frame video { top: -6%; height: 112%; }
 
-/* Schalter „Sound“: kleine Pille mit Schieber */
-.sound {
-  display: inline-flex; align-items: center; gap: 8px;
-  height: 26px; padding: 0 6px 0 10px;
-  border-radius: 999px;
-  background: var(--black); color: var(--white);
-  border: 1px solid rgba(255, 255, 255, .28);
-  font: 500 9px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
-}
-.showreel .sound { position: absolute; z-index: 2; left: 50%; top: clamp(12px, 1.4vw, 22px); transform: translateX(-50%); }
-.sound__track { position: relative; width: 22px; height: 12px; border-radius: 999px; border: 1px solid currentColor; }
-.sound__tick { position: absolute; top: 2px; left: 2px; width: 6px; height: 6px; border-radius: 999px; background: currentColor; transition: transform .35s cubic-bezier(.76, 0, .24, 1); }
-.sound[aria-pressed="true"] .sound__tick { transform: translateX(10px); }
-
 /* ---------- Studio (perlweiß, schillernd wie das Krokodil) ---------- */
 .studio {
   position: relative; isolation: isolate; overflow: hidden;

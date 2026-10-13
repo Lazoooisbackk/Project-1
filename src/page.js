@@ -3,14 +3,12 @@ import './styles/main.css';
 import { initScroll } from './scroll.js';
 import { initNav } from './nav.js';
 import { initTransitions } from './transitions.js';
-import { initSound } from './sound.js';
 import { initMagnetic } from './interactions.js';
 
 document.documentElement.classList.add('js');
 initScroll();
 initTransitions();
-const sound = initSound();
-initNav({ sound });
+initNav();
 initMagnetic();
 const year = document.querySelector('[data-year]');
 if (year) year.textContent = String(new Date().getFullYear());

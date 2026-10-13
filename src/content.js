@@ -7,8 +7,6 @@ export const content = {
   nav: {
     menuOpen: 'Menü öffnen',
     menuClose: 'Menü schließen',
-    soundOn: 'Sound on',
-    soundOff: 'Sound off',
   },
 
   /* Folien-Ballons: Dateien in public/objects (1200 × 1200 px, WebP + PNG, auf reinem Schwarz).

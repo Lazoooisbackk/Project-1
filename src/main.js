@@ -6,7 +6,6 @@ import { initScroll } from './scroll.js';
 import { initNav } from './nav.js';
 import { initCursor } from './cursor.js';
 import { initTransitions } from './transitions.js';
-import { initSound } from './sound.js';
 import { initMagnetic } from './interactions.js';
 import { initHero } from './hero.js';
 import { runLoader, introWillPlay, preloadIntro } from './loader.js';
@@ -33,8 +32,7 @@ if (introWillPlay()) preloadIntro();
 
 initScroll();
 initTransitions();
-const sound = initSound();
-initNav({ sound });
+initNav();
 const cursor = initCursor();
 const hero = initHero();
 
@@ -46,7 +44,7 @@ initStudio();
 initServices();
 initOffer();
 initManifestVideo();
-initContact({ sound });
+initContact();
 initFooter();
 initMagnetic();
 

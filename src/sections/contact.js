@@ -7,7 +7,7 @@ import { initHandle } from './handle.js';
 import { initChips, refreshChips } from '../utils/chips.js';
 import { EMAIL, sendForm, mailtoLink, markWrong, clearWrong } from '../utils/send.js';
 
-export function initContact({ sound } = {}) {
+export function initContact() {
   const section = $('.contact');
   if (!section) return;
   const reduce = reducedMotion();
@@ -60,7 +60,6 @@ export function initContact({ sound } = {}) {
     gsap.to(overlay, { autoAlpha: 1, duration: 0.6, ease: 'studio' });
     gsap.fromTo($$('.form-overlay__inner > *', overlay), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out', stagger: 0.06, delay: 0.2 });
     setTimeout(() => { if (open) field('name').focus({ preventScroll: true }); }, 500);
-    if (sound) sound.click();
   };
   const closeForm = () => {
     if (!open) return; open = false;

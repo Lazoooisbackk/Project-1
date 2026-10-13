@@ -3,7 +3,7 @@ import { $, $$ } from './utils/dom.js';
 import { lockScroll, unlockScroll, scrollTo } from './scroll.js';
 import { content } from './content.js';
 
-export function initNav({ sound } = {}) {
+export function initNav() {
   const btn = $('.menu-btn'), menu = $('.menu'), dots = $$('.menu-btn__dot');
   const links = $$('.menu__link');
   if (!btn || !menu) return null;
@@ -36,7 +36,6 @@ export function initNav({ sound } = {}) {
         .to(dots, { x: (i) => grid[i][0], y: (i) => grid[i][1], width: DOT, height: DOT, rotation: 0 }, 0)
         .add(() => { unlockScroll(); gsap.set(links, { yPercent: 110 }); });
     }
-    if (sound) sound.click();
   }
 
   /* Farbe der Navigation: weiß über dunklen Abschnitten, schwarz über hellen */
