@@ -1,5 +1,5 @@
 /* Gemeinsam: Bilder und Videos füllen ihren Rahmen */
-.manifest__reel video, .manifest__tile video, .showreel__frame video, .mvideo__bg video {
+.manifest__reel video, .showreel__frame video, .mvideo__bg video {
   position: absolute; left: 0; width: 100%; max-width: none;
   object-fit: cover;
 }
@@ -33,20 +33,11 @@
 }
 /* Link zur ersten Kundin: so groß wie „Alle ansehen“ im Arbeiten-Bereich; die Buchstaben im inneren Span animiert manifest.js */
 .manifest__link { grid-column: 1 / span 5; align-self: start; justify-self: start; font-size: clamp(17px, 1.5vw, 23px); letter-spacing: -.03em; }
-.manifest__link i { font-style: normal; font-size: .7em; margin-left: .35em; }
+.manifest__link i { font-style: normal; font-size: .7em; margin-right: .35em; }   /* Pfeil links vom Link */
 .manifest__side { display: inline-block; }
-.manifest__tile {
-  position: relative;
-  grid-column: 9 / span 4;
-  aspect-ratio: 16 / 10;
-  background: var(--black);
-  overflow: hidden;
-}
-.manifest__tile video { top: 0; height: 100%; }
 @media (max-width: 800px) {
   .manifest__reel { width: 100%; }
   .manifest__link { grid-column: 1 / -1; }
-  .manifest__tile { grid-column: 4 / -1; }
 }
 
 /* ---------- Arbeiten (schwarz) ---------- */
