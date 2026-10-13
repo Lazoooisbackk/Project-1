@@ -15,10 +15,10 @@
 .manifest__statement { max-width: 21em; }
 .manifest__statement .line-mask { padding-bottom: .24em; margin-bottom: -.24em; }
 
-/* Der Rahmen nimmt neun der zwölf Spalten ein und sitzt rechts, bündig mit der kleinen Kachel darunter */
+/* Der Rahmen nimmt neun der zwölf Spalten ein und sitzt in der Mitte */
 .manifest__reel {
   position: relative;
-  width: calc(75% - var(--pad) / 4); margin-left: auto;
+  width: calc(75% - var(--pad) / 4); margin-inline: auto;
   aspect-ratio: 16 / 9;
   background: #EDEDED;
   overflow: hidden;
