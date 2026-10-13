@@ -15,20 +15,15 @@
 .manifest__statement { max-width: 21em; }
 .manifest__statement .line-mask { padding-bottom: .24em; margin-bottom: -.24em; }
 
+/* Der Rahmen nimmt neun der zwölf Spalten ein und sitzt rechts, bündig mit der kleinen Kachel darunter */
 .manifest__reel {
   position: relative;
+  width: calc(75% - var(--pad) / 4); margin-left: auto;
   aspect-ratio: 16 / 9;
   background: #EDEDED;
   overflow: hidden;
 }
 .manifest__reel video { top: 0; height: 100%; }
-.manifest__reel-cap {
-  position: absolute; z-index: 1;
-  left: clamp(12px, 1.4vw, 22px); right: clamp(12px, 1.4vw, 22px); bottom: clamp(10px, 1.2vw, 18px);
-  display: flex; justify-content: space-between; gap: 16px;
-  pointer-events: none;
-}
-.manifest__reel-cap .label { color: var(--white); background: var(--black); padding: 4px 7px; border-radius: 999px; }
 
 .manifest__aside {
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -47,6 +42,7 @@
 }
 .manifest__tile video { top: 0; height: 100%; }
 @media (max-width: 800px) {
+  .manifest__reel { width: 100%; }
   .manifest__aside .paren { grid-column: 1 / -1; }
   .manifest__side { grid-column: 1 / -1; }
   .manifest__tile { grid-column: 4 / -1; }
