@@ -31,8 +31,10 @@
   align-items: end;
   margin-top: clamp(40px, 9vw, 150px);
 }
-.manifest__aside .paren { grid-column: 1 / span 2; align-self: start; }
-.manifest__side { grid-column: 3 / span 3; align-self: start; font-size: var(--small); line-height: 1.22; max-width: 31ch; }
+/* Link zur ersten Kundin: so groß wie „Alle ansehen“ im Arbeiten-Bereich; die Buchstaben im inneren Span animiert manifest.js */
+.manifest__link { grid-column: 1 / span 5; align-self: start; justify-self: start; font-size: clamp(17px, 1.5vw, 23px); letter-spacing: -.03em; }
+.manifest__link i { font-style: normal; font-size: .7em; margin-left: .35em; }
+.manifest__side { display: inline-block; }
 .manifest__tile {
   position: relative;
   grid-column: 9 / span 4;
@@ -43,8 +45,7 @@
 .manifest__tile video { top: 0; height: 100%; }
 @media (max-width: 800px) {
   .manifest__reel { width: 100%; }
-  .manifest__aside .paren { grid-column: 1 / -1; }
-  .manifest__side { grid-column: 1 / -1; }
+  .manifest__link { grid-column: 1 / -1; }
   .manifest__tile { grid-column: 4 / -1; }
 }
 
