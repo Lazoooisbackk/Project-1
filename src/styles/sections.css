@@ -142,7 +142,7 @@
 }
 .showreel__frame video { top: -6%; height: 112%; }
 
-/* ---------- Studio (perlweiß, schillernd) ---------- */
+/* ---------- Studio (perlweiß, schillernd wie das Krokodil) ---------- */
 .studio {
   position: relative; isolation: isolate; overflow: hidden;
   background: #ECE9E6; color: var(--ink);
@@ -172,16 +172,46 @@
   font-size: var(--text); font-weight: 500; line-height: 1.2; letter-spacing: -.015em;
   max-width: 37ch;
 }
-/* Die Jitter-Schleife (16:9) oben links */
+/* Drei Kacheln wie eine Treppe, alle gleich breit: die Jitter-Schleife (16:9) links, daneben die Dithering-Weltkugel
+   (quadratisch) eine halbe Schleifenhöhe tiefer, ganz rechts das Krokodil (quadratisch, eckig) noch einmal so viel tiefer. Die Krokodil-Animation malt src/sections/studioKroko.js */
 .studio__luma {
-  grid-column: 1 / span 5; grid-row: 1;
+  grid-column: 1 / span 4; grid-row: 1;
   position: relative; margin: 0; aspect-ratio: 16 / 9; background: #0E0C16; overflow: hidden;
 }
 .studio__luma video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.studio__dither {
+  grid-column: 5 / span 4; grid-row: 1;
+  margin-top: 28.125%;          /* 9/16 ÷ 2 der eigenen Breite = die halbe Höhe der gleich breiten Schleife */
+  position: relative; aspect-ratio: 1 / 1; background: #F7B8FF; overflow: hidden;
+}
+.studio__dither video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.studio__shape {
+  grid-column: 9 / span 4; grid-row: 1;
+  margin-top: 56.25%;           /* 9/16 der eigenen Breite = die ganze Höhe der gleich breiten Schleife */
+  display: grid; gap: 12px;
+}
+.studio__blob {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #378A2E;          /* das Grün aus seiner Jitter-Fassung */
+  overflow: hidden;
+}
+/* --u ist 1 % der Kachelbreite (setzt das Skript), damit die Schrift mit der Kachel mitwächst */
+.studio__kroko-name {
+  position: absolute; left: calc(var(--u, 4px) * 3.6); bottom: calc(var(--u, 4px) * 1.2);
+  margin: 0; color: #0F0F0F;
+  font: 800 calc(var(--u, 4px) * 17) / .93 var(--sans); letter-spacing: -.035em; white-space: nowrap;
+}
+.studio__kroko-name span { display: block; }
+.studio__kroko-name span + span { margin-left: calc(var(--u, 4px) * 31.1); }
+.studio__kroko { position: absolute; inset: 0; width: 100%; height: 100%; }
+.studio__caption { font-size: var(--small); line-height: 1.15; max-width: 14ch; }
 @media (max-width: 800px) {
   .studio > .paren { grid-column: 1 / -1; }
   .studio__text { grid-column: 1 / -1; grid-row: 2; }
   .studio__luma { grid-column: 1 / span 9; grid-row: 1; }
+  .studio__dither { grid-column: 4 / -1; grid-row: 2; margin-top: 0; }
+  .studio__shape { grid-column: 1 / span 9; grid-row: 3; margin-top: 0; }
 }
 
 /* ---------- Leistungen (schwarz) ---------- */
