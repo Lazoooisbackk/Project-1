@@ -1,13 +1,11 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, reducedMotion, debounce } from '../utils/dom.js';
 import { splitLines } from '../utils/split.js';
-import { initStudioKroko } from './studioKroko.js';
 
 export function initStudio() {
   const section = $('.studio');
   if (!section) return;
   const reduce = reducedMotion();
-  initStudioKroko(section);
 
   /* Textzeilen gibt es in diesem Bereich derzeit nicht; falls wieder welche dazukommen, fahren sie von unten ein */
   const text = $('.studio__text', section);
@@ -21,8 +19,8 @@ export function initStudio() {
 
   if (reduce) return;
 
-  /* Die Kacheln schieben sich von unten frei und gleiten beim Scrollen leicht mit, jede ein wenig anders */
-  const tiles = [['.studio__luma', 24], ['.studio__shape', 48]];
+  /* Die Kachel schiebt sich von unten frei und gleitet beim Scrollen leicht mit */
+  const tiles = [['.studio__luma', 24]];
   tiles.forEach(([sel, drift]) => {
     const el = $(sel, section);
     if (!el) return;
