@@ -142,7 +142,7 @@
 }
 .showreel__frame video { top: -6%; height: 112%; }
 
-/* ---------- Studio (perlweiß, schillernd wie das Krokodil) ---------- */
+/* ---------- Studio (perlweiß, schillernd) ---------- */
 .studio {
   position: relative; isolation: isolate; overflow: hidden;
   background: #ECE9E6; color: var(--ink);
