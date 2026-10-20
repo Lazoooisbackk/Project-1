@@ -44,7 +44,7 @@
 .studio {
   position: relative; isolation: isolate; overflow: hidden;
   background: #ECE9E6; color: var(--ink);
-  padding: clamp(110px, 15vw, 240px) var(--pad) clamp(40px, 6vw, 100px);
+  padding: clamp(12px, 1.4vw, 20px) var(--pad) clamp(40px, 6vw, 100px);   /* die Säule beginnt direkt an der Kante zum Weiß darüber */
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--pad); row-gap: clamp(18px, 1.8vw, 28px);
   align-items: start;
