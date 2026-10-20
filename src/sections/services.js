@@ -43,7 +43,7 @@ export function initServices() {
     const el = document.createElement('div');
     el.className = 'float-obj';
     el.style.setProperty('--size', `min(${spec.size}vw, 600px)`);
-    el.style.setProperty('--msize', `min(${Math.round(spec.size * 2.1)}vw, 300px)`);
+    el.style.setProperty('--msize', `min(${Math.round(spec.size * 2.4)}vw, 460px)`);
     const inner = document.createElement('div');
     inner.className = 'float-obj__inner';
     const pic = balloonPicture(spec.id, { lazy: true });
@@ -71,8 +71,8 @@ export function initServices() {
 
   /* Zeiger-Abstoßung: innerhalb des Radius werden die Dinge weggeschoben, danach federn sie zurück */
   const params = () => (window.matchMedia('(max-width: 767px)').matches
-    ? { R: 260, MAX: 110, ROT: 12, SC: 0.1 }
-    : { R: 460, MAX: 380, ROT: 30, SC: 0.2 });
+    ? { R: 220, MAX: 36, ROT: 4, SC: 0.04 }           /* sanft: nur leicht ausweichen */
+    : { R: 380, MAX: 70, ROT: 7, SC: 0.06 });
   let active = false;
   new IntersectionObserver(([e]) => {
     active = e.isIntersecting;
@@ -106,6 +106,19 @@ export function initServices() {
       }
     });
   };
+  /* Antippen oder Klicken auf den Hörer: kurzes Wackeln, dann federt er zurück */
+  const bump = (x, y) => {
+    objs.forEach((o) => {
+      const r = o.el.getBoundingClientRect();
+      if (x < r.left || x > r.right || y < r.top || y > r.bottom) return;
+      const pic = o.el.querySelector('picture') || o.el.firstElementChild;
+      gsap.timeline({ overwrite: 'auto' })
+        .to(pic, { rotation: -7, scale: 1.05, duration: 0.12, ease: 'power2.out' })
+        .to(pic, { rotation: 6, duration: 0.14, ease: 'power2.inOut' })
+        .to(pic, { rotation: 0, scale: 1, duration: 0.9, ease: 'elastic.out(1, 0.35)' });
+    });
+  };
+  section.addEventListener('pointerdown', (e) => bump(e.clientX, e.clientY), { passive: true });
   section.addEventListener('pointermove', (e) => onMove(e.clientX, e.clientY), { passive: true });
   section.addEventListener('pointerleave', () => objs.forEach((o) => { if (o.inside) release(o); }));
   section.addEventListener('touchmove', (e) => { const t = e.touches[0]; if (t) onMove(t.clientX, t.clientY); }, { passive: true });

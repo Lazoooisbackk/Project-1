@@ -133,3 +133,7 @@
   .more__text { min-height: 0; }
   .more, .offer .contact__handle { grid-column: 1 / -1; }
 }
+
+/* Die drei Sätze aus dem früheren Leistungen-Bereich, unter der Überschrift */
+.offer__intro { max-width: 46ch; margin: clamp(14px, 1.6vw, 24px) auto 0; text-align: center; font-size: var(--small); line-height: 1.35; color: rgba(255, 255, 255, .72); }
+.offer__intro strong { color: var(--white); font-weight: 700; }

@@ -15,12 +15,7 @@ export const content = {
     intro: ['smiley', 'cursor', 'flower', 'at', 'bolt'],
     /* Leistungen: x/y in % der Ballon-Fläche (Desktop), mx/my bis 991 px Breite, size in vw, rot in Grad */
     cluster: [
-      { id: 'cloud', x: 33, y: 30, mx: 26, my: 22, size: 19, rot: -10 },
-      { id: 'bubble', x: 55, y: 60, mx: 66, my: 52, size: 20, rot: 12 },
-      { id: 'bolt', x: 68, y: 26, mx: 78, my: 20, size: 14, rot: 16 },
-      { id: 'flower', x: 42, y: 78, mx: 26, my: 76, size: 14, rot: -18 },
-      { id: 'at', x: 63, y: 86, mx: 72, my: 86, size: 11, rot: 8 },
-      { id: 'smiley', x: 24, y: 66, mx: 46, my: 30, size: 10, rot: -6 },
+      { id: 'hoerer', x: 55, y: 50, mx: 50, my: 50, size: 36, rot: -4 },   /* der rote Hörer, groß rechts */
     ],
     letters: [],                                   // einzelne Buchstaben zwischen den Ballons: vorerst keine
   },
