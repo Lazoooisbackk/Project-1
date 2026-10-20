@@ -1,6 +1,7 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, reducedMotion, debounce } from '../utils/dom.js';
 import { splitLines } from '../utils/split.js';
+import { initAutoVideos } from '../utils/video.js';
 
 export function initStudio() {
   const section = $('.studio');
@@ -17,7 +18,30 @@ export function initStudio() {
     window.addEventListener('resize', debounce(() => { ({ lines } = splitLines(text)); gsap.set(lines, { yPercent: shown ? 0 : 110 }); }, 250));
   }
 
+  /* Laufende Säule: ein Satz = die Vorlagen einmal. Es werden so viele Kopien angehängt, dass die Säule
+     auch in der Startstellung (um eine Satzhöhe hochgeschoben) bis unten gefüllt ist; die Strecke ist genau eine Satzhöhe. */
   const strip = $('.strip', section);
+  const track = strip && $('.strip__track', strip);
+  if (track) {
+    const first = [...track.children];
+    const n = first.length / 2;                                    /* im HTML steht der Satz zweimal */
+    const set = () => first[n].offsetTop - first[0].offsetTop;     /* Satzhöhe samt Abständen */
+    const fill = () => {
+      const h = set();
+      if (!h) return;
+      const need = Math.ceil(strip.clientHeight / h) + 1;          /* Kopien, die nötig sind */
+      let have = track.children.length / n;
+      while (have < need) {
+        first.slice(0, n).forEach((el) => { const c = el.cloneNode(true); track.appendChild(c); initAutoVideos(c); });
+        have++;
+      }
+      track.style.setProperty('--set', `${h}px`);
+      track.style.animationDuration = `${Math.max(16, Math.round(h / 16))}s`;   /* ~16 px pro Sekunde */
+    };
+    fill();
+    window.addEventListener('resize', debounce(fill, 200));
+    document.fonts?.ready.then(fill);
+  }
 
   if (reduce) return;
 
