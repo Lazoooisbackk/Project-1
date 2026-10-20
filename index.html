@@ -50,7 +50,7 @@
 
 <nav class="menu" id="menu" aria-hidden="true" aria-label="Menü">
   <ul class="menu__list">
-    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#arbeiten">Arbeiten</a></span></li>
+    <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#manifest">Arbeiten</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#studio">Studio</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#leistungen">Leistungen</a></span></li>
     <li class="menu__item"><span class="line-mask"><a class="menu__link" href="./#kontakt">Kontakt</a></span></li>
@@ -104,32 +104,33 @@
   </section>
 
   <!-- Arbeiten -->
-  <section class="works" id="arbeiten" aria-label="Arbeiten">
-    <div class="works__list">
-      <a class="work" href="https://www.ounji.at" target="_blank" rel="noopener" aria-label="OUNJI, Brow &amp; Lash Studio: Website ansehen">
-        <div class="work__media">
-          <picture>
-            <source type="image/webp" srcset="./works/ounji.webp">
-            <img class="work__img" src="./works/ounji.jpg" alt="Screenshot der Website von OUNJI, Brow &amp; Lash Studio" loading="lazy" decoding="async" width="1600" height="1000">
-          </picture>
-          <div class="work__placeholder label"><span>Screenshot folgt</span></div>
-        </div>
-      </a>
-    </div>
-  </section>
-
   <!-- Studio -->
   <section class="studio" id="studio" aria-label="Das Studio">
-    <figure class="studio__luma" aria-hidden="true">
-      <video data-auto muted playsinline loop preload="none" poster="./video/luma.jpg" tabindex="-1">
-        <source data-src="./video/luma.mp4" type="video/mp4">
-      </video>
-    </figure>
-    <figure class="studio__dither" aria-hidden="true">
-      <video data-auto muted playsinline loop preload="none" poster="./video/dithering.jpg" tabindex="-1">
-        <source data-src="./video/dithering.mp4" type="video/mp4">
-      </video>
-    </figure>
+    <!-- Glas-Leiste: die beiden Jitter-Vorlagen laufen nebeneinander durch; der Inhalt steht zweimal drin, damit die Schleife nahtlos ist -->
+    <div class="strip" aria-hidden="true">
+      <div class="strip__track">
+      <figure class="strip__item strip__item--wide">
+        <video data-auto muted playsinline loop preload="none" poster="./video/luma.jpg" tabindex="-1">
+          <source data-src="./video/luma.mp4" type="video/mp4">
+        </video>
+      </figure>
+      <figure class="strip__item strip__item--square">
+        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.jpg" tabindex="-1">
+          <source data-src="./video/dithering.mp4" type="video/mp4">
+        </video>
+      </figure>
+      <figure class="strip__item strip__item--wide">
+        <video data-auto muted playsinline loop preload="none" poster="./video/luma.jpg" tabindex="-1">
+          <source data-src="./video/luma.mp4" type="video/mp4">
+        </video>
+      </figure>
+      <figure class="strip__item strip__item--square">
+        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.jpg" tabindex="-1">
+          <source data-src="./video/dithering.mp4" type="video/mp4">
+        </video>
+      </figure>
+      </div>
+    </div>
   </section>
 
   <!-- Leistungen -->

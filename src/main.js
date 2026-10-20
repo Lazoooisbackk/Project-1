@@ -10,7 +10,6 @@ import { initMagnetic } from './interactions.js';
 import { initHero } from './hero.js';
 import { runLoader, introWillPlay, preloadIntro } from './loader.js';
 import { initManifest } from './sections/manifest.js';
-import { initWorks } from './sections/works.js';
 import { initStudio } from './sections/studio.js';
 import { initServices } from './sections/services.js';
 import { initOffer } from './sections/offer.js';
@@ -37,7 +36,6 @@ const hero = initHero();
 
 initAutoVideos();
 initManifest();
-initWorks({ cursor });
 initStudio();
 initServices();
 initOffer();
