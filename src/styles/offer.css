@@ -1,7 +1,7 @@
 /* ---------- Drei Wege, Notiz, Website-Check und Erstgespräch (schwarz) ---------- */
 .offer {
   position: relative;
-  padding: clamp(90px, 12vw, 200px) var(--pad) clamp(72px, 9vw, 140px);
+  padding: clamp(40px, 5vw, 80px) var(--pad) clamp(72px, 9vw, 140px);
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--pad); row-gap: clamp(44px, 5.5vw, 90px);
   align-items: start;

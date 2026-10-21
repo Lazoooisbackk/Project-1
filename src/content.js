@@ -15,7 +15,7 @@ export const content = {
     intro: ['smiley', 'cursor', 'flower', 'at', 'bolt'],
     /* Leistungen: x/y in % der Ballon-Fläche (Desktop), mx/my bis 991 px Breite, size in vw, rot in Grad */
     cluster: [
-      { id: 'hoerer', x: 55, y: 50, mx: 50, my: 50, size: 36, rot: -4 },   /* der rote Hörer, groß rechts */
+      { id: 'hoerer', x: 58, y: 50, mx: 50, my: 50, size: 30, rot: -4 },   /* der rote Hörer, groß rechts */
     ],
     letters: [],                                   // einzelne Buchstaben zwischen den Ballons: vorerst keine
   },

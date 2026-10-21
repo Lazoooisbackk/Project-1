@@ -116,7 +116,7 @@
 /* ---------- Leistungen (schwarz): links „Rufen Sie mich an.“, rechts der rote Hörer ---------- */
 .services {
   position: relative;
-  padding: clamp(90px, 12vw, 200px) var(--pad) clamp(48px, 6vw, 96px);
+  padding: clamp(36px, 4vw, 64px) var(--pad) clamp(12px, 1.5vw, 24px);   /* knapp: Kasten und Hörer sitzen nah an „Drei Wege“ */
   overflow: hidden;
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--pad); row-gap: clamp(36px, 4.6vw, 72px);
@@ -145,12 +145,12 @@
 .services__objects {
   grid-column: 6 / span 7;
   position: relative; z-index: 1;
-  height: clamp(380px, 40vw, 680px);
+  height: clamp(300px, 30vw, 460px);
 }
 .services__objects .float-obj { mix-blend-mode: lighten; }
 @media (max-width: 800px) {
   .call { grid-column: 1 / -1; }
-  .services__objects { grid-column: 1 / -1; height: clamp(320px, 90vw, 480px); }
+  .services__objects { grid-column: 1 / -1; height: clamp(280px, 80vw, 400px); }
 }
 
 .float-obj {
