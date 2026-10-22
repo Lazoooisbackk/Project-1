@@ -40,7 +40,7 @@ export const content = {
      Ohne Schlüssel nimmt Google nur wenige Messungen am Tag an. */
   check: {
     endpoint: 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed',
-    psiKey: '',
+    psiKey: 'AIzaSyA6zirj2mEy7NqU3AzOLAXkGAJmxDE4RnY',   // nur für guskicstudio.vercel.app und lazoooisbackk.github.io gültig (Google Cloud, Projekt guskic-studio)
   },
 
   contact: {
