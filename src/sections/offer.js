@@ -93,7 +93,7 @@ export function initOffer() {
   gsap.set(lines, { yPercent: 110 });
   ScrollTrigger.create({ trigger: title, start: 'top 85%', once: true, onEnter: () => { shown = true; gsap.to(lines, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }); } });
   window.addEventListener('resize', debounce(() => { ({ lines } = splitLines(title)); gsap.set(lines, { yPercent: shown ? 0 : 110 }); }, 250));
-  [['.pack', '.offer__packs'], ['.note__title, .note__bubble, .note__intro', '.note'], ['.more', '.offer__more']].forEach(([items, trigger]) => {
+  [['.pack', '.offer__packs'], ['.steps__title, .step, .steps__promise', '.offer__steps'], ['.note__title, .note__bubble, .note__intro', '.note'], ['.more', '.offer__more']].forEach(([items, trigger]) => {
     const els = $$(items, section);
     gsap.set(els, { y: 28, opacity: 0 });
     ScrollTrigger.create({ trigger: $(trigger, section), start: 'top 88%', once: true, onEnter: () => gsap.to(els, { y: 0, opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.08, clearProps: 'transform,opacity' }) });

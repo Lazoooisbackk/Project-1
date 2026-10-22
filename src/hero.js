@@ -12,7 +12,7 @@ export function initHero() {
   mark.appendChild(svg);
   gsap.set(letters, { yPercent: 120 });
   const tagLines = $$('.hero__tag .line', stage);
-  const fades = $$('.hero__top .magnetic, .hero__bar', stage);
+  const fades = $$('.hero__top .hero__sub, .hero__top .magnetic, .hero__bar', stage);
   gsap.set(tagLines, { yPercent: 115 });
   gsap.set(fades, { opacity: 0 });
 

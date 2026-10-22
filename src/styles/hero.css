@@ -37,6 +37,13 @@
   line-height: 1.08;
   letter-spacing: -.03em;
 }
+/* zweiter Satz: wer gemeint ist, etwas kleiner und ruhiger */
+.hero__sub {
+  font-size: clamp(14px, 1.1vw, 17px); line-height: 1.3; letter-spacing: -.015em;
+  max-width: 40ch; margin-top: -4px;
+  color: rgba(0, 0, 0, .72);
+}
+.is-inked .hero__sub { color: rgba(255, 255, 255, .85); }
 /* Knopf im Start-Bereich in derselben Schrift wie die Zeile darüber (Geist, nicht Mono) */
 .hero__top .btn {
   height: auto; padding: .42em 1em .5em; gap: .45em;

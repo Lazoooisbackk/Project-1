@@ -59,7 +59,8 @@
       <p class="hero__tag">
         <span class="line-mask"><span class="line">Websites, die man anfassen möchte.</span></span>
       </p>
-      <span class="magnetic"><a class="btn btn--blend" href="#kontakt"><span>Projekt anfragen</span><i aria-hidden="true">→</i></a></span>
+      <p class="hero__sub">Für Betriebe in Wien und Umgebung, die gefunden werden und Anfragen bekommen wollen.</p>
+      <span class="magnetic"><a class="btn btn--blend" href="#leistungen"><span>Projekt anfragen</span><i aria-hidden="true">→</i></a></span>
     </div>
 
     <div class="hero__center">
@@ -82,12 +83,22 @@
 
     <div class="manifest__aside">
       <a class="manifest__link u-link" href="https://www.ounji.at" target="_blank" rel="noopener"><i aria-hidden="true">↪</i><span class="manifest__side">www.ounji.at</span></a>
+      <dl class="manifest__facts">
+        <div class="fact"><dt class="label">Projekt</dt><dd>OUNJI, Brows &amp; Lashes in Wien: ein Onepager mit Terminanfrage über WhatsApp und Anbindung an Instagram.</dd></div>
+        <div class="fact"><dt class="label">Beweis</dt><dd>Diese Seite hier: 100 von 100 Punkten bei Google Lighthouse am Desktop, gemessen im Oktober 2026. Gebaut mit eigenem Code, ohne Baukasten.</dd></div>
+      </dl>
     </div>
   </section>
 
   <!-- Arbeiten -->
   <!-- Studio -->
   <section class="studio" id="studio" aria-label="Das Studio">
+    <!-- Die Person: Name, Ort, zwei Sätze. Das Foto kommt später: <figure class="studio__photo"><img src="./studio/lazar.jpg" alt="Lazar Guskic"></figure> vor die Überschrift setzen. -->
+    <div class="studio__person" data-person>
+      <span class="label">Das Studio</span>
+      <p class="studio__who">Lazar Guskic, Maria Ellend bei Wien.</p>
+      <p>Ich baue jede Website selbst, mit eigenem Code statt Vorlage, damit sie schnell lädt und man sie nicht verwechselt. Nach dem Start bleibe ich erreichbar: am Telefon, nicht über ein Ticket.</p>
+    </div>
     <!-- Glas-Leiste: die beiden Jitter-Vorlagen laufen nebeneinander durch; der Inhalt steht zweimal drin, damit die Schleife nahtlos ist -->
     <div class="strip" aria-hidden="true">
       <div class="strip__track">
@@ -137,23 +148,49 @@
         <h3 class="pack__name">Onepager</h3>
         <p class="pack__price" data-price="onepager" hidden></p>
         <p class="pack__lead">Eine Seite, die alles sagt.</p>
+        <ul class="pack__list">
+          <li>Start, Leistungen und Kontakt auf einer Seite</li>
+          <li>Für das Handy gebaut, lädt schnell</li>
+          <li>Texte und Bilder richte ich mit Ihnen ein</li>
+        </ul>
       </li>
       <li class="pack">
         <h3 class="pack__name">Website</h3>
         <p class="pack__price" data-price="website" hidden></p>
         <p class="pack__lead">Mehrere Seiten für Betriebe, die mehr zeigen wollen.</p>
+        <ul class="pack__list">
+          <li>Bis zu sechs Unterseiten, etwa Leistungen, Team, Galerie</li>
+          <li>Bei Google auffindbar: Titel, Texte, Firmendaten</li>
+          <li>Anfrage-Formular oder Terminbuchung</li>
+        </ul>
       </li>
       <li class="pack pack--last">
         <div class="pack__text">
           <h3 class="pack__name">Betreuung</h3>
           <p class="pack__price" data-price="care" hidden></p>
           <p class="pack__lead">Damit Ihre Seite aktuell bleibt.</p>
+          <ul class="pack__list">
+            <li>Hosting, Sicherheit, Updates</li>
+            <li>Änderungen innerhalb von 48 Stunden</li>
+            <li>Jeden Monat ein Bericht: Besucher, Anfragen, Tempo</li>
+          </ul>
         </div>
         <button class="round round--light pack__down" type="button" data-to-note aria-label="Weiter zur Notiz">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
         </button>
       </li>
     </ul>
+
+    <!-- So läuft es: drei Schritte mit Zeitangabe, darunter das Versprechen -->
+    <div class="offer__steps">
+      <h3 class="steps__title">So läuft es.</h3>
+      <ol class="steps">
+        <li class="step"><span class="step__n label">01</span><span class="step__t">Anruf, 15 Minuten.</span><span class="step__d">Sie erzählen, was Ihr Betrieb braucht. Ich sage Ihnen, was es kostet und wie lange es dauert.</span></li>
+        <li class="step"><span class="step__n label">02</span><span class="step__t">Entwurf in 48 Stunden.</span><span class="step__d">Sie sehen Ihre Startseite am Handy, bevor Sie sich entscheiden.</span></li>
+        <li class="step"><span class="step__n label">03</span><span class="step__t">Live in 10 Tagen.</span><span class="step__d">Texte, Bilder, Domain: ich richte alles ein, Sie geben frei.</span></li>
+      </ol>
+      <p class="steps__promise">Mein Versprechen: Der Entwurf ist in 48 Stunden da, sonst bekommen Sie ihn geschenkt.</p>
+    </div>
 
     <!-- Die Notiz: ein leerer weißer Kasten. Erst beim Senden fragt er nach der E-Mail-Adresse für die Antwort. -->
     <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
@@ -203,14 +240,6 @@
     </div>
   </section>
 
-  <!-- Kontakt -->
-  <section class="contact on-dark" id="kontakt" aria-labelledby="contact-title">
-    <h2 class="contact__title statement" id="contact-title">Schreiben Sie mir.</h2>
-    <div class="contact__actions">
-      <span class="magnetic"><a class="btn btn--ghost" href="mailto:guskic.studio@gmail.com"><span>guskic.studiO@gmail.com</span><i aria-hidden="true">⊕</i></a></span>
-    </div>
-  </section>
-
 </main>
 
 <div class="form-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="form-title" data-lenis-prevent>
@@ -256,7 +285,7 @@
       <li><a class="u-link" href="impressum.html">Impressum</a></li>
       <li><a class="u-link" href="datenschutz.html">Datenschutz</a></li>
     </ul>
-    <span>Maria Ellend · Wien</span>
+    <span>Maria Ellend · Wien · <a class="u-link" href="mailto:guskic.studio@gmail.com">guskic.studiO@gmail.com</a></span>
   </div>
 </footer>
 </body>

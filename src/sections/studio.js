@@ -18,6 +18,14 @@ export function initStudio() {
     window.addEventListener('resize', debounce(() => { ({ lines } = splitLines(text)); gsap.set(lines, { yPercent: shown ? 0 : 110 }); }, 250));
   }
 
+  /* Die Person: kommt beim Hinscrollen weich von unten */
+  const person = $('[data-person]', section);
+  if (person && !reduce) {
+    const parts = Array.from(person.children);
+    gsap.set(parts, { y: 24, opacity: 0 });
+    ScrollTrigger.create({ trigger: person, start: 'top 85%', once: true, onEnter: () => gsap.to(parts, { y: 0, opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.08, clearProps: 'transform,opacity' }) });
+  }
+
   /* Laufende Säule: ein Satz = die Vorlagen einmal. Es werden so viele Kopien angehängt, dass die Säule
      auch in der Startstellung (um eine Satzhöhe hochgeschoben) bis unten gefüllt ist; die Strecke ist genau eine Satzhöhe. */
   const strip = $('.strip', section);

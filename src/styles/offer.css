@@ -19,6 +19,26 @@
 .pack__name { font: 500 var(--h1) / 1 var(--sans); letter-spacing: -.04em; }
 .pack__price { font-variant-numeric: tabular-nums; }
 .pack__lead { max-width: 26ch; }
+/* drei Zeilen, was drin ist */
+.pack__list { display: grid; gap: 7px; margin: 4px 0 0; padding: 0; list-style: none; max-width: 30ch; font-size: var(--small); line-height: 1.35; color: rgba(255, 255, 255, .72); }
+.pack__list li { position: relative; padding-left: 14px; }
+.pack__list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 1px; background: currentColor; }
+
+/* So läuft es: drei Schritte mit Zeitangabe und das Versprechen */
+.offer__steps { grid-column: 1 / -1; display: grid; gap: clamp(24px, 3vw, 40px); }
+.steps__title { font: 500 clamp(22px, 2.5vw, 40px) / 1.05 var(--sans); letter-spacing: -.035em; }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--pad); row-gap: 28px; margin: 0; padding: 0; list-style: none; }
+.step { display: grid; gap: 10px; align-content: start; }
+.step__n { color: rgba(255, 255, 255, .55); }
+.step__t { font: 500 clamp(20px, 2vw, 30px) / 1.05 var(--sans); letter-spacing: -.03em; }
+.step__d { max-width: 30ch; font-size: var(--small); line-height: 1.35; color: rgba(255, 255, 255, .72); text-wrap: pretty; }
+.steps__promise {
+  justify-self: start;
+  padding: 14px 18px;
+  border: 1px solid var(--line); border-radius: 16px;
+  font: 500 clamp(15px, 1.3vw, 19px) / 1.3 var(--sans); letter-spacing: -.02em;
+  max-width: 44ch; text-wrap: pretty;
+}
 /* bei „Betreuung“ sitzt rechts der Pfeil, der zur Notiz führt */
 .pack--last { grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: center; }
 
@@ -126,6 +146,7 @@
 }
 @media (max-width: 800px) {
   .offer { row-gap: 40px; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
   .offer__title { text-align: left; }
   .offer__packs { grid-template-columns: minmax(0, 1fr); }
   .note { grid-column: 1 / -1; }

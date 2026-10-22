@@ -22,12 +22,12 @@ Ein Push auf `main` baut die Seite auf Vercel (https://guskicstudio.vercel.app, 
 ## Aufbau der Seite
 
 1. **Intro** (`src/loader.js`): schwarze Fläche, „g“ und „O“, dazwischen die Folien-Ballons, der Zähler läuft von 100 auf 000, das O wird zum Chrom-O, der Vorhang hebt sich. Rund 2,2 s bis der Vorhang hochgeht, 3 s bis er oben ist. Klick, Tipp oder Taste überspringt. Spielt einmal pro Sitzung. Die Ballons kommen als kleine 480-px-Bilder (`public/objects/*-s.webp`).
-2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger hinterlässt eine schwarze Fläche wie verschüttete Tinte, darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
-3. **Manifest**: „Weggeklickt wird woanders.“, die OUNJI-Seite als Scroll-Aufnahme, Link auf www.ounji.at.
-4. **Studio**: die Glas-Säule, in der zwei Jitter-Schleifen (luma, dithering) endlos nach unten laufen (`src/sections/studio.js`).
-5. **Leistungen**: die weiße Anruf-Karte mit der Telefonnummer und der rote Hörer, der dem Zeiger ausweicht (`src/sections/services.js`).
-6. **Drei Wege**: Onepager, Website, Betreuung (Preise über `offer.showPrices` in `src/content.js`), die Notiz zum Hineinschreiben, der Gratis Website-Check (Formular-Overlay), die Instagram-Fläche.
-7. **Kontakt** und **Fußzeile** mit der Wortmarke und dem zweiten Chrom-O.
+2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke, oben links der Spruch, der zweite Satz (für wen) und der Knopf „Projekt anfragen“, der zur Anruf-Karte führt. Wischen mit dem Zeiger hinterlässt eine schwarze Fläche wie verschüttete Tinte, darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
+3. **Manifest**: „Weggeklickt wird woanders.“, die OUNJI-Seite als Scroll-Aufnahme, Link auf www.ounji.at, darunter zwei Fakten (Projekt, Beweis).
+4. **Studio**: links die Person (Name, Ort, zwei Sätze; das Foto kommt später, siehe Kommentar in `index.html`), rechts die Glas-Säule, in der zwei Jitter-Schleifen (luma, dithering) endlos nach unten laufen (`src/sections/studio.js`).
+5. **Leistungen**: die weiße Anruf-Karte mit der Telefonnummer (Hauptweg zum Kontakt) und der rote Hörer, der dem Zeiger ausweicht (`src/sections/services.js`).
+6. **Drei Wege**: Onepager, Website, Betreuung mit je drei Zeilen Inhalt (Preise über `offer.showPrices` in `src/content.js`, derzeit aus), „So läuft es“ in drei Schritten mit dem Versprechen (Entwurf in 48 Stunden, sonst geschenkt), die Notiz zum Hineinschreiben, der Gratis Website-Check (Formular-Overlay), die Instagram-Fläche.
+7. **Fußzeile** mit der Wortmarke, dem zweiten Chrom-O, Impressum, Datenschutz und der E-Mail-Adresse. Einen eigenen Kontakt-Bereich gibt es nicht mehr.
 
 Unterseiten: `impressum.html`, `datenschutz.html`, `404.html` (alle über `src/page.js`, ohne Menü, mit kleiner Fußzeile). `vercel.json` schaltet saubere Adressen ein (`/impressum` statt `/impressum.html`) und setzt Sicherheits-Header. `public/robots.txt` und `public/sitemap.xml` liegen bei.
 
