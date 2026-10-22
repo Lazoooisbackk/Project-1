@@ -36,8 +36,9 @@ export function readResult(json) {
   const lcpMs = a['largest-contentful-paint'] && a['largest-contentful-paint'].numericValue;
   const lcp = typeof lcpMs === 'number' ? lcpMs : null;
   const https = score(a['is-on-https']) === 1;
-  const viewport = score(a['viewport']) === 1;
-  const tap = score(a['tap-targets']), font = score(a['font-size']);
+  /* Google (Lighthouse 13) nennt die Handy-Prüfung „viewport-insight“, ältere Fassungen „viewport“; Schrift- und Knopfgrößen prüft Google nicht mehr */
+  const vp = score(a['viewport-insight']) !== null ? score(a['viewport-insight']) : score(a['viewport']);
+  const crawl = score(a['is-crawlable']);
   const title = score(a['document-title']) === 1, desc = score(a['meta-description']) === 1;
   /* Bild: zuerst das große Ganzseiten-Bild (412 px breit, scharf), sonst das kleine Standbild */
   const full = (lr.fullPageScreenshot && lr.fullPageScreenshot.screenshot && lr.fullPageScreenshot.screenshot.data)
@@ -51,15 +52,16 @@ export function readResult(json) {
   else if (perf >= 50) lights.push({ id: 'tempo', name: 'Tempo', state: 'yellow', text: `Mittel: ${perf} von 100 Punkten. ${lcpText}` });
   else lights.push({ id: 'tempo', name: 'Tempo', state: 'red', text: `Langsam: ${perf} von 100 Punkten. ${lcpText}` });
 
-  if (!viewport) lights.push({ id: 'handy', name: 'Handy', state: 'red', text: 'Nicht fürs Handy gebaut: die Seite wird winzig angezeigt.' });
-  else if (tap === 0 || font === 0) lights.push({ id: 'handy', name: 'Handy', state: 'yellow', text: 'Passt sich an, aber Schrift oder Knöpfe sind am Handy zu klein.' });
-  else lights.push({ id: 'handy', name: 'Handy', state: 'green', text: 'Passt sich dem Handy an, Schrift und Knöpfe sind groß genug.' });
+  if (vp === null) lights.push({ id: 'handy', name: 'Handy', state: 'grey', text: 'Google konnte die Handy-Darstellung nicht prüfen.' });
+  else if (vp < 1) lights.push({ id: 'handy', name: 'Handy', state: 'red', text: 'Nicht fürs Handy gebaut: die Seite wird winzig angezeigt und muss gezoomt werden.' });
+  else lights.push({ id: 'handy', name: 'Handy', state: 'green', text: 'Passt sich dem Handy an: der Darstellungsbereich ist richtig gesetzt.' });
 
   lights.push(https
     ? { id: 'sicher', name: 'Sicherheit', state: 'green', text: 'Verschlüsselt (https). Browser zeigen das Schloss.' }
     : { id: 'sicher', name: 'Sicherheit', state: 'red', text: 'Nicht verschlüsselt: Browser warnen „Nicht sicher“.' });
 
-  if (title && desc) lights.push({ id: 'google', name: 'Google', state: 'green', text: 'Titel und Beschreibung für Google sind da.' });
+  if (crawl === 0) lights.push({ id: 'google', name: 'Google', state: 'red', text: 'Google darf die Seite nicht aufnehmen (noindex): sie taucht in der Suche nicht auf.' });
+  else if (title && desc) lights.push({ id: 'google', name: 'Google', state: 'green', text: 'Titel und Beschreibung für Google sind da.' });
   else if (title || desc) lights.push({ id: 'google', name: 'Google', state: 'yellow', text: title ? 'Die Beschreibung für Google fehlt: der Treffer bleibt leer.' : 'Der Seitentitel für Google fehlt.' });
   else lights.push({ id: 'google', name: 'Google', state: 'red', text: 'Google bekommt weder Titel noch Beschreibung.' });
 
