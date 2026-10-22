@@ -217,10 +217,40 @@
     </form>
 
     <div class="offer__more">
-      <div class="more">
-        <h3 class="more__title">Gratis Website-Check</h3>
-        <p class="more__text">Sie haben schon eine Website? Ich schaue sie mir an und schicke Ihnen drei konkrete Verbesserungen.</p>
-        <span class="magnetic"><button class="btn btn--light" type="button" data-open-form="check"><span>Website prüfen lassen</span><i aria-hidden="true">→</i></button></span>
+      <!-- Live-Sichtbarkeits-Check: Adresse eingeben, Google misst am Handy, vier Ampeln und das Handy-Bild (src/sections/check.js) -->
+      <div class="check" id="check" data-check>
+        <div class="check__head">
+          <h3 class="check__title">Gratis Sichtbarkeits-Check.</h3>
+          <p class="check__text">Sie haben schon eine Website? Tippen Sie die Adresse ein. In etwa 30 Sekunden sehen Sie, wie Google sie am Handy misst.</p>
+        </div>
+        <form class="check__form" novalidate>
+          <label class="sr-only" for="c-url">Adresse Ihrer Website</label>
+          <input id="c-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="www.ihr-betrieb.at">
+          <button class="round round--dark check__go" type="submit" aria-label="Website prüfen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <p class="check__hint" role="status" aria-live="polite" data-check-hint hidden></p>
+        <div class="check__result" data-check-result hidden>
+          <figure class="phone" hidden><img data-check-shot alt="Ihre Website, so wie Google sie am Handy sieht"></figure>
+          <div class="check__body">
+            <ul class="lights" data-check-lights aria-label="Ergebnis"></ul>
+            <p class="check__cost" data-check-cost hidden></p>
+            <form class="check__mail" data-check-mail novalidate>
+              <p class="check__mail-lead">Ich schaue mir das Ergebnis an und schicke Ihnen innerhalb von 24 Stunden drei konkrete Verbesserungen.</p>
+              <div class="check__field">
+                <label class="sr-only" for="c-email">Ihre E-Mail-Adresse</label>
+                <input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="name@beispiel.at">
+                <button class="round round--light check__send" type="submit" aria-label="Verbesserungen anfordern">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+              </div>
+              <p class="check__legal">Nur für meine Antwort. Mehr in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+            </form>
+            <p class="check__done" data-check-done tabindex="-1" hidden>Danke. Die drei Verbesserungen kommen innerhalb von 24 Stunden per E-Mail.</p>
+          </div>
+        </div>
+        <p class="check__alt">Lieber ohne Messung? <a href="#" class="u-link" data-check-fallback>Adresse an mich schicken</a>, ich prüfe sie selbst.</p>
       </div>
     <div class="contact__handle">
       <a class="handle" href="https://www.instagram.com/l.guskic/" target="_blank" rel="noopener" data-handle>

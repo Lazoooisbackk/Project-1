@@ -15,6 +15,7 @@ import { initServices } from './sections/services.js';
 import { initOffer } from './sections/offer.js';
 import { initManifestVideo } from './sections/manifestVideo.js';
 import { initContact } from './sections/contact.js';
+import { initCheck } from './sections/check.js';
 import { initFooter } from './sections/footer.js';
 
 document.documentElement.classList.add('js');
@@ -40,7 +41,8 @@ initStudio();
 initServices();
 initOffer();
 initManifestVideo();
-initContact();
+const contact = initContact();
+initCheck(contact || {});
 initFooter();
 initMagnetic();
 

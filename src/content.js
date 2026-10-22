@@ -35,6 +35,14 @@ export const content = {
     },
   },
 
+  /* Live-Sichtbarkeits-Check (src/sections/check.js): fragt Google PageSpeed Insights direkt aus dem Browser ab.
+     psiKey: API-Schlüssel aus der Google Cloud Console (PageSpeed Insights API, auf die Website-Adresse beschränkt).
+     Ohne Schlüssel nimmt Google nur wenige Messungen am Tag an. */
+  check: {
+    endpoint: 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed',
+    psiKey: '',
+  },
+
   contact: {
     form: {
       /* Das Formular schickt die Angaben an Web3Forms, der Dienst leitet sie als E-Mail weiter.
