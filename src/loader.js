@@ -3,6 +3,9 @@
   Am Ende wird das weiße O zum Chrom-O, dann hebt sich der Vorhang. Spielt einmal pro Sitzung.
   Das weiße O ist dieselbe Kontur wie das O der Wortmarke (Newsreader), als SVG, damit der Übergang
   zum Chrom-O deckungsgleich ist.
+
+  Dauer: rund 2,2 s bis der Vorhang hochgeht, 3 s bis er oben ist (vorher 10 s). Die Ballons kommen als kleine 480-px-Bilder.
+  Klick, Tipp oder Taste überspringt das Intro sofort.
 */
 import { gsap } from './utils/gsap.js';
 import { $, pad3, session, reducedMotion, isMobile } from './utils/dom.js';
@@ -13,6 +16,7 @@ import { content } from './content.js';
 import { WORDMARK } from './wordmark.js';
 
 const KEY = 'gs-intro-seen';
+const SIZE = 's';                                   // kleine Ballon-Bilder fürs Intro
 const within = (p, ms, fallback) => Promise.race([p, new Promise((r) => setTimeout(() => r(fallback), ms))]);
 
 export const introWillPlay = () => !session.get(KEY) && !reducedMotion();
@@ -35,7 +39,7 @@ function makeO(el) {
   $('.loader__o-wrap', el).insertBefore(svg, $('.loader__bl', el));
   return svg;
 }
-export const preloadIntro = () => preloadBalloons(content.objects.intro);
+export const preloadIntro = () => preloadBalloons(content.objects.intro, { size: SIZE, timeout: 2500 });
 
 export async function runLoader({ hero, fonts }) {
   const el = $('#loader');
@@ -71,17 +75,30 @@ export async function runLoader({ hero, fonts }) {
     return;
   }
 
-  /* Alles vor dem Start laden und dekodieren: Schriften und Ballons */
+  /* Überspringen: Klick, Tipp oder Taste. Wird erst scharf, wenn die Zeitleiste läuft. */
+  let skip = null;
+  const skipped = new Promise((resolve) => { skip = resolve; });
+  const onKey = (e) => { if (!e.metaKey && !e.ctrlKey && !e.altKey && e.key !== 'Tab' && e.key !== 'Shift') skip(); };
+  const armSkip = () => {
+    el.addEventListener('pointerdown', skip, { once: true });
+    document.addEventListener('keydown', onKey);
+  };
+  const disarmSkip = () => {
+    el.removeEventListener('pointerdown', skip);
+    document.removeEventListener('keydown', onKey);
+  };
+
+  /* Schriften und die kleinen Ballons laden, aber höchstens kurz warten */
   counter.textContent = '100';
-  const [balloons] = await Promise.all([within(preloadIntro(), 9000, []), within(fonts, 4000)]);
+  const [balloons] = await Promise.all([within(preloadIntro(), 1800, []), within(fonts, 1500)]);
 
   const items = balloons.map((b) => {
-    const pic = balloonPicture(b.id, { className: 'loader__item', format: b.format });
+    const pic = balloonPicture(b.id, { className: 'loader__item', format: b.format, size: SIZE });
     win.appendChild(pic);
     gsap.set(pic, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
     return pic;
   });
-  await Promise.all(items.map((p) => p.querySelector('img').decode().catch(() => {})));
+  await within(Promise.all(items.map((p) => p.querySelector('img').decode().catch(() => {}))), 600, null);
 
   /* Chrom-O deckungsgleich über das weiße O legen (Maße aus der Kontur, unabhängig von Transformationen) */
   const placeChrome = () => {
@@ -105,13 +122,13 @@ export async function runLoader({ hero, fonts }) {
 
   const tl = gsap.timeline();
 
-  /* 1–3: „g“ steigt aus der Maske, „O“ wächst, danach öffnet sich das Fenster */
-  tl.to(g, { yPercent: 0, duration: 1, ease: 'power4.inOut' }, 0)
-    .to(o, { scale: 1, duration: 1, ease: 'power4.inOut' }, 0);
-  if (has) tl.to(win, { width: gapW, duration: 1.2, ease: 'power4.inOut' }, 1);
+  /* 1–3: „g“ steigt aus der Maske, „O“ wächst, dazu öffnet sich das Fenster */
+  tl.to(g, { yPercent: 0, duration: 0.4, ease: 'power4.inOut' }, 0)
+    .to(o, { scale: 1, duration: 0.4, ease: 'power4.inOut' }, 0);
+  if (has) tl.to(win, { width: gapW, duration: 0.45, ease: 'power4.inOut' }, 0.2);
 
-  /* 4: Karussell. Der erste Ballon ploppt herein, danach wechseln sie etwa alle 240 ms. */
-  const POP = 1.5, POP_D = 0.8, SWAP = 0.24, RUN = 2.6;
+  /* 4: Karussell. Der erste Ballon ploppt herein, danach wechseln sie alle 160 ms. */
+  const POP = 0.4, POP_D = 0.3, SWAP = 0.16, RUN = 0.64;
   let current = null;
   if (has) {
     tl.call(() => {
@@ -127,7 +144,7 @@ export async function runLoader({ hero, fonts }) {
       tl.call(() => {
         if (current && current !== next) { gsap.killTweensOf(current); gsap.set(current, { opacity: 0 }); }
         gsap.killTweensOf(next);
-        gsap.fromTo(next, { opacity: 0, scale: 0.8, rotation: gsap.utils.random(-12, 12) }, { opacity: 1, scale: 1, duration: 0.32, ease: 'back.out(1.2)' });
+        gsap.fromTo(next, { opacity: 0, scale: 0.8, rotation: gsap.utils.random(-12, 12) }, { opacity: 1, scale: 1, duration: 0.22, ease: 'back.out(1.2)' });
         current = next;
       }, null, S0 + i * SWAP);
     }
@@ -149,28 +166,38 @@ export async function runLoader({ hero, fonts }) {
   tl.call(() => {
     if (!current) return;
     gsap.killTweensOf(current);
-    gsap.to(current, { scale: 0, duration: 0.6, ease: 'power4.inOut' });
-  }, null, E0 + 0.5);
-  if (has) tl.to(win, { width: '1rem', duration: 0.8, ease: 'power4.inOut' }, E0 + 0.6);
-  const M = has ? E0 + 1.4 : E0;
+    gsap.to(current, { scale: 0, duration: 0.25, ease: 'power4.inOut' });
+  }, null, E0);
+  if (has) tl.to(win, { width: '1rem', duration: 0.3, ease: 'power4.inOut' }, E0 + 0.05);
+  const M = has ? E0 + 0.35 : E0;
 
   /* Das weiße O wird an Ort und Stelle zum Chrom-O, erst glatt, dann zerknittert */
   if (chrome) {
     tl.call(() => { chrome.restart(); chrome.start(); }, null, M)
-      .to(o, { opacity: 0, duration: 0.4, ease: 'none' }, M)
-      .to(chromeCanvas, { opacity: 1, duration: 0.4, ease: 'none' }, M)
-      .fromTo(chrome.state, { crumple: 0 }, { crumple: 1, duration: 0.9, ease: 'power2.inOut' }, M + 0.1);
+      .to(o, { opacity: 0, duration: 0.2, ease: 'none' }, M)
+      .to(chromeCanvas, { opacity: 1, duration: 0.2, ease: 'none' }, M)
+      .fromTo(chrome.state, { crumple: 0 }, { crumple: 1, duration: 0.45, ease: 'power2.inOut' }, M + 0.05);
   }
 
   /* 6: Abgang. Zähler aus, Vorhang nach oben, g sinkt, das O schrumpft, der Start-Bereich übernimmt */
-  const X = M + (chrome ? 1.15 : 0.3);
-  tl.to(counter, { opacity: 0, duration: 0.5, ease: 'none' }, X - 0.5)
-    .to(el, { height: 0, duration: 1.8, ease: 'power4.inOut' }, X)
-    .to(g, { yPercent: 100, duration: 1, ease: 'power4.inOut' }, X)
-    .to(chrome ? chrome.state : o, { scale: 0, duration: 1, ease: 'power4.inOut' }, X)
-    .add(() => { unlockScroll(); hero.reveal(); }, X);
+  const X = M + (chrome ? 0.5 : 0.2);
+  const exit = (t, at) => t
+    .to(counter, { opacity: 0, duration: 0.3, ease: 'none' }, Math.max(0, at - 0.3))
+    .to(el, { height: 0, duration: 0.8, ease: 'power4.inOut' }, at)
+    .to(g, { yPercent: 100, duration: 0.5, ease: 'power4.inOut' }, at)
+    .to(chrome ? chrome.state : o, { scale: 0, duration: 0.5, ease: 'power4.inOut' }, at)
+    .add(() => { unlockScroll(); hero.reveal(); }, at);
+  exit(tl, X);
 
-  await tl.then();
+  armSkip();
+  const result = await Promise.race([tl.then(() => 'done'), skipped.then(() => 'skip')]);
+  disarmSkip();
+  if (result === 'skip' && tl.progress() < 1) {
+    /* Sofort raus: laufende Tweens stoppen, dann derselbe Abgang, nur ohne Wartezeit */
+    tl.kill();
+    gsap.killTweensOf([...items, count, o, win, g, counter]);
+    await exit(gsap.timeline(), 0).then();
+  }
   if (chrome) { window.removeEventListener('resize', placeChrome); chrome.dispose(); }
   finish();
 }

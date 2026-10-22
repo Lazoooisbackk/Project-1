@@ -50,3 +50,9 @@ Sterne und Herzen wurden auf Wunsch entfernt.
 - `public/video/luma.mp4`: eigener Export der Jitter-Vorlage „Luma Dot Background“ (1280 × 720, 8 s), mit ffmpeg auf H.264 CRF 28 verkleinert; Standbild `luma.jpg` ist das erste Bild.
 - `public/og.jpg`: Screenshot des Start-Bereichs mit `?foil=1`.
 - Die Wortmarke (`src/wordmark.js`) ist aus der freien Schrift Geist Bold erzeugt; das O aus der freien Schrift Newsreader (SIL OFL 1.1, `scripts/newsreader-o.json`).
+
+## Ergänzt am 22. Oktober 2026
+
+- `public/objects/*-s.webp` und `*-s.png`: dieselben Ballons in 480 × 480 px, nur fürs Intro (vorher lud das Intro 3,2 MB an 1200-px-Bildern).
+- `public/video/luma.webp`, `dithering.webp`, `reel-ounji.webp`: Standbilder der Videos als WebP (aus den JPGs erzeugt; die JPGs bleiben als Reserve liegen).
+- `public/og.jpg` wird jetzt mit absoluter Adresse verlinkt (https://guskicstudio.vercel.app/og.jpg), sonst zeigen WhatsApp und Instagram kein Vorschaubild.

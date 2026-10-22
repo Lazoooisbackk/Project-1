@@ -9,13 +9,16 @@ export function initServices() {
   if (!section) return;
   const reduce = reducedMotion();
 
+  /* Textzeilen gibt es in diesem Bereich derzeit nicht (nur die Anruf-Karte); falls welche dazukommen, fahren sie von unten ein */
   const items = $$('.services__item .line', section);
-  gsap.set(items, { yPercent: reduce ? 0 : 110 });
-  if (!reduce) {
-    ScrollTrigger.create({
-      trigger: section, start: 'top 70%', once: true,
-      onEnter: () => gsap.to(items, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }),
-    });
+  if (items.length) {
+    gsap.set(items, { yPercent: reduce ? 0 : 110 });
+    if (!reduce) {
+      ScrollTrigger.create({
+        trigger: section, start: 'top 70%', once: true,
+        onEnter: () => gsap.to(items, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.08 }),
+      });
+    }
   }
 
   const layer = $('.services__objects', section);

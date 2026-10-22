@@ -6,7 +6,7 @@
   "description": "guskic studiO – Website",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/fix404.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -4,7 +4,11 @@
 */
 import { asset } from './utils/dom.js';
 
-export const balloon = (id) => ({ id, webp: asset(`objects/${id}.webp`), png: asset(`objects/${id}.png`) });
+/* size 's' = die kleine 480-px-Fassung (Intro), sonst die große mit 1200 px */
+export const balloon = (id, size = '') => {
+  const f = size === 's' ? `${id}-s` : id;
+  return { id, size, px: size === 's' ? 480 : 1200, webp: asset(`objects/${f}.webp`), png: asset(`objects/${f}.png`) };
+};
 
 /* Laden + dekodieren. Schlägt WebP fehl, wird PNG versucht; schlägt beides fehl: null. */
 function preload(src, timeout) {
@@ -17,11 +21,11 @@ function preload(src, timeout) {
 }
 
 const cache = new Map();
-export function preloadBalloons(ids, { timeout = 8000 } = {}) {
-  const key = ids.join(',');
+export function preloadBalloons(ids, { timeout = 8000, size = '' } = {}) {
+  const key = `${size}:${ids.join(',')}`;
   if (cache.has(key)) return cache.get(key);
   const p = Promise.all(ids.map(async (id) => {
-    const b = balloon(id);
+    const b = balloon(id, size);
     let img = await preload(b.webp, timeout);
     let format = 'webp';
     if (!img) { img = await preload(b.png, timeout); format = 'png'; }
@@ -32,8 +36,8 @@ export function preloadBalloons(ids, { timeout = 8000 } = {}) {
 }
 
 /* <picture> mit WebP und PNG-Fallback. format 'png' = WebP ist nicht verfügbar. */
-export function balloonPicture(id, { className = '', lazy = false, format = 'webp' } = {}) {
-  const b = balloon(id);
+export function balloonPicture(id, { className = '', lazy = false, format = 'webp', size = '' } = {}) {
+  const b = balloon(id, size);
   const pic = document.createElement('picture');
   if (className) pic.className = className;
   if (format === 'webp') {
@@ -45,8 +49,8 @@ export function balloonPicture(id, { className = '', lazy = false, format = 'web
   const img = document.createElement('img');
   img.src = b.png;
   img.alt = '';
-  img.width = 1200;
-  img.height = 1200;
+  img.width = b.px;
+  img.height = b.px;
   img.draggable = false;
   img.decoding = lazy ? 'async' : 'sync';
   if (lazy) img.loading = 'lazy';

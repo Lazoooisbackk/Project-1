@@ -11,12 +11,23 @@
 <link rel="stylesheet" href="/fonts/fonts.css">
 <title>guskic studiO – Websites, die man anfassen möchte.</title>
 <meta name="description" content="guskic studiO ist das Webdesign-Studio von Lazar Guskic aus Wien: individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
+<link rel="canonical" href="https://guskicstudio.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="guskic studiO – Websites, die man anfassen möchte.">
 <meta property="og:description" content="Webdesign-Studio aus Wien. Individuelle Websites mit eigenem Code, Typografie, Motion und 3D.">
-<meta property="og:image" content="/og.jpg">
+<meta property="og:url" content="https://guskicstudio.vercel.app/">
+<meta property="og:site_name" content="guskic studiO">
+<meta property="og:image" content="https://guskicstudio.vercel.app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="guskic studiO – Wortmarke auf Folie">
 <meta property="og:locale" content="de_AT">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="guskic studiO – Websites, die man anfassen möchte.">
+<meta name="twitter:image" content="https://guskicstudio.vercel.app/og.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"guskic studiO","url":"https://guskicstudio.vercel.app/","image":"https://guskicstudio.vercel.app/og.jpg","description":"Webdesign-Studio aus Wien: individuelle Websites mit eigenem Code, Typografie, Motion und 3D.","telephone":"+43 676 491 61 44","email":"guskic.studio@gmail.com","founder":{"@type":"Person","name":"Lazar Guskic"},"address":{"@type":"PostalAddress","streetAddress":"Mautgasse 1","postalCode":"2402","addressLocality":"Maria Ellend","addressCountry":"AT"},"areaServed":["Wien","Niederösterreich","Österreich"],"sameAs":["https://www.instagram.com/l.guskic/"]}
+</script>
 <style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#000;z-index:1000}.loader[hidden]{display:none}</style>
 <script type="module" src="/src/main.js"></script>
 </head>
@@ -64,7 +75,7 @@
     </p>
 
     <figure class="manifest__reel">
-      <video data-auto muted playsinline loop preload="none" poster="./video/reel-ounji.jpg" aria-label="Die Website von OUNJI, beim Durchscrollen aufgenommen">
+      <video data-auto muted playsinline loop preload="none" poster="./video/reel-ounji.webp" aria-label="Die Website von OUNJI, beim Durchscrollen aufgenommen">
         <source data-src="./video/reel-ounji.mp4" type="video/mp4">
       </video>
     </figure>
@@ -81,22 +92,22 @@
     <div class="strip" aria-hidden="true">
       <div class="strip__track">
       <figure class="strip__item strip__item--wide">
-        <video data-auto muted playsinline loop preload="none" poster="./video/luma.jpg" tabindex="-1">
+        <video data-auto muted playsinline loop preload="none" poster="./video/luma.webp" tabindex="-1">
           <source data-src="./video/luma.mp4" type="video/mp4">
         </video>
       </figure>
       <figure class="strip__item strip__item--square">
-        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.jpg" tabindex="-1">
+        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.webp" tabindex="-1">
           <source data-src="./video/dithering.mp4" type="video/mp4">
         </video>
       </figure>
       <figure class="strip__item strip__item--wide">
-        <video data-auto muted playsinline loop preload="none" poster="./video/luma.jpg" tabindex="-1">
+        <video data-auto muted playsinline loop preload="none" poster="./video/luma.webp" tabindex="-1">
           <source data-src="./video/luma.mp4" type="video/mp4">
         </video>
       </figure>
       <figure class="strip__item strip__item--square">
-        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.jpg" tabindex="-1">
+        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.webp" tabindex="-1">
           <source data-src="./video/dithering.mp4" type="video/mp4">
         </video>
       </figure>
@@ -175,7 +186,7 @@
         <span class="magnetic"><button class="btn btn--light" type="button" data-open-form="check"><span>Website prüfen lassen</span><i aria-hidden="true">→</i></button></span>
       </div>
     <div class="contact__handle">
-      <a class="handle" href="https://www.instagram.com/l.guskic/" target="_blank" rel="noopener" aria-label="l.guskic auf Instagram" data-handle>
+      <a class="handle" href="https://www.instagram.com/l.guskic/" target="_blank" rel="noopener" data-handle>
         <svg class="handle__icon" viewBox="0 0 24 24" fill="none" stroke="url(#handle-ig)" stroke-width="2" aria-hidden="true">
           <defs>
             <radialGradient id="handle-ig" gradientUnits="userSpaceOnUse" cx="7" cy="25.5" r="30">
@@ -186,7 +197,7 @@
           <circle cx="12" cy="12" r="4.5"/>
           <circle cx="17.5" cy="6.5" r="1.25" fill="url(#handle-ig)" stroke="none"/>
         </svg>
-        <span class="handle__name" aria-hidden="true">l.guskic</span>
+        <span class="handle__name" aria-hidden="true">l.guskic</span><span class="sr-only">l.guskic auf Instagram</span>
       </a>
     </div>
     </div>
@@ -238,14 +249,14 @@
 </div>
 
 <footer class="footer on-dark" aria-label="Fußzeile">
-  <p class="footer__mark" aria-label="guskic studiO"></p>
+  <div class="footer__mark" role="img" aria-label="guskic studiO"></div>
   <div class="footer__links">
     <span>©<span data-year>2026</span> — guskic studiO</span>
     <ul>
       <li><a class="u-link" href="impressum.html">Impressum</a></li>
       <li><a class="u-link" href="datenschutz.html">Datenschutz</a></li>
     </ul>
-    <span>Maria Ellend · Wien <span class="pill" aria-hidden="true">DE</span></span>
+    <span>Maria Ellend · Wien</span>
   </div>
 </footer>
 </body>

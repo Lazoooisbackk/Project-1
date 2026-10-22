@@ -12,6 +12,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         impressum: resolve(__dirname, 'impressum.html'),
         datenschutz: resolve(__dirname, 'datenschutz.html'),
+        notfound: resolve(__dirname, '404.html'),
       },
       output: {
         manualChunks: (id) => {

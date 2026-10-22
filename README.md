@@ -17,25 +17,31 @@ npm run build     # fertige Seite nach dist/
 npm run preview   # dist/ lokal ansehen, http://localhost:4173
 ```
 
-Ein Push auf `main` baut die Seite und stellt sie über GitHub Pages online (`.github/workflows/deploy.yml`).
+Ein Push auf `main` baut die Seite auf Vercel (https://guskicstudio.vercel.app, Hauptadresse) und über GitHub Pages (`.github/workflows/deploy.yml`, Zweitkopie). `npm run build` ruft danach `scripts/fix404.mjs` auf, das in `dist/404.html` die Pfade absolut macht (Vercel liefert die 404-Seite unter jeder Adresse aus).
 
 ## Aufbau der Seite
 
-1. **Intro** (`src/loader.js`): schwarze Fläche, „g“ und „O“, dazwischen wechseln Folien-Ballons, der Zähler läuft von 100 auf 000. Spielt einmal pro Sitzung.
-2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger hinterlässt eine feste schwarze Fläche wie verschüttete Tinte, die nach 2–3 Sekunden wieder verschwindet; darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
-3. **Manifest**: Aussage, Showreel im Rahmen, kleiner Absatz mit fallenden Buchstaben.
-4. **Arbeiten**: wandernde Überschrift, versetzte Projekt-Karten.
-5. **Showreel** über die ganze Breite.
-6. **Studio**: Text und eine leere weiße Form mit runden Ecken.
-7. **Leistungen**: Folien-Ballons und die Buchstaben g u s k i c, die dem Zeiger ausweichen.
-8. **Video** mit der Figur im Folien-Kostüm, darüber Textblöcke und zwei Bildkarten.
-9. **Kontakt** und **Fußzeile** mit der Wortmarke.
+1. **Intro** (`src/loader.js`): schwarze Fläche, „g“ und „O“, dazwischen die Folien-Ballons, der Zähler läuft von 100 auf 000, das O wird zum Chrom-O, der Vorhang hebt sich. Rund 2,2 s bis der Vorhang hochgeht, 3 s bis er oben ist. Klick, Tipp oder Taste überspringt. Spielt einmal pro Sitzung. Die Ballons kommen als kleine 480-px-Bilder (`public/objects/*-s.webp`).
+2. **Start** (`src/hero.js`, `src/heroStage.js`, `src/fluid.js`, `src/balloonLetters.js`): weiße Fläche mit der Wortmarke. Wischen mit dem Zeiger hinterlässt eine schwarze Fläche wie verschüttete Tinte, darin steht der Name als Folien-Ballons. Das O ist immer das Chrom-O.
+3. **Manifest**: „Weggeklickt wird woanders.“, die OUNJI-Seite als Scroll-Aufnahme, Link auf www.ounji.at.
+4. **Studio**: die Glas-Säule, in der zwei Jitter-Schleifen (luma, dithering) endlos nach unten laufen (`src/sections/studio.js`).
+5. **Leistungen**: die weiße Anruf-Karte mit der Telefonnummer und der rote Hörer, der dem Zeiger ausweicht (`src/sections/services.js`).
+6. **Drei Wege**: Onepager, Website, Betreuung (Preise über `offer.showPrices` in `src/content.js`), die Notiz zum Hineinschreiben, der Gratis Website-Check (Formular-Overlay), die Instagram-Fläche.
+7. **Kontakt** und **Fußzeile** mit der Wortmarke und dem zweiten Chrom-O.
+
+Unterseiten: `impressum.html`, `datenschutz.html`, `404.html` (alle über `src/page.js`, ohne Menü, mit kleiner Fußzeile). `vercel.json` schaltet saubere Adressen ein (`/impressum` statt `/impressum.html`) und setzt Sicherheits-Header. `public/robots.txt` und `public/sitemap.xml` liegen bei.
+
+## Offene Punkte (Stand 22. Oktober 2026)
+
+- **Eigene Domain und E-Mail.** Sobald die Domain da ist: die Adresse `https://guskicstudio.vercel.app` in `index.html` (canonical, og:url, og:image, JSON-LD), `public/robots.txt` und `public/sitemap.xml` ersetzen; Gmail-Adresse in `index.html`, `impressum.html`, `datenschutz.html` und `src/content.js` tauschen.
+- **Impressum nach der Gewerbeanmeldung ergänzen:** Gewerbeberechtigung, WKO-Mitgliedschaft, Behörde, UID oder Kleinunternehmer-Hinweis (Kommentar in `impressum.html`).
+- **Besucherzahlen:** Vercel Web Analytics im Vercel-Dashboard einschalten, dann `<script defer src="/_vercel/insights/script.js"></script>` vor `</body>` in `index.html` und einen Satz in `datenschutz.html` ergänzen (cookiefrei).
+- **Ballast, der gelöscht werden kann** (wird nicht geladen): `public/video/manifest.mp4`, `manifest.jpg`, `manifest.webp`, `showreel.mp4`, `showreel.jpg`, `src/sections/works.js`, `src/sections/showreel.js`, `insta-slides.html`, `o-render.html` (nur lokal). Löschen geht auf GitHub pro Datei über „…“ → „Delete file“.
+- Prüfbericht mit allen Schwachstellen und dem Plan: `../Website-Pruefbericht-2026-10-22.md`.
 
 ## Texte ändern
 
 Die sichtbaren Texte stehen in `index.html`. Listen, die das JavaScript braucht (Ballons im Intro, Positionen der Ballons, die Zeile über dem Video, E-Mail-Adresse des Formulars), stehen in `src/content.js`.
-
-Noch Platzhalter: die Adresse und die Telefonnummer in `impressum.html` und `datenschutz.html`.
 
 Pakete und Notiz: `offer.showPrices` in `src/content.js` schaltet Preise unter den Paketen ein oder aus (Standard: aus, die Seite zeigt keine Zahlen). Die Notiz und das Formular (Projekt, Website-Check, Erstgespräch) senden über Web3Forms (`contact.form.endpoint` und `accessKey`) (`src/utils/send.js`); schlägt das Senden fehl, öffnet sich als Ersatz eine fertige E-Mail.
 
