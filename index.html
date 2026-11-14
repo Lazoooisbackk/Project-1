@@ -28,7 +28,10 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"guskic studiO","url":"https://guskicstudio.vercel.app/","image":"https://guskicstudio.vercel.app/og.jpg","description":"Webdesign-Studio aus Wien: individuelle Websites mit eigenem Code, Typografie, Motion und 3D.","telephone":"+43 676 491 61 44","email":"guskic.studio@gmail.com","founder":{"@type":"Person","name":"Lazar Guskic"},"address":{"@type":"PostalAddress","streetAddress":"Mautgasse 1","postalCode":"2402","addressLocality":"Maria Ellend","addressCountry":"AT"},"areaServed":["Wien","Niederösterreich","Österreich"],"sameAs":["https://www.instagram.com/l.guskic/"]}
 </script>
-<style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#000;z-index:1000}.loader[hidden]{display:none}</style>
+<!-- Der schwarze Intro-Vorhang steht schon im HTML. Notbremse: Kommt das Skript nicht (Netz, Fehler), gibt CSS die Seite nach 10 s frei;
+     ohne JavaScript ist er gar nicht da. loader.js setzt „loader-ok“, sobald es übernimmt. -->
+<style>.loader{position:fixed;top:0;left:0;right:0;height:100%;background:#000;z-index:1000;animation:gs-off 0s 10s forwards}.loader[hidden]{display:none}body.is-loading{animation:gs-scroll 0s 10s forwards}.loader-ok .loader,.loader-ok body.is-loading{animation:none}@keyframes gs-off{to{visibility:hidden}}@keyframes gs-scroll{to{overflow:visible}}</style>
+<noscript><style>.loader{display:none}html body.is-loading{overflow:visible}</style></noscript>
 <script type="module" src="/src/main.js"></script>
 </head>
 <body class="is-loading has-hero">
@@ -60,7 +63,7 @@
         <span class="line-mask"><span class="line">Websites, die man anfassen möchte.</span></span>
       </p>
       <p class="hero__sub">Für Betriebe in Wien und Umgebung, die gefunden werden und Anfragen bekommen wollen.</p>
-      <span class="magnetic"><a class="btn btn--blend" href="#leistungen"><span>Projekt anfragen</span><i aria-hidden="true">→</i></a></span>
+      <span class="magnetic"><a class="btn btn--blend" href="https://api.whatsapp.com/send?phone=436764916144&amp;text=Gr%C3%BC%C3%9F%20Gott%2C%20Lazar!%20%F0%9F%91%8B%0AIch%20bin%20%E2%80%A6%20von%20%E2%80%A6%20(Betrieb)%20und%20interessiere%20mich%20f%C3%BCr%20eine%20Website.%0A%0A%F0%9F%93%8D%20Wo%3A%20%E2%80%A6%0A%E2%8F%B0%20Am%20besten%20erreichbar%3A%20%E2%80%A6" target="_blank" rel="noopener" data-wa><span>Anfrage auf WhatsApp</span><i aria-hidden="true">→</i></a></span>
     </div>
 
     <div class="hero__center">
@@ -69,59 +72,106 @@
 
   </section>
 
-  <!-- Aussage, Showreel im Rahmen, kleiner Absatz mit Folien-Kachel -->
-  <section class="manifest" id="manifest" aria-label="Manifest">
+  <!-- Arbeiten: drei echte Kundenseiten, je im Handy, die Seite läuft von selbst durch (reines CSS) -->
+  <section class="manifest" id="arbeiten" aria-labelledby="works-title">
     <p class="manifest__statement statement">
       <span class="line-mask"><span class="line">Weggeklickt wird woanders.</span></span>
     </p>
 
-    <figure class="manifest__reel">
-      <video data-auto muted playsinline loop preload="none" poster="./video/reel-ounji.webp" aria-label="Die Website von OUNJI, beim Durchscrollen aufgenommen">
-        <source data-src="./video/reel-ounji.mp4" type="video/mp4">
-      </video>
-    </figure>
-
-    <div class="manifest__aside">
-      <a class="manifest__link u-link" href="https://www.ounji.at" target="_blank" rel="noopener"><i aria-hidden="true">↪</i><span class="manifest__side">www.ounji.at</span></a>
-      <dl class="manifest__facts">
-        <div class="fact"><dt class="label">Projekt</dt><dd>OUNJI, Brows &amp; Lashes in Wien: ein Onepager mit Terminanfrage über WhatsApp und Anbindung an Instagram.</dd></div>
-        <div class="fact"><dt class="label">Beweis</dt><dd>Diese Seite hier: 100 von 100 Punkten bei Google Lighthouse am Desktop, gemessen im Oktober 2026. Gebaut mit eigenem Code, ohne Baukasten.</dd></div>
-      </dl>
+    <div class="works">
+      <h2 class="label works__title" id="works-title">Arbeiten</h2>
+      <ul class="works__list">
+        <li class="work">
+          <a class="work__link" href="https://fleischerei-sahan.vercel.app/" target="_blank" rel="noopener">
+            <span class="iph" aria-hidden="true" data-iph>
+              <span class="iph__floor"></span>
+              <span class="iph__spin">
+                <span class="iph__face"><span class="iph__in">
+                  <span class="iph__screen">
+                    <img class="iph__site" style="--dur:13.6s" src="./works/sahan-seite.webp" width="585" height="9971" alt="" loading="lazy" decoding="async">
+                    <img class="iph__logo" src="./works/sahan-logo-400.webp" srcset="./works/sahan-logo-400.webp 400w, ./works/sahan-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
+                    <i class="iph__glare"></i>
+                  </span>
+                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
+                </span></span>
+              </span>
+            </span>
+            <span class="work__meta label">Fleischerei · Hannovermarkt, Wien 20</span>
+            <span class="work__name">Fleischerei Şahan</span>
+            <span class="work__text">Vorbestellen per WhatsApp mit fertiger Nachricht. Der Anruf-Knopf läutet nur in den Öffnungszeiten. Eigene Fotos und Videos vom Stand.</span>
+            <span class="work__url">fleischerei-sahan.vercel.app <i aria-hidden="true">↗</i></span>
+          </a>
+        </li>
+        <li class="work">
+          <a class="work__link" href="https://fleischerei-guskic.vercel.app/" target="_blank" rel="noopener">
+            <span class="iph" aria-hidden="true" data-iph>
+              <span class="iph__floor"></span>
+              <span class="iph__spin">
+                <span class="iph__face"><span class="iph__in">
+                  <span class="iph__screen">
+                    <img class="iph__site" style="--dur:14.4s" src="./works/guskic-seite.webp" width="585" height="10499" alt="" loading="lazy" decoding="async">
+                    <img class="iph__logo" src="./works/guskic-logo-400.webp" srcset="./works/guskic-logo-400.webp 400w, ./works/guskic-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
+                    <i class="iph__glare"></i>
+                  </span>
+                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
+                </span></span>
+              </span>
+            </span>
+            <span class="work__meta label">Fleischerei · Hannovermarkt, Wien 20</span>
+            <span class="work__name">Fleischerei Guskic</span>
+            <span class="work__text">Ein Schnittplan, der beim Scrollen mitzeigt: zehn Stücke vom Kopf bis zu den Füßen. Öffnungszeiten mit „Jetzt geöffnet“.</span>
+            <span class="work__url">fleischerei-guskic.vercel.app <i aria-hidden="true">↗</i></span>
+          </a>
+        </li>
+        <li class="work">
+          <a class="work__link" href="https://www.ounji.at/" target="_blank" rel="noopener">
+            <span class="iph" aria-hidden="true" data-iph>
+              <span class="iph__floor"></span>
+              <span class="iph__spin">
+                <span class="iph__face"><span class="iph__in">
+                  <span class="iph__screen">
+                    <img class="iph__site" style="--dur:11.1s" src="./works/ounji-seite.webp" width="585" height="8349" alt="" loading="lazy" decoding="async">
+                    <img class="iph__logo" src="./works/ounji-logo-400.webp" srcset="./works/ounji-logo-400.webp 400w, ./works/ounji-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
+                    <i class="iph__glare"></i>
+                  </span>
+                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
+                </span></span>
+              </span>
+            </span>
+            <span class="work__meta label">Brows &amp; Lashes · Wien 3</span>
+            <span class="work__name">OUNJI</span>
+            <span class="work__text">Ein Onepager mit Preisliste, Terminanfrage über WhatsApp und Anbindung an Instagram.</span>
+            <span class="work__url">www.ounji.at <i aria-hidden="true">↗</i></span>
+          </a>
+        </li>
+      </ul>
+      <p class="works__proof">Prüfen Sie selbst: Jede dieser Adressen können Sie unten im <a class="u-link" href="#check">Sichtbarkeits-Check</a> messen lassen.</p>
     </div>
   </section>
 
-  <!-- Arbeiten -->
   <!-- Studio -->
   <section class="studio" id="studio" aria-label="Das Studio">
     <!-- Die Person: Name, Ort, zwei Sätze. Das Foto kommt später: <figure class="studio__photo"><img src="./studio/lazar.jpg" alt="Lazar Guskic"></figure> vor die Überschrift setzen. -->
     <div class="studio__person" data-person>
       <span class="label">Das Studio</span>
       <p class="studio__who">Lazar Guskic, Maria Ellend bei Wien.</p>
-      <p>Ich baue jede Website selbst, mit eigenem Code statt Vorlage, damit sie schnell lädt und man sie nicht verwechselt. Nach dem Start bleibe ich erreichbar: am Telefon, nicht über ein Ticket.</p>
+      <p>Ich baue jede Website selbst, mit eigenem Code statt Vorlage, damit sie schnell lädt und man sie nicht verwechselt. Nach dem Start bleibe ich erreichbar: auf WhatsApp und am Telefon, nicht über ein Ticket.</p>
     </div>
-    <!-- Glas-Leiste: die beiden Jitter-Vorlagen laufen nebeneinander durch; der Inhalt steht zweimal drin, damit die Schleife nahtlos ist -->
+    <!-- Glas-Säule: Ausschnitte aus den Kundenseiten laufen langsam nach unten; der Satz steht zweimal drin, damit die Schleife nahtlos ist -->
     <div class="strip" aria-hidden="true">
       <div class="strip__track">
-      <figure class="strip__item strip__item--wide">
-        <video data-auto muted playsinline loop preload="none" poster="./video/luma.webp" tabindex="-1">
-          <source data-src="./video/luma.mp4" type="video/mp4">
-        </video>
-      </figure>
-      <figure class="strip__item strip__item--square">
-        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.webp" tabindex="-1">
-          <source data-src="./video/dithering.mp4" type="video/mp4">
-        </video>
-      </figure>
-      <figure class="strip__item strip__item--wide">
-        <video data-auto muted playsinline loop preload="none" poster="./video/luma.webp" tabindex="-1">
-          <source data-src="./video/luma.mp4" type="video/mp4">
-        </video>
-      </figure>
-      <figure class="strip__item strip__item--square">
-        <video data-auto muted playsinline loop preload="none" poster="./video/dithering.webp" tabindex="-1">
-          <source data-src="./video/dithering.mp4" type="video/mp4">
-        </video>
-      </figure>
+      <figure class="strip__item"><img src="./works/sahan-d0.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/guskic-d0.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/ounji-d1.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/sahan-d1.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/guskic-d2.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/ounji-d2.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/sahan-d0.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/guskic-d0.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/ounji-d1.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/sahan-d1.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/guskic-d2.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
+      <figure class="strip__item"><img src="./works/ounji-d2.webp" width="1152" height="720" alt="" loading="lazy" decoding="async"></figure>
       </div>
     </div>
   </section>
@@ -129,11 +179,12 @@
   <!-- Leistungen -->
   <section class="services on-dark" id="leistungen" aria-labelledby="call-title">
     <div class="call">
-      <a class="call__card" href="tel:+436764916144">
-        <span class="call__lead" id="call-title">Rufen Sie mich an, am Telefon geht es am schnellsten.</span>
-        <span class="call__number">+43 676 491 61 44</span>
+      <a class="call__card" href="https://api.whatsapp.com/send?phone=436764916144&amp;text=Gr%C3%BC%C3%9F%20Gott%2C%20Lazar!%20%F0%9F%91%8B%0AIch%20bin%20%E2%80%A6%20von%20%E2%80%A6%20(Betrieb)%20und%20interessiere%20mich%20f%C3%BCr%20eine%20Website.%0A%0A%F0%9F%93%8D%20Wo%3A%20%E2%80%A6%0A%E2%8F%B0%20Am%20besten%20erreichbar%3A%20%E2%80%A6" target="_blank" rel="noopener" data-wa>
+        <span class="call__lead" id="call-title">Schreiben Sie mir auf WhatsApp. Stichworte reichen, ich melde mich.</span>
+        <span class="call__number"><svg class="call__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.6a9.4 9.4 0 0 0-8.1 14.2L2.6 21.4l4.7-1.2A9.4 9.4 0 1 0 12 2.6zm0 1.8a7.6 7.6 0 1 1-3.9 14.1l-.3-.2-2.8.7.7-2.7-.2-.3A7.6 7.6 0 0 1 12 4.4zm-3.1 4c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5z"/></svg>WhatsApp schreiben</span>
         <span class="call__go" aria-hidden="true">→</span>
       </a>
+      <p class="call__alt">Lieber anrufen? <a class="u-link" href="tel:+436764916144">+43 676 491 61 44</a></p>
     </div>
     <div class="services__objects" aria-hidden="true"></div>
   </section>
@@ -185,7 +236,7 @@
     <div class="offer__steps">
       <h3 class="steps__title">So läuft es.</h3>
       <ol class="steps">
-        <li class="step"><span class="step__n label">01</span><span class="step__t">Anruf, 15 Minuten.</span><span class="step__d">Sie erzählen, was Ihr Betrieb braucht. Ich sage Ihnen, was es kostet und wie lange es dauert.</span></li>
+        <li class="step"><span class="step__n label">01</span><span class="step__t">Nachricht oder Anruf.</span><span class="step__d">Sie erzählen, was Ihr Betrieb braucht. Ich sage Ihnen, was es kostet und wie lange es dauert.</span></li>
         <li class="step"><span class="step__n label">02</span><span class="step__t">Entwurf in 48 Stunden.</span><span class="step__d">Sie sehen Ihre Startseite am Handy, bevor Sie sich entscheiden.</span></li>
         <li class="step"><span class="step__n label">03</span><span class="step__t">Live in 10 Tagen.</span><span class="step__d">Texte, Bilder, Domain: ich richte alles ein, Sie geben frei.</span></li>
       </ol>
@@ -194,10 +245,10 @@
 
     <!-- Die Notiz: ein leerer weißer Kasten. Erst beim Senden fragt er nach der E-Mail-Adresse für die Antwort. -->
     <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
-      <h3 class="note__title" id="note-title">Schreiben Sie auf, wie Ihre Website werden soll.</h3>
+      <h3 class="note__title" id="note-title">Lieber per E-Mail? Schreiben Sie auf, wie Ihre Website werden soll.</h3>
       <div class="note__bubble" data-note-bubble>
         <label class="sr-only" for="n-text">Ihre Notiz</label>
-        <textarea id="n-text" name="notiz" rows="5"></textarea>
+        <textarea id="n-text" name="notiz" rows="3"></textarea>
         <div class="note__mail" data-note-mail hidden>
           <label for="n-email">Ihre eigene E-Mail-Adresse, damit ich Ihnen antworten kann.</label>
           <input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="name@beispiel.at">
@@ -213,7 +264,7 @@
         <p>Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
       </div>
       <p class="note__hint" role="alert" data-note-hint hidden></p>
-      <p class="note__intro">Die Notiz geht mit dem Pfeil automatisch an mich. Stichworte reichen, ich antworte Ihnen direkt.</p>
+      <p class="note__intro">Die Notiz geht mit dem Pfeil an mich, ich antworte per E-Mail.</p>
     </form>
 
     <div class="offer__more">
@@ -315,7 +366,7 @@
       <li><a class="u-link" href="impressum.html">Impressum</a></li>
       <li><a class="u-link" href="datenschutz.html">Datenschutz</a></li>
     </ul>
-    <span>Maria Ellend · Wien · <a class="u-link" href="mailto:guskic.studio@gmail.com">guskic.studiO@gmail.com</a></span>
+    <span>Maria Ellend · Wien · <a class="u-link" href="mailto:guskic.studio@gmail.com">guskic.studio@gmail.com</a></span>
   </div>
 </footer>
 </body>

@@ -1,6 +1,5 @@
-import { gsap, ScrollTrigger } from '../utils/gsap.js';
-import { $, $$, reducedMotion } from '../utils/dom.js';
-import { splitChars } from '../utils/split.js';
+import { gsap } from '../utils/gsap.js';
+import { $, $$ } from '../utils/dom.js';
 import { lockScroll, unlockScroll } from '../scroll.js';
 import { content } from '../content.js';
 import { initHandle } from './handle.js';
@@ -8,16 +7,7 @@ import { initChips, refreshChips } from '../utils/chips.js';
 import { EMAIL, sendForm, mailtoLink, markWrong, clearWrong } from '../utils/send.js';
 
 export function initContact() {
-  const reduce = reducedMotion();
   initHandle(document);                         // die Instagram-Fläche sitzt im Abschnitt „Drei Wege“
-
-  /* Einen eigenen Kontakt-Bereich gibt es nicht mehr (Hauptweg ist die Anruf-Karte); falls er zurückkommt, läuft sein Titel hier ein */
-  const title = $('.contact__title');
-  if (title) {
-    const { chars } = splitChars(title);
-    gsap.set(chars, { yPercent: reduce ? 0 : 125 });
-    if (!reduce) ScrollTrigger.create({ trigger: title, start: 'top 80%', once: true, onEnter: () => gsap.to(chars, { yPercent: 0, duration: 1.4, ease: 'power4.inOut', stagger: { each: 0.03, from: 'start' } }) });
-  }
 
   /* ---------- Formular-Overlay: Projekt anfragen, Website-Check oder Erstgespräch ---------- */
   const overlay = $('.form-overlay'), closeBtn = $('.form-overlay__close'), form = $('.form', overlay);

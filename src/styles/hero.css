@@ -30,7 +30,6 @@
 
 .hero__top {
   display: grid; justify-items: start; gap: clamp(12px, 1.2vw, 18px);
-  padding-right: 96px;   /* Platz für „Menü“ oben rechts */
 }
 .hero__tag {
   font-size: clamp(16px, 1.45vw, 22px);
@@ -46,7 +45,7 @@
 .is-inked .hero__sub { color: rgba(255, 255, 255, .85); }
 /* Knopf im Start-Bereich in derselben Schrift wie die Zeile darüber (Geist, nicht Mono) */
 .hero__top .btn {
-  height: auto; padding: .42em 1em .5em; gap: .45em;
+  height: auto; min-height: 44px; padding: .42em 1em .5em; gap: .45em;
   font: 500 clamp(16px, 1.45vw, 22px)/1 var(--sans); letter-spacing: -.03em; text-transform: none;
 }
 .hero__top .btn i { font-size: 1em; }
@@ -78,7 +77,3 @@
 .hero__links i { font-style: normal; font-weight: 500; }
 .hero__links .pill { margin-left: 4px; }
 .is-inked .hero__links .pill { background: var(--white); color: var(--black); }
-
-@media (max-width: 600px) {
-  .hero__top { padding-right: 84px; }
-}

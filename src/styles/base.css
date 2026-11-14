@@ -157,3 +157,7 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+
+/* Kleine Textlinks bekommen eine größere Tippfläche (mindestens 44 px hoch), ohne dass sich die Zeile verschiebt */
+.footer__links a, .check__alt a, .call__alt a, .works__proof a, .note__legal a, .check__legal a, .form__legal a { padding-block: 14px; margin-block: -14px; }
+.footer__links a.u-link::after, .check__alt a.u-link::after, .call__alt a.u-link::after, .works__proof a.u-link::after, .form__legal a.u-link::after { bottom: calc(14px - .12em); }

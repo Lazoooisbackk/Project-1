@@ -1,7 +1,6 @@
 import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, reducedMotion, debounce } from '../utils/dom.js';
 import { splitLines } from '../utils/split.js';
-import { initAutoVideos } from '../utils/video.js';
 
 export function initStudio() {
   const section = $('.studio');
@@ -26,7 +25,7 @@ export function initStudio() {
     ScrollTrigger.create({ trigger: person, start: 'top 85%', once: true, onEnter: () => gsap.to(parts, { y: 0, opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.08, clearProps: 'transform,opacity' }) });
   }
 
-  /* Laufende Säule: ein Satz = die Vorlagen einmal. Es werden so viele Kopien angehängt, dass die Säule
+  /* Laufende Säule: ein Satz = die Ausschnitte aus den Kundenseiten einmal. Es werden so viele Kopien angehängt, dass die Säule
      auch in der Startstellung (um eine Satzhöhe hochgeschoben) bis unten gefüllt ist; die Strecke ist genau eine Satzhöhe. */
   const strip = $('.strip', section);
   const track = strip && $('.strip__track', strip);
@@ -40,7 +39,7 @@ export function initStudio() {
       const need = Math.ceil(strip.clientHeight / h) + 1;          /* Kopien, die nötig sind */
       let have = track.children.length / n;
       while (have < need) {
-        first.slice(0, n).forEach((el) => { const c = el.cloneNode(true); track.appendChild(c); initAutoVideos(c); });
+        first.slice(0, n).forEach((el) => track.appendChild(el.cloneNode(true)));
         have++;
       }
       track.style.setProperty('--set', `${h}px`);

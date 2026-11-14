@@ -22,14 +22,15 @@ function stopSmooth() {
   ScrollTrigger.refresh();
 }
 
-/* Misst laufend die Bildrate. Liegt sie zweimal hintereinander unter ca. 42 Bildern pro Sekunde
+/* Misst in den ersten 12 Sekunden die Bildrate. Liegt sie zweimal hintereinander unter ca. 42 Bildern pro Sekunde
    (Energiesparmodus in Safari und auf dem iPhone, schwache Geräte), wird das weiche Scrollen abgeschaltet.
-   Der Median zählt, damit einzelne Hänger beim Laden nichts auslösen. */
+   Der Median zählt, damit einzelne Hänger beim Laden nichts auslösen. Danach hört die Messung auf: keine Dauerlast. */
 function watchFrameRate() {
   let last = 0, slow = 0;
   const win = [];
+  const until = performance.now() + 12000;
   const frame = (t) => {
-    if (!lenis) return;
+    if (!lenis || t > until) return;
     if (last) { const d = t - last; if (d < 250) win.push(d); }
     last = t;
     if (win.length >= 30) {

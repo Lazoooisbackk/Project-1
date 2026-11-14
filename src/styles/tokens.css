@@ -18,11 +18,10 @@
 
   --pad: clamp(14px, 1.25vw, 22px);
   --h1: clamp(30px, 3.3vw, 54px);     /* große Aussagen */
-  --text: clamp(14px, 1.05vw, 16px);  /* Fließtext */
-  --small: clamp(12px, 0.9vw, 13.5px);
+  --text: clamp(14px, 1.05vw, 17px);  /* Fließtext */
+  --small: clamp(12px, 0.9vw, 14px);
   --nav-h: 56px;
 
-  --z-cursor: 950;
   --z-menu: 800;
   --z-form: 850;
   --z-curtain: 990;

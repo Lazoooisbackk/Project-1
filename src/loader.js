@@ -41,7 +41,18 @@ function makeO(el) {
 }
 export const preloadIntro = () => preloadBalloons(content.objects.intro, { size: SIZE, timeout: 2500 });
 
+/* Notausgang: Vorhang weg, Scrollen frei, Start-Bereich ohne Auftritt zeigen (bei einem Fehler im Intro) */
+export function releaseLoader(hero) {
+  const el = $('#loader');
+  if (el) el.hidden = true;
+  document.body.classList.remove('is-loading');
+  unlockScroll();
+  session.set(KEY, '1');
+  try { hero?.reveal({ instant: true }); } catch (err) { console.error('[hero]', err); }
+}
+
 export async function runLoader({ hero, fonts }) {
+  document.documentElement.classList.add('loader-ok');   // das Skript übernimmt: die CSS-Notbremse in index.html ist nicht mehr nötig
   const el = $('#loader');
   const g = $('.loader__g', el), win = $('.loader__win', el), bl = $('.loader__bl', el);
   const o = makeO(el);

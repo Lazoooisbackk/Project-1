@@ -12,7 +12,7 @@ export function initHero() {
   mark.appendChild(svg);
   gsap.set(letters, { yPercent: 120 });
   const tagLines = $$('.hero__tag .line', stage);
-  const fades = $$('.hero__top .hero__sub, .hero__top .magnetic, .hero__bar', stage);
+  const fades = $$('.hero__top .hero__sub, .hero__top .magnetic', stage);
   gsap.set(tagLines, { yPercent: 115 });
   gsap.set(fades, { opacity: 0 });
 
@@ -24,14 +24,23 @@ export function initHero() {
   stage.addEventListener('click', (e) => { if (!e.target.closest('a, button')) api.crumpleAgain(); });
 
   /* Rendern nur, wenn der Start sichtbar ist, der Tab aktiv ist und das Intro ihn nicht mehr verdeckt */
-  let inView = true;
+  let inView = true, lost = false;
   const sync = () => {
-    const on = revealed && inView && !document.hidden;
+    const on = revealed && inView && !document.hidden && !lost;
     if (on) api.start(); else api.stop();
   };
   new IntersectionObserver(([entry]) => { inView = entry.intersectionRatio > 0.12; sync(); }, { threshold: [0, 0.12, 0.3] }).observe(stage);
   document.addEventListener('visibilitychange', sync);
   document.fonts.ready.then(() => api.layout());
+
+  /* Verliert der Browser die 3D-Fläche (iPhone bei Speichermangel oder App-Wechsel), zeigt der Start die
+     normale Wortmarke aus SVG statt einer eingefrorenen oder leeren Fläche */
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    lost = true; api.stop();
+    document.documentElement.classList.add('no-gl');
+    gsap.set(letters, { autoAlpha: 1, yPercent: 0 });
+  });
 
   /* Das Zeichen „gO“ oben links erscheint erst, wenn der Start vorbei ist */
   ScrollTrigger.create({

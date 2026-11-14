@@ -83,7 +83,7 @@ async function measure(url, signal) {
   const json = await res.json().catch(() => ({}));
   if (!res.ok || json.error) {
     const msg = (json.error && json.error.message) || `HTTP ${res.status}`;
-    const e = new Error(msg); e.quota = /quota|rate/i.test(msg); throw e;
+    const e = new Error(msg); e.quota = res.status === 429 || /quota|rate/i.test(msg); throw e;
   }
   return json;
 }

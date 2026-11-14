@@ -25,6 +25,15 @@ export function initTransitions() {
       .to(curtain, { yPercent: -101, duration: reduce ? 0.2 : 0.8, ease: 'studio', onComplete: () => curtain.classList.remove('is-active') }, reduce ? 0 : 0.35);
   }
 
+  /* „Zurück“ aus dem Browser-Zwischenspeicher: Die Seite kommt so zurück, wie sie verlassen wurde, also mit
+     geschlossenem Vorhang. Dann den Vorhang sofort wegnehmen. */
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    gsap.killTweensOf(curtain);
+    gsap.set(curtain, { yPercent: 101 });
+    curtain.classList.remove('is-active');
+  });
+
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href]');
     if (!a) return;

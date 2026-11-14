@@ -4,10 +4,6 @@
 export const content = {
   brand: { name: 'guskic studiO' },
 
-  nav: {
-    menuOpen: 'Menü öffnen',
-    menuClose: 'Menü schließen',
-  },
 
   /* Folien-Ballons: Dateien in public/objects (1200 × 1200 px, WebP + PNG, auf reinem Schwarz).
      Sie stehen nur auf schwarzen Flächen und werden mit „lighten“ gemischt. */
@@ -20,15 +16,12 @@ export const content = {
     letters: [],                                   // einzelne Buchstaben zwischen den Ballons: vorerst keine
   },
 
-  manifestVideo: {
-    line: 'das ist guskic studiO',
-  },
 
   /* Pakete und Notiz.
      showPrices: false = die Seite zeigt keine einzige Zahl. true = unter jedem Paket steht sein Preis (in Euro, hier eintragen). */
   offer: {
     showPrices: false,
-    prices: { onepager: 'ab 800 €', website: 'ab 1.200 €', care: '49 € im Monat' },
+    prices: { onepager: '450 €', website: 'ab 1.200 €', care: 'optional, 50 € im Monat' },   // Stand 14.11.2026: Onepager 450 €, Betreuung optional 50 €
     note: {
       subject: 'Notiz zur Website',
       thanks: 'Danke, Ihre Notiz ist angekommen.',
@@ -40,7 +33,7 @@ export const content = {
      Ohne Schlüssel nimmt Google nur wenige Messungen am Tag an. */
   check: {
     endpoint: 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed',
-    psiKey: 'AIzaSyA6zirj2mEy7NqU3AzOLAXkGAJmxDE4RnY',   // nur für guskicstudio.vercel.app und lazoooisbackk.github.io gültig (Google Cloud, Projekt guskic-studio)
+    psiKey: 'AIzaSyA6zirj2mEy7NqU3AzOLAXkGAJmxDE4RnY',   // Google Cloud, Projekt guskic-studio: nur PageSpeed Insights API, nur Referrer guskicstudio.vercel.app/* (in der Console prüfen)
   },
 
   contact: {
@@ -50,7 +43,7 @@ export const content = {
       endpoint: 'https://api.web3forms.com/submit',
       accessKey: '66309881-baef-4ea0-99dd-f8f40d98b2c9',   // öffentlicher Schlüssel von Web3Forms, gehört zu guskic.studio@gmail.com
       mailto: 'guskic.studio@gmail.com',
-      subject: 'Projektanfrage über guskic.studio',
+      subject: 'Projektanfrage über die Website',
       thanks: 'Danke, Ihre Nachricht ist angekommen.',
       types: {
         projekt: { title: 'Projekt anfragen', subject: 'Projektanfrage', message: 'Worum geht es?' },
