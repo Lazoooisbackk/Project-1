@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="256x256">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/fonts/geist-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-mono-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
@@ -47,14 +48,20 @@
 </div>
 
 <header class="nav">
-  <a class="nav__mark" href="./#stage" aria-label="guskic studiO – zur Startseite">gO</a>
-  <div class="nav__right">
+  <div class="nav__bar">
+    <a class="nav__brand" href="./#stage" aria-label="guskic studiO – zur Startseite"><span class="nav__logo" aria-hidden="true"></span><span>guskic studiO</span></a>
+    <nav class="nav__links" aria-label="Hauptmenü">
+      <a href="#arbeiten">Arbeiten</a>
+      <a href="#pakete">Preise</a>
+      <a href="#ablauf">Ablauf</a>
+    </nav>
+    <a class="nav__cta" href="#termin">Termin buchen</a>
   </div>
 </header>
 
 <main id="main">
 
-  <!-- Start: weiß. Wischen mit dem Zeiger legt die Folien-Version des Namens frei. Das O ist das Chrom-O. -->
+  <!-- Start: weiß. Wischen mit dem Zeiger legt die Folien-Version des Namens frei. Das O ist das Chrom-O (Lazars Entscheidung 20.11.2026; die Fassung mit dem Zeichen statt O liegt in _pruefung/heroStage-logo-statt-O.js). -->
   <section class="hero" id="stage" data-hero aria-label="guskic studiO">
     <canvas class="hero__gl" id="gl" aria-hidden="true"></canvas>
 
@@ -78,66 +85,38 @@
       <span class="line-mask"><span class="line">Weggeklickt wird woanders.</span></span>
     </p>
 
-    <div class="works">
+    <div class="works" data-works data-state="stack">
       <h2 class="label works__title" id="works-title">Arbeiten</h2>
-      <ul class="works__list">
-        <li class="work">
-          <a class="work__link" href="https://fleischerei-sahan.vercel.app/" target="_blank" rel="noopener">
-            <span class="iph" aria-hidden="true" data-iph>
-              <span class="iph__floor"></span>
-              <span class="iph__spin">
-                <span class="iph__face"><span class="iph__in">
-                  <span class="iph__screen">
-                    <img class="iph__site" style="--dur:13.6s" src="./works/sahan-seite.webp" width="585" height="9971" alt="" loading="lazy" decoding="async">
-                    <img class="iph__logo" src="./works/sahan-logo-400.webp" srcset="./works/sahan-logo-400.webp 400w, ./works/sahan-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
-                    <i class="iph__glare"></i>
-                  </span>
-                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
-                </span></span>
-              </span>
+      <div class="deck">
+        <div class="deck__stage">
+          <button class="screen screen--ounji" type="button" data-screen="ounji" aria-label="OUNJI">
+            <span class="screen__glow"></span>
+            <span class="screen__card">
+              <span class="screen__bar" aria-hidden="true"><i></i><i></i><i></i><span class="screen__url">www.ounji.at</span></span>
+              <span class="screen__view"><img class="screen__site" src="./works/ounji-computer.webp" width="1280" height="4276" alt="Die Website von OUNJI am Computer, läuft langsam von oben nach unten" loading="lazy" decoding="async"></span>
             </span>
+          </button>
+          <button class="screen screen--sahan" type="button" data-screen="sahan" aria-label="Fleischerei Şahan">
+            <span class="screen__glow"></span>
+            <span class="screen__card">
+              <span class="screen__bar" aria-hidden="true"><i></i><i></i><i></i><span class="screen__url">fleischerei-sahan.vercel.app</span></span>
+              <span class="screen__view"><img class="screen__site" src="./works/sahan-computer.webp" width="1280" height="5670" alt="Die Website von Fleischerei Şahan am Computer, läuft langsam von oben nach unten" loading="lazy" decoding="async"></span>
+            </span>
+          </button>
+        </div>
+        <p class="deck__hint" data-deck-hint aria-live="polite">Tippen zum Auffächern</p>
+      </div>
+      <ul class="works__list">
+        <li class="work work--sahan">
+          <a class="work__link" href="https://fleischerei-sahan.vercel.app/" target="_blank" rel="noopener">
             <span class="work__meta label">Fleischerei · Hannovermarkt, Wien 20</span>
             <span class="work__name">Fleischerei Şahan</span>
             <span class="work__text">Vorbestellen per WhatsApp mit fertiger Nachricht. Der Anruf-Knopf läutet nur in den Öffnungszeiten. Eigene Fotos und Videos vom Stand.</span>
             <span class="work__url">fleischerei-sahan.vercel.app <i aria-hidden="true">↗</i></span>
           </a>
         </li>
-        <li class="work">
-          <a class="work__link" href="https://fleischerei-guskic.vercel.app/" target="_blank" rel="noopener">
-            <span class="iph" aria-hidden="true" data-iph>
-              <span class="iph__floor"></span>
-              <span class="iph__spin">
-                <span class="iph__face"><span class="iph__in">
-                  <span class="iph__screen">
-                    <img class="iph__site" style="--dur:14.4s" src="./works/guskic-seite.webp" width="585" height="10499" alt="" loading="lazy" decoding="async">
-                    <img class="iph__logo" src="./works/guskic-logo-400.webp" srcset="./works/guskic-logo-400.webp 400w, ./works/guskic-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
-                    <i class="iph__glare"></i>
-                  </span>
-                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
-                </span></span>
-              </span>
-            </span>
-            <span class="work__meta label">Fleischerei · Hannovermarkt, Wien 20</span>
-            <span class="work__name">Fleischerei Guskic</span>
-            <span class="work__text">Ein Schnittplan, der beim Scrollen mitzeigt: zehn Stücke vom Kopf bis zu den Füßen. Öffnungszeiten mit „Jetzt geöffnet“.</span>
-            <span class="work__url">fleischerei-guskic.vercel.app <i aria-hidden="true">↗</i></span>
-          </a>
-        </li>
-        <li class="work">
+        <li class="work work--ounji">
           <a class="work__link" href="https://www.ounji.at/" target="_blank" rel="noopener">
-            <span class="iph" aria-hidden="true" data-iph>
-              <span class="iph__floor"></span>
-              <span class="iph__spin">
-                <span class="iph__face"><span class="iph__in">
-                  <span class="iph__screen">
-                    <img class="iph__site" style="--dur:11.1s" src="./works/ounji-seite.webp" width="585" height="8349" alt="" loading="lazy" decoding="async">
-                    <img class="iph__logo" src="./works/ounji-logo-400.webp" srcset="./works/ounji-logo-400.webp 400w, ./works/ounji-logo-640.webp 640w" sizes="(max-width: 900px) 160px, 180px" width="400" height="835" alt="" loading="lazy" decoding="async">
-                    <i class="iph__glare"></i>
-                  </span>
-                  <img class="iph__frame" src="./device/iphone-front-400.webp" srcset="./device/iphone-front-400.webp 400w, ./device/iphone-front-600.webp 600w, ./device/iphone-front-800.webp 800w" sizes="(max-width: 900px) 165px, 190px" width="400" height="813" alt="" loading="lazy" decoding="async">
-                </span></span>
-              </span>
-            </span>
             <span class="work__meta label">Brows &amp; Lashes · Wien 3</span>
             <span class="work__name">OUNJI</span>
             <span class="work__text">Ein Onepager mit Preisliste, Terminanfrage über WhatsApp und Anbindung an Instagram.</span>
@@ -145,7 +124,6 @@
           </a>
         </li>
       </ul>
-      <p class="works__proof">Prüfen Sie selbst: Jede dieser Adressen können Sie unten im <a class="u-link" href="#check">Sichtbarkeits-Check</a> messen lassen.</p>
     </div>
   </section>
 
@@ -176,20 +154,89 @@
     </div>
   </section>
 
-  <!-- Leistungen -->
-  <section class="services on-dark" id="leistungen" aria-labelledby="call-title">
-    <div class="call">
-      <a class="call__card" href="https://api.whatsapp.com/send?phone=436764916144&amp;text=Gr%C3%BC%C3%9F%20Gott%2C%20Lazar!%20%F0%9F%91%8B%0AIch%20bin%20%E2%80%A6%20von%20%E2%80%A6%20(Betrieb)%20und%20interessiere%20mich%20f%C3%BCr%20eine%20Website.%0A%0A%F0%9F%93%8D%20Wo%3A%20%E2%80%A6%0A%E2%8F%B0%20Am%20besten%20erreichbar%3A%20%E2%80%A6" target="_blank" rel="noopener" data-wa>
-        <span class="call__lead" id="call-title">Schreiben Sie mir auf WhatsApp. Stichworte reichen, ich melde mich.</span>
-        <span class="call__number"><svg class="call__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.6a9.4 9.4 0 0 0-8.1 14.2L2.6 21.4l4.7-1.2A9.4 9.4 0 1 0 12 2.6zm0 1.8a7.6 7.6 0 1 1-3.9 14.1l-.3-.2-2.8.7.7-2.7-.2-.3A7.6 7.6 0 0 1 12 4.4zm-3.1 4c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.1 2.3.9 2.8.7 3.3.7.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3l-1.9-.9c-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5z"/></svg>WhatsApp schreiben</span>
-        <span class="call__go" aria-hidden="true">→</span>
-      </a>
-      <p class="call__alt">Lieber anrufen? <a class="u-link" href="tel:+436764916144">+43 676 491 61 44</a></p>
+  <!-- Erstgespräch buchen: Tag, Uhrzeit, Name. Die Anfrage geht als fertige WhatsApp-Nachricht an Lazar (src/sections/booking.js). -->
+  <section class="services on-dark" id="termin" aria-labelledby="book-title">
+    <div class="book-intro">
+      <h2 class="statement" id="book-title">Erstgespräch vereinbaren.</h2>
+      <p class="book-intro__lead">15 Minuten am Telefon, kostenlos. Schreiben Sie mir auf WhatsApp oder rufen Sie an.</p>
+      <div class="contact__handle">
+        <a class="handle" href="https://www.instagram.com/l.guskic/" target="_blank" rel="noopener" data-handle>
+          <svg class="handle__icon" viewBox="0 0 24 24" fill="none" stroke="url(#handle-ig)" stroke-width="2" aria-hidden="true">
+            <defs>
+              <radialGradient id="handle-ig" gradientUnits="userSpaceOnUse" cx="7" cy="25.5" r="30">
+                <stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/>
+              </radialGradient>
+            </defs>
+            <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.6"/>
+            <circle cx="12" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="6.5" r="1.25" fill="url(#handle-ig)" stroke="none"/>
+          </svg>
+          <span class="handle__name" aria-hidden="true">l.guskic</span><span class="sr-only">l.guskic auf Instagram</span>
+        </a>
+      </div>
     </div>
-    <div class="services__objects" aria-hidden="true"></div>
+
+    <!-- Einfache Karte (Standard). Die Buchung mit Tag und Uhrzeit darunter ist ausgeschaltet: src/content.js → booking.mode -->
+    <div class="quick" id="quick">
+      <p class="quick__lead">Schreiben Sie mir kurz, wer Sie sind und was Ihr Betrieb braucht. Stichworte reichen, ich melde mich.</p>
+      <div class="quick__actions">
+        <a class="quick__btn quick__btn--wa" href="https://api.whatsapp.com/send?phone=436764916144&amp;text=Gr%C3%BC%C3%9F%20Gott%2C%20Lazar!%20Ich%20m%C3%B6chte%20ein%20kostenloses%20Erstgespr%C3%A4ch.%20Mein%20Betrieb%3A%20" target="_blank" rel="noopener" data-wa><svg class="quick__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.6a9.4 9.4 0 0 0-8.1 14.2L2.6 21.4l4.7-1.2A9.4 9.4 0 1 0 12 2.6zm0 1.8a7.6 7.6 0 1 1-3.9 14.1l-.3-.2-2.8.7.7-2.7-.2-.3A7.6 7.6 0 0 1 12 4.4z"/></svg>Auf WhatsApp schreiben</a>
+        <a class="quick__btn quick__btn--tel" href="tel:+436764916144">Anrufen: +43 676 491 61 44</a>
+      </div>
+      <p class="quick__or"><span>oder schriftlich</span></p>
+
+      <!-- Die Notiz: ein Feld zum Hineinschreiben. Erst beim Senden fragt es nach der E-Mail-Adresse für die Antwort (src/sections/offer.js). -->
+      <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
+        <p class="note__title" id="note-title">Schreiben Sie auf, wie Ihre Website werden soll.</p>
+        <div class="note__bubble" data-note-bubble>
+          <label class="sr-only" for="n-text">Ihre Notiz</label>
+          <textarea id="n-text" name="notiz" rows="2" placeholder="Zum Beispiel: Friseur in Wien 10, Preisliste und Terminanfrage"></textarea>
+          <div class="note__mail" data-note-mail hidden>
+            <label for="n-email">Ihre eigene E-Mail-Adresse, damit ich Ihnen antworten kann.</label>
+            <input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="name@beispiel.at">
+            <p class="note__legal">Nur für meine Antwort. Mehr in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+          </div>
+          <div class="form__trap" aria-hidden="true"><label>Dieses Feld bitte leer lassen<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label></div>
+          <button class="round round--dark note__send" type="submit" aria-label="Notiz senden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+          </button>
+        </div>
+        <div class="note__done" data-note-done tabindex="-1" hidden>
+          <p class="note__thanks" data-note-thanks>Danke, Ihre Notiz ist angekommen.</p>
+          <p>Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
+        </div>
+        <p class="note__hint" role="alert" data-note-hint hidden></p>
+        <p class="note__intro">Die Notiz geht mit dem Pfeil an mich, ich antworte per E-Mail.</p>
+      </form>
+    </div>
+
+    <form class="book" id="book" novalidate hidden>
+      <fieldset class="book__group">
+        <legend>1. Tag wählen</legend>
+        <div class="slots slots--days" id="book-days" role="radiogroup" aria-label="Tag"></div>
+      </fieldset>
+      <fieldset class="book__group">
+        <legend>2. Uhrzeit wählen</legend>
+        <div class="slots" id="book-times" role="radiogroup" aria-label="Uhrzeit"></div>
+      </fieldset>
+      <fieldset class="book__group">
+        <legend>3. Wer sind Sie?</legend>
+        <div class="book__fields">
+          <label class="book__field"><span>Ihr Name</span><input type="text" name="name" autocomplete="name" required></label>
+          <label class="book__field"><span>Ihr Betrieb</span><input type="text" name="betrieb" autocomplete="organization"></label>
+        </div>
+      </fieldset>
+      <p class="book__summary" id="book-summary" aria-live="polite">Wählen Sie zuerst einen Tag und eine Uhrzeit.</p>
+      <div class="book__actions">
+        <button class="book__send" type="submit">Termin auf WhatsApp anfragen</button>
+        <a class="book__mail u-link" id="book-mail" href="mailto:guskic.studio@gmail.com">Lieber per E-Mail anfragen</a>
+      </div>
+      <p class="book__hint" id="book-hint" role="status"></p>
+      <p class="book__small">Die Anfrage öffnet WhatsApp mit einer fertigen Nachricht. Gesendet wird erst, wenn Sie dort auf Senden tippen. Ich bestätige den Termin im Chat.</p>
+    </form>
   </section>
 
-  <!-- Drei Wege, die Notiz zum Hineinschreiben, Website-Check und Erstgespräch. Preise zeigt die Seite nur,
+  <!-- Drei Wege, Ablauf und Instagram. Preise zeigt die Seite nur,
        wenn src/content.js sie einschaltet (offer.showPrices). -->
   <section class="offer on-dark" id="pakete" aria-labelledby="offer-title">
     <h2 class="offer__title statement" id="offer-title">Drei Wege zu Ihrer Website.</h2>
@@ -226,99 +273,19 @@
             <li>Jeden Monat ein Bericht: Besucher, Anfragen, Tempo</li>
           </ul>
         </div>
-        <button class="round round--light pack__down" type="button" data-to-note aria-label="Weiter zur Notiz">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-        </button>
       </li>
     </ul>
 
     <!-- So läuft es: drei Schritte mit Zeitangabe, darunter das Versprechen -->
-    <div class="offer__steps">
+    <div class="offer__steps" id="ablauf">
       <h3 class="steps__title">So läuft es.</h3>
       <ol class="steps">
-        <li class="step"><span class="step__n label">01</span><span class="step__t">Nachricht oder Anruf.</span><span class="step__d">Sie erzählen, was Ihr Betrieb braucht. Ich sage Ihnen, was es kostet und wie lange es dauert.</span></li>
-        <li class="step"><span class="step__n label">02</span><span class="step__t">Entwurf in 48 Stunden.</span><span class="step__d">Sie sehen Ihre Startseite am Handy, bevor Sie sich entscheiden.</span></li>
-        <li class="step"><span class="step__n label">03</span><span class="step__t">Live in 10 Tagen.</span><span class="step__d">Texte, Bilder, Domain: ich richte alles ein, Sie geben frei.</span></li>
+        <li class="step"><span class="step__t">Nachricht oder Anruf.</span><span class="step__d">Sie erzählen, was Ihr Betrieb braucht. Ich sage Ihnen, was es kostet und wie lange es dauert.</span></li>
+        <li class="step"><span class="step__t">Entwurf in 48 Stunden.</span><span class="step__d">Sie sehen Ihre Startseite am Handy, bevor Sie sich entscheiden.</span></li>
+        <li class="step"><span class="step__t">Live in 10 Tagen.</span><span class="step__d">Texte, Bilder, Domain: ich richte alles ein, Sie geben frei.</span></li>
       </ol>
-      <p class="steps__promise">Mein Versprechen: Der Entwurf ist in 48 Stunden da, sonst bekommen Sie ihn geschenkt.</p>
     </div>
 
-    <!-- Die Notiz: ein leerer weißer Kasten. Erst beim Senden fragt er nach der E-Mail-Adresse für die Antwort. -->
-    <form class="note" id="notiz" data-note novalidate aria-labelledby="note-title">
-      <h3 class="note__title" id="note-title">Lieber per E-Mail? Schreiben Sie auf, wie Ihre Website werden soll.</h3>
-      <div class="note__bubble" data-note-bubble>
-        <label class="sr-only" for="n-text">Ihre Notiz</label>
-        <textarea id="n-text" name="notiz" rows="3"></textarea>
-        <div class="note__mail" data-note-mail hidden>
-          <label for="n-email">Ihre eigene E-Mail-Adresse, damit ich Ihnen antworten kann.</label>
-          <input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="name@beispiel.at">
-          <p class="note__legal">Nur für meine Antwort. Mehr in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
-        </div>
-        <div class="form__trap" aria-hidden="true"><label>Dieses Feld bitte leer lassen<input name="_honey" type="text" tabindex="-1" autocomplete="off"></label></div>
-        <button class="round round--dark note__send" type="submit" aria-label="Notiz senden">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
-        </button>
-      </div>
-      <div class="note__done" data-note-done tabindex="-1" hidden>
-        <p class="note__thanks" data-note-thanks>Danke, Ihre Notiz ist angekommen.</p>
-        <p>Ich antworte Ihnen so schnell wie möglich per E-Mail.</p>
-      </div>
-      <p class="note__hint" role="alert" data-note-hint hidden></p>
-      <p class="note__intro">Die Notiz geht mit dem Pfeil an mich, ich antworte per E-Mail.</p>
-    </form>
-
-    <div class="offer__more">
-      <!-- Live-Sichtbarkeits-Check: Adresse eingeben, Google misst am Handy, vier Ampeln und das Handy-Bild (src/sections/check.js) -->
-      <div class="check" id="check" data-check>
-        <div class="check__head">
-          <h3 class="check__title">Gratis Sichtbarkeits-Check.</h3>
-          <p class="check__text">Sie haben schon eine Website? Tippen Sie die Adresse ein. In etwa 30 Sekunden sehen Sie, wie Google sie am Handy misst.</p>
-        </div>
-        <form class="check__form" novalidate>
-          <label class="sr-only" for="c-url">Adresse Ihrer Website</label>
-          <input id="c-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="www.ihr-betrieb.at">
-          <button class="round round--dark check__go" type="submit" aria-label="Website prüfen">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </form>
-        <p class="check__hint" role="status" aria-live="polite" data-check-hint hidden></p>
-        <div class="check__result" data-check-result hidden>
-          <figure class="phone" hidden><img data-check-shot alt="Ihre Website, so wie Google sie am Handy sieht"></figure>
-          <div class="check__body">
-            <ul class="lights" data-check-lights aria-label="Ergebnis"></ul>
-            <p class="check__cost" data-check-cost hidden></p>
-            <form class="check__mail" data-check-mail novalidate>
-              <p class="check__mail-lead">Ich schaue mir das Ergebnis an und schicke Ihnen innerhalb von 24 Stunden drei konkrete Verbesserungen.</p>
-              <div class="check__field">
-                <label class="sr-only" for="c-email">Ihre E-Mail-Adresse</label>
-                <input id="c-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="name@beispiel.at">
-                <button class="round round--light check__send" type="submit" aria-label="Verbesserungen anfordern">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </button>
-              </div>
-              <p class="check__legal">Nur für meine Antwort. Mehr in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
-            </form>
-            <p class="check__done" data-check-done tabindex="-1" hidden>Danke. Die drei Verbesserungen kommen innerhalb von 24 Stunden per E-Mail.</p>
-          </div>
-        </div>
-        <p class="check__alt">Lieber ohne Messung? <a href="#" class="u-link" data-check-fallback>Adresse an mich schicken</a>, ich prüfe sie selbst.</p>
-      </div>
-    <div class="contact__handle">
-      <a class="handle" href="https://www.instagram.com/l.guskic/" target="_blank" rel="noopener" data-handle>
-        <svg class="handle__icon" viewBox="0 0 24 24" fill="none" stroke="url(#handle-ig)" stroke-width="2" aria-hidden="true">
-          <defs>
-            <radialGradient id="handle-ig" gradientUnits="userSpaceOnUse" cx="7" cy="25.5" r="30">
-              <stop offset=".05" stop-color="#FDF497"/><stop offset=".45" stop-color="#FD5949"/><stop offset=".6" stop-color="#D6249F"/><stop offset=".9" stop-color="#285AEB"/>
-            </radialGradient>
-          </defs>
-          <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.6"/>
-          <circle cx="12" cy="12" r="4.5"/>
-          <circle cx="17.5" cy="6.5" r="1.25" fill="url(#handle-ig)" stroke="none"/>
-        </svg>
-        <span class="handle__name" aria-hidden="true">l.guskic</span><span class="sr-only">l.guskic auf Instagram</span>
-      </a>
-    </div>
-    </div>
   </section>
 
 </main>
@@ -359,7 +326,12 @@
 </div>
 
 <footer class="footer on-dark" aria-label="Fußzeile">
-  <div class="footer__mark" role="img" aria-label="guskic studiO"></div>
+  <!-- Ganz unten: das Zeichen in Chrom, ein X, das Chrom-O (src/sections/footer.js) -->
+  <div class="footer__mark lockup" role="img" aria-label="guskic studiO: das Zeichen und das O">
+    <span class="lockup__cell lockup__cell--logo"><canvas class="lockup__logo" aria-hidden="true"></canvas></span>
+    <span class="lockup__x" aria-hidden="true">X</span>
+    <span class="lockup__cell lockup__cell--o"><canvas class="lockup__o" aria-hidden="true"></canvas></span>
+  </div>
   <div class="footer__links">
     <span>©<span data-year>2026</span> — guskic studiO</span>
     <ul>

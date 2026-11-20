@@ -4,19 +4,31 @@
   padding: clamp(20px, 2.6vw, 44px) var(--pad) 14px;
   overflow: hidden;
 }
-.footer__mark {
+/* Ganz unten: Zeichen  X  O, mittig nebeneinander. --s = Höhe der Reihe, --oa = Breite/Höhe des O (aus footer.js) */
+.lockup {
+  --s: clamp(76px, 15vw, 200px);
   position: relative;
-  margin: 0 0 10px;
-  font-size: 0; line-height: 0;
+  display: flex; align-items: center; justify-content: center; gap: calc(var(--s) * .2);
+  height: var(--s);
+  margin: clamp(24px, 4vw, 64px) 0 clamp(28px, 4vw, 56px);
   color: var(--white);
 }
-.footer__mark .wm { overflow: hidden; }
-.footer__mark .wm__l { cursor: default; }
-.footer__o {
-  position: absolute; left: 0; top: 0;
-  width: 0; height: 0; max-width: none;
-  pointer-events: none;
+.lockup__cell { position: relative; flex: none; height: var(--s); }
+.lockup__cell--logo { width: var(--s); }
+.lockup__cell--o { width: calc(var(--s) * .92 * var(--oa, .76)); }
+/* Die Leinwände sind größer als ihr Platz, damit das Drehen nicht abgeschnitten wird */
+.lockup__logo, .lockup__o { position: absolute; left: 50%; top: 50%; translate: -50% -50%; max-width: none; pointer-events: none; }
+.lockup__logo { width: calc(var(--s) / .8); height: calc(var(--s) / .8); }
+.lockup__o { width: calc(var(--s) * .92 / .6); height: calc(var(--s) * .92 / .6); }
+.lockup__x {
+  flex: none;
+  font: 500 calc(var(--s) * .56) / 1 var(--sans); letter-spacing: 0;
+  translate: 0 -.02em;                        /* optisch mittig zur Höhe von Zeichen und O */
 }
+/* Ohne 3D (alter Browser, Grafik aus): das Zeichen flach in Weiß, das O als weißer Buchstabe */
+.is-flat .lockup__logo, .is-flat .lockup__o { display: none; }
+.is-flat .lockup__cell--logo { background: currentColor; -webkit-mask: url("/logo.svg") center / contain no-repeat; mask: url("/logo.svg") center / contain no-repeat; }
+.is-flat .lockup__cell--o::before { content: "O"; display: grid; place-items: center; height: 100%; font: 700 calc(var(--s) * 1.15) / 1 var(--sans); }
 .footer__links {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px;
   font-size: 12px; line-height: 1.3; letter-spacing: 0;

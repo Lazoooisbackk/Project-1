@@ -1,35 +1,44 @@
-/* Navigation: schwarz auf hellen, weiß auf dunklen Abschnitten (Klasse is-light, gesetzt in src/nav.js).
-   Nur während des Wischens im Start-Bereich wird sie mit „difference“ gemischt. */
+/* Leiste oben: schwebende Kapsel, grau und leicht durchsichtig. Links das Zeichen mit dem Namen, in der Mitte die
+   Sprungziele, rechts „Termin buchen“. Auf schmalen Bildschirmen bleiben Name und Knopf. */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0;
+  position: fixed; top: 14px; left: 0; right: 0;
   z-index: 801;
-  height: var(--nav-h);
-  display: flex; align-items: center; justify-content: space-between;
-  padding-inline: var(--pad);
+  display: flex; justify-content: center;
+  padding-inline: 14px;
   pointer-events: none;
-  color: var(--ink);
-  transition: color .25s;
 }
-.nav.is-light { color: var(--white); }
-.is-inked .nav { color: var(--white); mix-blend-mode: difference; transition: none; }
-.nav > * { pointer-events: auto; }
-
-/* Das Zeichen „gO“ sitzt auf einer kleinen Glasfläche: so läuft es beim Scrollen nie in den Text darunter */
-.nav__mark {
-  display: inline-grid; place-items: center;
-  height: 40px; padding: 0 12px 1px;
+.nav__bar {
+  pointer-events: auto;
+  display: flex; align-items: center; justify-content: space-between; gap: clamp(14px, 2.6vw, 36px);
+  width: min(100%, 880px); height: var(--nav-h); padding: 0 8px 0 16px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, .78);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-          backdrop-filter: blur(14px) saturate(1.4);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .04), 0 6px 18px -10px rgba(0, 0, 0, .35);
-  font-family: var(--sans); font-weight: 700;
-  font-size: 21px; line-height: 1; letter-spacing: -.05em;
-  transition: opacity .4s, visibility .4s, background-color .25s;
+  background: rgba(24, 24, 27, .74); color: var(--white);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+          backdrop-filter: blur(18px) saturate(1.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 14px 40px -18px rgba(0, 0, 0, .6);
+  font-family: var(--sans); letter-spacing: -.011em;
 }
-.nav.is-light .nav__mark { background: rgba(28, 28, 30, .72); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
-/* Auf der Startseite steht oben links zuerst der Text; das Zeichen kommt nach dem Start */
-.has-hero .nav__mark { opacity: 0; visibility: hidden; }
-.has-hero.is-past-hero .nav__mark { opacity: 1; visibility: visible; }
+.nav__brand { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; font-size: 17px; letter-spacing: -.035em; white-space: nowrap; }
+/* Logo-Zeichen (vier Schleifen): nimmt die Textfarbe an */
+.nav__logo {
+  flex: none; display: block; width: 26px; height: 26px;
+  background: currentColor;
+  -webkit-mask: url("/logo.svg") center / contain no-repeat;
+          mask: url("/logo.svg") center / contain no-repeat;
+}
+.nav__links { display: flex; gap: clamp(16px, 2.2vw, 30px); font-size: 15px; color: rgba(255, 255, 255, .76); }
+.nav__links a { padding: 12px 0; white-space: nowrap; transition: color .2s; }
+.nav__links a:hover { color: var(--white); }
+.nav__cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 40px; padding: 0 16px; border-radius: 999px;
+  background: var(--white); color: var(--black);
+  font-weight: 560; font-size: 15px; letter-spacing: -.012em; white-space: nowrap;
+  transition: transform .25s cubic-bezier(.2, .7, .1, 1);
+}
+.nav__cta:active { transform: scale(.97); }
+.nav a:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; border-radius: 999px; }
 
-.nav__right { display: flex; align-items: center; gap: 18px; }
+@media (max-width: 900px) {
+  .nav__links { display: none; }
+}

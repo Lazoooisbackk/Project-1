@@ -8,7 +8,6 @@ import { gsap, ScrollTrigger } from '../utils/gsap.js';
 import { $, $$, reducedMotion, debounce } from '../utils/dom.js';
 import { splitLines } from '../utils/split.js';
 import { EMAIL, sendForm, mailtoLink } from '../utils/send.js';
-import { scrollTo } from '../scroll.js';
 import { content } from '../content.js';
 
 export function initOffer() {
@@ -23,8 +22,14 @@ export function initOffer() {
     el.hidden = !cfg.showPrices;
   });
 
-  /* ---------- Notiz ---------- */
-  const note = $('[data-note]', section);
+  /* ---------- Notiz (steht seit 20.11.2026 in der Erstgespräch-Karte, nicht mehr in diesem Abschnitt) ---------- */
+  const note = $('[data-note]');
+  if (note) initNote(note, cfg);
+
+  revealOffer(section, reduce);
+}
+
+function initNote(note, cfg) {
   const bubble = $('[data-note-bubble]', note), done = $('[data-note-done]', note);
   const mailBox = $('[data-note-mail]', note), hint = $('[data-note-hint]', note);
   const text = note.elements.notiz, email = note.elements.email;
@@ -42,13 +47,6 @@ export function initOffer() {
 
   /* Ein Klick irgendwo in den Kasten setzt die Schreibmarke hinein */
   bubble.addEventListener('click', (e) => { if (e.target === bubble) (mailBox.hidden ? text : email).focus(); });
-
-  /* Der Pfeil bei „Betreuung“ führt zur Notiz */
-  $$('[data-to-note]', section).forEach((btn) => btn.addEventListener('click', () => {
-    if (bubble.hidden) { bubble.hidden = false; done.hidden = true; note.classList.remove('is-done'); }
-    scrollTo(note, { offset: -90 });
-    setTimeout(() => text.focus({ preventScroll: true }), reduce ? 0 : 900);
-  }));
 
   note.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -85,7 +83,10 @@ export function initOffer() {
     link.focus();
   });
 
-  /* ---------- Einblenden beim Hinscrollen, wie in den anderen Abschnitten ---------- */
+}
+
+/* ---------- Einblenden beim Hinscrollen, wie in den anderen Abschnitten ---------- */
+function revealOffer(section, reduce) {
   if (reduce) return;
   const title = $('.offer__title', section);
   let { lines } = splitLines(title);

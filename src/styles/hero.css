@@ -10,7 +10,7 @@
   grid-template-rows: auto 1fr auto;
   grid-template-columns: minmax(0, 1fr);
   padding-inline: var(--pad);
-  padding-block: clamp(14px, 1.4vw, 22px);
+  padding-block: calc(14px + var(--nav-h) + clamp(14px, 1.6vw, 24px)) clamp(14px, 1.4vw, 22px);   /* oben Platz für die Leiste */
   touch-action: pan-y;
   -webkit-user-select: none; user-select: none;
   overflow: hidden;
@@ -77,3 +77,17 @@
 .hero__links i { font-style: normal; font-weight: 500; }
 .hero__links .pill { margin-left: 4px; }
 .is-inked .hero__links .pill { background: var(--white); color: var(--black); }
+
+/* 3D-Zeichen in Chrom: schwebt nach dem Intro von oben herunter (heroLogo.js setzt Größe, Platz und --drop) */
+.hero__logo {
+  position: absolute; z-index: 1; left: 50%; top: 0; width: 0; height: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, var(--drop, -110vh), 0);
+}
+.hero__logo canvas { display: block; width: 100%; height: 100%; }
+.hero__logo.is-in { opacity: 1; transform: none; transition: transform 2.9s cubic-bezier(.42, 0, .16, 1), opacity .6s ease; }
+.hero__logo.is-still { transition: none; }
+.hero__logo[hidden], .no-gl .hero__logo { display: none; }
+/* weicher Schatten unter dem Zeichen, nur auf großen Bildschirmen (kostet am Handy unnötig Leistung) */
+@media (min-width: 901px) { .hero__logo canvas { filter: drop-shadow(0 22px 26px rgba(0, 0, 0, .16)); } }

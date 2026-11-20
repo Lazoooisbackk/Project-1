@@ -12,7 +12,7 @@
 .works { display: grid; gap: clamp(20px, 2.4vw, 36px); }
 .works__title { color: #6E6E73; }     /* 4,8:1 auf Weiß */
 .works__list {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));   /* zwei Arbeiten (Şahan, OUNJI) seit 20.11.2026 */
   column-gap: var(--pad); row-gap: 56px;
   margin: 0; padding: 0; list-style: none;
 }
@@ -212,45 +212,124 @@
   .strip { grid-column: 2 / span 10; grid-row: 1; height: clamp(440px, 72vh, 720px); }
 }
 
-/* ---------- Leistungen (schwarz): links „Rufen Sie mich an.“, rechts der rote Hörer ---------- */
+/* ---------- Erstgespräch buchen (schwarz): links Überschrift und Telefon, rechts die weiße Buchungskarte ---------- */
 .services {
   position: relative;
-  padding: clamp(36px, 4vw, 64px) var(--pad) clamp(12px, 1.5vw, 24px);   /* knapp: Kasten und Hörer sitzen nah an „Drei Wege“ */
-  overflow: hidden;
+  padding: clamp(56px, 7vw, 120px) var(--pad) clamp(28px, 3vw, 48px);
   display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--pad); row-gap: clamp(36px, 4.6vw, 72px);
-  align-items: center;
+  column-gap: var(--pad); row-gap: clamp(28px, 3.4vw, 48px);
+  align-items: start;
 }
-.call { grid-column: 1 / span 6; position: relative; z-index: 2; }
-/* Weißer Kasten: ein kurzer Satz, „WhatsApp schreiben“ groß, der ganze Kasten öffnet den Chat mit fertiger Nachricht */
-.call__card {
-  position: relative; display: grid; gap: clamp(14px, 1.6vw, 22px);
-  padding: clamp(24px, 3vw, 44px) clamp(24px, 3vw, 44px) clamp(28px, 3.4vw, 48px);
+.book-intro { grid-column: 1 / span 5; display: grid; gap: clamp(14px, 1.6vw, 22px); justify-items: start; }
+.book-intro__lead { max-width: 34ch; font-size: clamp(16px, 1.35vw, 21px); line-height: 1.35; letter-spacing: -.015em; color: rgba(255, 255, 255, .72); text-wrap: pretty; }
+/* zweiter Weg: anrufen */
+.call__alt { font-size: var(--text); color: rgba(255, 255, 255, .72); }
+.call__alt a { color: var(--white); font-weight: 500; white-space: nowrap; }
+
+/* Einfache Karte: zwei große Knöpfe, WhatsApp und Anrufen */
+.quick {
+  grid-column: 7 / span 6;
+  display: grid; gap: clamp(18px, 2vw, 26px);
+  padding: clamp(24px, 3vw, 44px);
   border-radius: clamp(22px, 2.4vw, 34px);
   background: var(--white); color: var(--black);
-  text-decoration: none;
-  transition: transform .3s ease, box-shadow .3s ease;
+  font-family: var(--sans); letter-spacing: -.011em;
 }
-.call__card:hover { transform: translateY(-3px); box-shadow: 0 30px 60px -30px rgba(255, 255, 255, .35); }
-.call__lead { font-size: var(--small); font-weight: 500; line-height: 1.3; letter-spacing: -.01em; max-width: 30ch; color: rgba(0, 0, 0, .7); }
-.call__number { display: flex; align-items: center; gap: .3em; padding-right: 52px; font-family: var(--sans); font-weight: 700; font-size: clamp(26px, 3.4vw, 58px); line-height: 1; letter-spacing: -.045em; }
-.call__icon { flex: none; width: 1em; height: 1em; color: #25D366; }
-/* zweiter Weg unter dem Kasten: anrufen */
-.call__alt { margin-top: 14px; padding-left: clamp(24px, 3vw, 44px); font-size: var(--text); color: rgba(255, 255, 255, .72); }
-.call__alt a { color: var(--white); font-weight: 500; white-space: nowrap; }
-.call__go {
-  position: absolute; right: clamp(18px, 2vw, 28px); bottom: clamp(18px, 2vw, 28px);
-  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
-  background: var(--black); color: var(--white); font-size: 20px; line-height: 1;
+.quick[hidden], .book[hidden] { display: none; }
+.quick__lead { max-width: 36ch; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.32; letter-spacing: -.02em; text-wrap: pretty; }
+.quick__actions { display: grid; gap: 10px; }
+.quick__btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 60px; padding: 0 22px; border-radius: 999px;
+  font: 560 clamp(17px, 1.4vw, 19px)/1 var(--sans); letter-spacing: -.015em; text-decoration: none;
+  transition: transform .25s cubic-bezier(.2, .7, .1, 1), background-color .2s, box-shadow .2s;
+}
+.quick__btn:active { transform: scale(.98); }
+.quick__btn:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+.quick__btn--wa { background: var(--black); color: var(--white); }
+.quick__btn--wa:hover { background: #26262a; }
+.quick__icon { flex: none; width: 22px; height: 22px; color: #25D366; }
+.quick__btn--tel { box-shadow: inset 0 0 0 1px var(--line-dark); color: var(--black); font-variant-numeric: tabular-nums; }
+.quick__btn--tel:hover { box-shadow: inset 0 0 0 1.5px var(--black); }
+/* „oder schriftlich“: feine Linie mit Wort in der Mitte, trennt Knöpfe und Notiz */
+.quick__or { display: flex; align-items: center; gap: 14px; margin-block: 4px; font-size: 14px; color: rgba(0, 0, 0, .5); }
+.quick__or::before, .quick__or::after { content: ""; flex: 1; height: 1px; background: var(--line-dark); }
+/* Die Notiz in der Karte: hellgraues Feld statt weißem Kasten, damit sie zur Karte gehört */
+.quick .note { display: grid; gap: 10px; }
+.quick .note__title { font: 500 16px/1.3 var(--sans); letter-spacing: -.015em; }
+.quick .note__bubble { padding: 16px 18px 64px; background: #f2f2f0; border-radius: 18px; transition: box-shadow .2s; }
+.quick .note__bubble:focus-within { box-shadow: inset 0 0 0 1.5px var(--black); }
+.quick .note__bubble textarea { min-height: 2.7em; font-size: 17px; }
+.quick .note__bubble textarea::placeholder { color: rgba(0, 0, 0, .38); }
+.quick .note__mail { border-top-color: rgba(0, 0, 0, .1); }
+.quick .note__send { right: 12px; bottom: 12px; }
+.quick .note__hint { color: #b4232a; font-size: 14px; }
+.quick .note__hint a { color: var(--black); }
+.quick .note__intro { font-size: 14px; color: rgba(0, 0, 0, .55); }
+.quick .note__done { background: #f2f2f0; padding: 20px 18px; border-radius: 18px; }
+.quick .note__thanks { font-size: clamp(19px, 1.6vw, 24px); }
+
+.book {
+  grid-column: 7 / span 6;
+  padding: clamp(22px, 2.6vw, 38px);
+  border-radius: clamp(22px, 2.4vw, 34px);
+  background: var(--white); color: var(--black);
+  font-family: var(--sans); letter-spacing: -.011em;
+}
+.book__group { border: 0; margin: 0 0 22px; padding: 0; min-width: 0; }
+.book__group legend { padding: 0; margin-bottom: 12px; font-size: 16px; font-weight: 600; letter-spacing: -.02em; }
+.slots { display: flex; flex-wrap: wrap; gap: 8px; }
+.slots--days { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.slot {
+  min-height: 46px; padding: 10px 14px;
+  border: 1px solid var(--line-dark); border-radius: 14px;
+  background: var(--white); color: var(--black); cursor: pointer;
+  font: 500 15px/1 var(--sans); font-variant-numeric: tabular-nums;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.slot:hover { border-color: var(--black); }
+.slot[aria-checked="true"] { background: var(--black); border-color: var(--black); color: var(--white); }
+.slot:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+.slot--day { display: grid; justify-items: center; gap: 4px; padding: 9px 4px; }
+.slot--day small { font-size: 13px; font-weight: 400; opacity: .62; }
+.slots__empty { padding: 10px 0; font-size: 15px; color: rgba(0, 0, 0, .55); }
+.book__fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.book__field { display: grid; gap: 6px; font-size: 14px; color: rgba(0, 0, 0, .6); }
+.book__field input {
+  height: 50px; padding: 0 14px;
+  border: 1px solid var(--line-dark); border-radius: 12px;
+  background: var(--white); color: var(--black);
+  font: 400 16px var(--sans);
+}
+.book__field input:focus-visible { outline: 2px solid var(--black); outline-offset: 1px; }
+.book__summary { padding: 13px 16px; border-radius: 14px; background: #f2f2f0; font-size: 15px; font-weight: 500; }
+.book__actions { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+.book__send {
+  min-height: 52px; padding: 0 24px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--black); color: var(--white);
+  font: 560 16px/1 var(--sans); letter-spacing: -.012em;
+  transition: transform .25s cubic-bezier(.2, .7, .1, 1), background-color .2s;
+}
+.book__send:hover { background: #26262a; }
+.book__send:active { transform: scale(.97); }
+.book__send:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+.book__mail { font-size: 15px; font-weight: 500; padding-block: 12px; }
+.book__mail::after { bottom: 10px; transform: scaleX(1); }
+.book__mail:hover::after { transform: scaleX(0); transform-origin: right; }
+.book__hint { margin-top: 10px; min-height: 1.4em; font-size: 15px; font-weight: 500; }
+.book__hint.is-error { color: #b4232a; }
+.book__small { margin-top: 4px; font-size: 13px; line-height: 1.45; color: rgba(0, 0, 0, .55); }
+
+@media (max-width: 900px) {
+  .book-intro, .book, .quick { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .slots--days { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .book__fields { grid-template-columns: 1fr; }
+  .book__send { width: 100%; }
 }
 
-/* Der Hörer: eigene Fläche rechts, weicht dem Zeiger leicht aus und wackelt beim Antippen (src/sections/services.js) */
-.services__objects {
-  grid-column: 6 / span 7;
-  position: relative; z-index: 1;
-  height: clamp(300px, 30vw, 460px);
-}
-.services__objects .float-obj { mix-blend-mode: lighten; }
+.float-obj { mix-blend-mode: lighten; }
 @media (max-width: 800px) {
   .call { grid-column: 1 / -1; }
   .services__objects { grid-column: 1 / -1; height: clamp(280px, 80vw, 400px); }
@@ -347,4 +426,176 @@
 .form__done:focus { outline: none; }
 @media (max-width: 600px) {
   .form__row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Dauer je Arbeitsprobe (früher als style-Attribut, das der Sicherheitsfilter blockte) */
+.iph__site--1 { --dur: 13.6s; }
+.iph__site--2 { --dur: 14.4s; }
+.iph__site--3 { --dur: 11.1s; }
+
+/* In der Karte: versteckte Teile der Notiz (E-Mail-Schritt, Dank, Hinweis) wirklich verstecken */
+.quick [hidden] { display: none !important; }
+
+/* Instagram-Fläche links neben der Erstgespräch-Karte, unter dem Text (seit 20.11.2026) */
+.book-intro .contact__handle { grid-column: auto; grid-row: auto; justify-self: start; margin-top: clamp(8px, 1.4vw, 20px); }
+
+/* ---------- Arbeiten: Wand aus Bildschirmen (nach der Jitter-Vorlage „Animated Mobile Screens“, seit 20.11.2026) ----------
+   Drei Reihen: hinten klein und dunkel, Mitte, vorne groß. Jede Reihe ist ein Band aus mehreren gleichen Sätzen und
+   wandert genau einen Satz weit, dann beginnt sie unbemerkt von vorn. --w = Kartenbreite vorne. */
+.wall {
+  --w: clamp(112px, 16vw, 240px);
+  --g: clamp(10px, 1.2vw, 18px);
+  position: relative; isolation: isolate; overflow: hidden;
+  height: calc(var(--w) * 2.93);
+  width: 100%; max-width: 1840px; justify-self: center;   /* breiter nicht, sonst reichen die Bänder auf sehr breiten Bildschirmen nicht */
+  border-radius: clamp(20px, 2.4vw, 34px);
+  background: #000;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+.wall__stage { position: absolute; inset: 0; transform-origin: 50% 62%; animation: wall-zoom 18s ease-in-out infinite alternate; }
+.wall__row { position: absolute; left: 0; height: calc(var(--cw) * 16 / 9); }
+.wall__track { display: flex; width: max-content; animation: wall-run var(--speed) linear infinite; }
+.wall__row--back  { --cw: calc(var(--w) * .62); --cg: calc(var(--g) * .62); top: calc(var(--w) * .1);  --speed: 120s; }
+.wall__row--mid   { --cw: calc(var(--w) * .78); --cg: calc(var(--g) * .78); top: calc(var(--w) * .46); --speed: 95s; }
+.wall__row--front { --cw: var(--w);             --cg: var(--g);             top: var(--w);             --speed: 80s; }
+.wall__row--mid .wall__track { animation-direction: reverse; }
+.wall__row[data-copies="3"] .wall__track { --shift: -33.3333%; }
+.wall__row[data-copies="2"] .wall__track { --shift: -50%; }
+/* hintere Reihen abgedunkelt, wie in der Vorlage */
+.wall__row--back::after, .wall__row--mid::after { content: ""; position: absolute; inset: 0; width: 400vw; pointer-events: none; }
+.wall__row--back::after { background: rgba(0, 0, 0, .52); }
+.wall__row--mid::after { background: rgba(0, 0, 0, .28); }
+.wall__card {
+  flex: none; position: relative; overflow: hidden;
+  width: var(--cw); aspect-ratio: 9 / 16; margin-right: var(--cg);
+  border-radius: calc(var(--cw) * .07);
+  background: #1a1a1c;
+}
+.wall__card img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.wall__row--front .wall__card { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9); }
+/* vorne: die echte Seite läuft langsam von oben nach unten und zurück, wie im Handy */
+.wall__card--live img { height: auto; object-fit: initial; animation: wall-page var(--dur) ease-in-out 1s infinite alternate; }
+.wall__card--sahan  { --ratio: 17.0444; --dur: 28s; }
+.wall__card--guskic { --ratio: 17.9470; --dur: 30s; }
+.wall__card--ounji  { --ratio: 14.2718; --dur: 24s; }
+@keyframes wall-run { to { transform: translateX(var(--shift)); } }
+@keyframes wall-zoom { to { transform: scale(1.1); } }
+@keyframes wall-page { to { transform: translateY(calc(var(--cw) * 16 / 9 - var(--cw) * var(--ratio))); } }
+/* Angetippt: die Reihen und der Zoom stehen, die Seiten laufen weiter. Außerhalb des Bildschirms ruht alles. */
+.wall.is-paused .wall__track, .wall.is-paused .wall__stage { animation-play-state: paused; }
+.wall.is-off .wall__track, .wall.is-off .wall__stage, .wall.is-off .wall__card--live img { animation-play-state: paused; }
+.wall__toggle { position: absolute; z-index: 2; right: clamp(12px, 1.4vw, 20px); bottom: clamp(12px, 1.4vw, 20px); }
+.wall__toggle svg { width: 18px; height: 18px; }
+.wall__play, .wall.is-paused .wall__pause { display: none; }
+.wall.is-paused .wall__play { display: block; }
+.wall__toggle:focus-visible { outline: 2px solid var(--white); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .wall__stage, .wall__track, .wall__card--live img { animation: none; }
+  .wall .wall__toggle { display: none; }      /* .round aus offer.css setzt sonst display: grid */
+  .wall { cursor: auto; }
+}
+
+/* ---------- Arbeiten als Stapel (seit 20.11.2026, Lazars Idee). Zwei Browserfenster aus Milchglas im Breitformat 16:9.
+   Zustände an .works (screens.js): stack = aufeinander, open = aufgefächert, focus = eine Seite groß, die andere klein daneben.
+   Die Seiten scrollen immer von selbst. Außerhalb des Bildschirms ruht alles (.is-on). Hinter jedem Fenster ein Farbschein. */
+.works {
+  --w: min(620px, 43vw);                        /* Breite eines Fensters */
+  --st-h: .86; --op-h: .86; --fo-h: .98;        /* Höhe der Bühne je Zustand, in Fensterbreiten */
+  --op-x: 55%; --op-y: 0%;                      /* aufgefächert: nebeneinander */
+  --fo-x: 0%; --fo-y: 0%; --fo-s: 1.2;          /* groß: Mitte, etwas größer */
+  --ne-x: 78%; --ne-y: 6%; --ne-s: .62;         /* die andere: klein daneben */
+}
+@media (max-width: 900px) {
+  .works {
+    --w: min(340px, 80vw);
+    --st-h: .9; --op-h: 1.5; --fo-h: 1.56;
+    --op-x: 0%; --op-y: 62%;                    /* Handy: untereinander */
+    --fo-x: 0%; --fo-y: -14%; --fo-s: 1.04;
+    --ne-x: 0%; --ne-y: 74%; --ne-s: .7;
+  }
+}
+.deck { display: grid; justify-items: center; gap: 8px; overflow-x: clip; padding-block: 8px; }
+.deck__stage { position: relative; width: 100%; height: calc(var(--w) * var(--st-h)); transition: height .9s cubic-bezier(.2, .85, .2, 1); }
+.works[data-state="open"] .deck__stage { height: calc(var(--w) * var(--op-h)); }
+.works[data-state="focus"] .deck__stage { height: calc(var(--w) * var(--fo-h)); }
+.deck__hint { margin: 0; min-height: 1.4em; color: #6E6E73; font-size: var(--small); letter-spacing: -.01em; }
+
+.screen {
+  position: absolute; left: 50%; top: 50%; z-index: 1;
+  width: var(--w); margin: calc(var(--w) * -.3075) 0 0 calc(var(--w) / -2);
+  padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left;
+  cursor: pointer; isolation: isolate; container-type: inline-size;
+  -webkit-tap-highlight-color: transparent;
+  transition: translate 1s cubic-bezier(.2, .85, .2, 1), rotate 1s cubic-bezier(.2, .85, .2, 1), scale 1s cubic-bezier(.2, .85, .2, 1), opacity .6s ease, filter .6s ease;
+}
+.screen--sahan { --end: -87.30%; --dur: 26s; --float: 7s; --g1: rgba(214, 38, 48, .62);  --g2: rgba(255, 196, 0, .5);   --shade: rgba(120, 14, 24, .34); }
+.screen--ounji { --end: -83.16%; --dur: 22s; --float: 8s; --g1: rgba(150, 118, 226, .62); --g2: rgba(246, 222, 160, .75); --shade: rgba(104, 78, 176, .3); }
+/* aufeinander: Şahan oben, OUNJI leicht versetzt darunter; lädt mit einem kleinen Wackeln zum Antippen ein */
+.works[data-state="stack"] .screen--sahan { z-index: 2; translate: -3% 3%; rotate: -3deg; animation: deck-peek 6s ease-in-out 2.5s infinite; }
+.works[data-state="stack"] .screen--ounji { translate: 4% -5%; rotate: 3deg; }
+@keyframes deck-peek { 0%, 76%, 100% { transform: none; } 86% { transform: translate(-4%, 2%) rotate(-2deg); } }
+/* aufgefächert */
+.works[data-state="open"] .screen--sahan { translate: calc(var(--op-x) * -1) calc(var(--op-y) * -1); rotate: -1.5deg; }
+.works[data-state="open"] .screen--ounji { translate: var(--op-x) var(--op-y); rotate: 1.5deg; }
+/* eine Seite groß, die andere klein daneben */
+.works[data-focus="sahan"] .screen--sahan, .works[data-focus="ounji"] .screen--ounji { z-index: 3; translate: var(--fo-x) var(--fo-y); rotate: 0deg; scale: var(--fo-s); }
+.works[data-focus="sahan"] .screen--ounji { translate: var(--ne-x) var(--ne-y); rotate: 4deg; scale: var(--ne-s); opacity: .55; filter: saturate(.5); }
+.works[data-focus="ounji"] .screen--sahan { translate: calc(var(--ne-x) * -1) var(--ne-y); rotate: -4deg; scale: var(--ne-s); opacity: .55; filter: saturate(.5); }
+.work { transition: opacity .5s ease; }
+.works[data-focus="sahan"] .work--ounji, .works[data-focus="ounji"] .work--sahan { opacity: .3; }
+
+/* Farbschein */
+.screen__glow {
+  position: absolute; inset: -20% -10%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side at 64% 36%, var(--g1), transparent), radial-gradient(closest-side at 34% 68%, var(--g2), transparent);
+  filter: blur(8cqw); opacity: .9;
+  animation: screen-glow 9s ease-in-out infinite alternate;
+}
+@keyframes screen-glow { from { transform: scale(.92) rotate(-4deg); opacity: .7; } to { transform: scale(1.05) rotate(4deg); opacity: 1; } }
+/* Fenster aus Milchglas mit Leiste oben */
+.screen__card {
+  position: relative; display: block; width: 100%;
+  padding: 0 1.4cqw 1.4cqw; border-radius: 3cqw;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .55));
+  -webkit-backdrop-filter: blur(12px) saturate(1.6); backdrop-filter: blur(12px) saturate(1.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .9),
+    inset 0 -1px 0 rgba(0, 0, 0, .05),
+    0 0 0 1px rgba(17, 17, 19, .07),
+    0 5cqw 9cqw -4cqw var(--shade),
+    0 1.2cqw 2.6cqw -1.4cqw rgba(0, 0, 0, .22);
+  opacity: .001; translate: 0 6cqw;
+  transition: opacity .8s ease, translate 1.2s cubic-bezier(.19, 1, .22, 1);
+  animation: screen-float var(--float) ease-in-out infinite alternate;
+}
+.screen.is-seen .screen__card { opacity: 1; translate: 0 0; }
+@keyframes screen-float { from { transform: translateY(-.9cqw); } to { transform: translateY(.9cqw); } }
+.screen__bar { display: grid; grid-template-columns: repeat(3, auto) 1fr; align-items: center; gap: 1cqw; height: 5.4cqw; padding-inline: .6cqw; }
+.screen__bar i { width: 1.4cqw; height: 1.4cqw; border-radius: 50%; background: rgba(17, 17, 19, .16); }
+.screen__url {
+  justify-self: center; translate: -3cqw 0; padding: .6cqw 3cqw; border-radius: 99px;
+  background: rgba(255, 255, 255, .6); box-shadow: inset 0 0 0 1px rgba(17, 17, 19, .06);
+  color: rgba(17, 17, 19, .6); font-size: max(9px, 1.9cqw); line-height: 1; letter-spacing: -.01em; white-space: nowrap;
+}
+.screen__view { position: relative; display: block; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 1.8cqw; background: #f1f1f2; transform: translateZ(0); }
+/* Glanz, der von selbst schräg über das Glas zieht */
+.screen__card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(112deg, transparent 38%, rgba(255, 255, 255, .38) 49%, rgba(255, 255, 255, 0) 60%);
+  background-size: 260% 100%; background-position: 130% 0;
+  animation: screen-shine 9s ease-in-out infinite;
+}
+.screen--ounji .screen__card::after { animation-delay: -4.5s; }
+@keyframes screen-shine { 0%, 62% { background-position: 130% 0; } 100% { background-position: -30% 0; } }
+/* Die Seite läuft bis zu ihrem Ende und zurück. Weg = Bildhöhe minus Fensterhöhe, in Prozent der Bildhöhe. */
+.screen__site { position: absolute; left: 0; top: 0; display: block; width: 100%; height: auto; max-width: none; animation: screen-page var(--dur) ease-in-out .8s infinite alternate; }
+@keyframes screen-page { to { transform: translateY(var(--end)); } }
+.screen:not(.is-on), .screen:not(.is-on) .screen__site, .screen:not(.is-on) .screen__card, .screen:not(.is-on) .screen__card::after, .screen:not(.is-on) .screen__glow { animation-play-state: paused; }
+.screen:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 3cqw; }
+@media (prefers-reduced-motion: reduce) {
+  .screen, .deck__stage { transition: none; }
+  .screen__card { opacity: 1; translate: none; transition: none; animation: none; }
+  .screen, .screen__card::after, .screen__glow, .screen__site { animation: none !important; }
 }

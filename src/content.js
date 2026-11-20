@@ -21,10 +21,30 @@ export const content = {
      showPrices: false = die Seite zeigt keine einzige Zahl. true = unter jedem Paket steht sein Preis (in Euro, hier eintragen). */
   offer: {
     showPrices: false,
-    prices: { onepager: '450 €', website: 'ab 1.200 €', care: 'optional, 50 € im Monat' },   // Stand 14.11.2026: Onepager 450 €, Betreuung optional 50 €
+    prices: { onepager: '600 €', website: 'ab 1.200 €', care: 'optional, 50 € im Monat' },   // Stand 20.11.2026: Onepager 600 € (vorher 450 €), Betreuung optional 50 €
     note: {
       subject: 'Notiz zur Website',
       thanks: 'Danke, Ihre Notiz ist angekommen.',
+    },
+  },
+
+  /* Erstgespräch (src/sections/booking.js).
+     mode: 'whatsapp' = nur die Knöpfe „Auf WhatsApp schreiben“ und „Anrufen“ (Entscheidung 20.11.2026: reicht für den Anfang).
+           'kalender' = Besucher wählen Tag und Uhrzeit, die Anfrage geht als fertige WhatsApp-Nachricht. Erst einschalten,
+                        wenn regelmäßig Anfragen von Fremden kommen, und dann im Datenschutz den Absatz „Terminanfrage“ wieder einfügen.
+     slots: Wunschzeiten je Wochentag (0 = Sonntag, 6 = Samstag). Ein Wochentag ohne Eintrag erscheint nicht. */
+  booking: {
+    mode: 'whatsapp',
+    phone: '436764916144',
+    mail: 'guskic.studio@gmail.com',
+    days: 12,                       // so viele Tage stehen zur Wahl
+    slots: {
+      1: ['16:30', '17:00', '17:30', '18:00', '18:30'],
+      2: ['16:30', '17:00', '17:30', '18:00', '18:30'],
+      3: ['16:30', '17:00', '17:30', '18:00', '18:30'],
+      4: ['16:30', '17:00', '17:30', '18:00', '18:30'],
+      5: ['15:00', '15:30', '16:00', '16:30', '17:00'],
+      6: ['10:00', '10:30', '11:00', '11:30', '12:00'],
     },
   },
 

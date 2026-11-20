@@ -7,10 +7,13 @@ import { initTransitions } from './transitions.js';
 import { initMagnetic } from './interactions.js';
 import { initHero } from './hero.js';
 import { initIphones } from './iphone3d.js';
+import { initWall } from './sections/wall.js';
+import { initScreens } from './sections/screens.js';
 import { runLoader, introWillPlay, preloadIntro, releaseLoader } from './loader.js';
 import { initManifest } from './sections/manifest.js';
 import { initStudio } from './sections/studio.js';
 import { initServices } from './sections/services.js';
+import { initBooking } from './sections/booking.js';
 import { initOffer } from './sections/offer.js';
 import { initContact } from './sections/contact.js';
 import { initCheck } from './sections/check.js';
@@ -35,11 +38,15 @@ safe('scroll', initScroll);
 safe('transitions', initTransitions);
 safe('nav', initNav);
 const hero = safe('hero', initHero);
+// Das schwebende Zeichen oben in der Mitte (heroLogo.js) ist seit 20.11.2026 aus (Lazar). Im Namen bleibt das Chrom-O.
 
 safe('manifest', initManifest);
 safe('iphones', initIphones);
+safe('wall', initWall);
+safe('screens', initScreens);
 safe('studio', initStudio);
 safe('services', initServices);
+safe('booking', initBooking);
 safe('offer', initOffer);
 const contact = safe('contact', initContact);
 safe('check', () => initCheck(contact || {}));
@@ -52,7 +59,8 @@ import('./scroll.js').then(({ scrollTo }) => {
   $$('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
-      if (id.length > 1 && document.querySelector(id)) { e.preventDefault(); scrollTo(id); }
+      /* Sprungziele aus der Leiste landen unter der Leiste, nicht dahinter. Der Start bleibt ganz oben. */
+      if (id.length > 1 && document.querySelector(id)) { e.preventDefault(); scrollTo(id, { offset: id === '#stage' || !a.closest('.nav') ? 0 : -88 }); }
     });
   });
 });
