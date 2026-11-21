@@ -20,8 +20,11 @@ export const content = {
   /* Pakete und Notiz.
      showPrices: false = die Seite zeigt keine einzige Zahl. true = unter jedem Paket steht sein Preis (in Euro, hier eintragen). */
   offer: {
-    showPrices: false,
-    prices: { onepager: '600 €', website: 'ab 1.200 €', care: 'optional, 50 € im Monat' },   // Stand 20.11.2026: Onepager 600 € (vorher 450 €), Betreuung optional 50 €
+    showPrices: true,                              // seit 21.11.2026 an (Lazar): spart Gespräche mit zu kleinem Budget
+    prices: {
+      onepager: 'ab 600 €', website: 'ab 1.200 €', care: 'optional, 50 € im Monat',   // Stand 21.11.2026 (Onepager vorher 450 €)
+      note: 'Endpreise. Als Kleinunternehmer verrechne ich keine Umsatzsteuer.',      // wie auf den Rechnungen (§ 6 Abs. 1 Z 27 UStG)
+    },
     note: {
       subject: 'Notiz zur Website',
       thanks: 'Danke, Ihre Notiz ist angekommen.',

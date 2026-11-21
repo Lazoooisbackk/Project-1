@@ -42,3 +42,6 @@
 @media (max-width: 900px) {
   .nav__links { display: none; }
 }
+
+/* Handy: „Termin buchen“ mindestens 44 px hoch, so groß wie ein Daumen (21.11.2026) */
+@media (max-width: 900px) { .nav__cta { min-height: 44px; } }

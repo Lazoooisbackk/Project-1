@@ -17,7 +17,11 @@
 }
 .pack, .pack__text { display: grid; gap: 12px; align-content: start; justify-items: start; }
 .pack__name { font: 500 var(--h1) / 1 var(--sans); letter-spacing: -.04em; }
-.pack__price { font-variant-numeric: tabular-nums; }
+.pack__price {                                    /* Preis als ruhige Kapsel unter dem Namen (seit 21.11.2026 sichtbar) */
+  padding: 7px 14px; border: 1px solid rgba(255, 255, 255, .3); border-radius: 999px;
+  font: 500 clamp(15px, 1.2vw, 18px) / 1 var(--sans); letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+}
+.offer__note { grid-column: 1 / -1; margin-top: calc(-1 * clamp(20px, 3vw, 54px)); font-size: var(--small); color: rgba(255, 255, 255, .62); }
 .pack__lead { max-width: 26ch; }
 /* drei Zeilen, was drin ist */
 .pack__list { display: grid; gap: 7px; margin: 4px 0 0; padding: 0; list-style: none; max-width: 30ch; font-size: var(--small); line-height: 1.35; color: rgba(255, 255, 255, .72); }
@@ -85,6 +89,7 @@
 }
 .note__bubble textarea { min-height: 4.05em; resize: none; overflow: hidden; }
 .note__bubble textarea:focus, .note__mail input:focus { outline: none; }
+.note__bubble:focus-within { box-shadow: 0 0 0 2px #1D1D1F; }      /* sichtbar, wo man gerade schreibt */
 /* zweiter Schritt im selben Kasten: die Adresse für die Antwort */
 .note__mail { display: grid; gap: 6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #E5E5EA; }
 .note__mail label { font-size: var(--small); color: #6E6E73; }

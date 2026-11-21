@@ -48,7 +48,7 @@ a { color: inherit; text-decoration: none; }
   font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .05em;
   transform: translateY(-120%);
 }
-.skip-link:focus { transform: none; }
+.skip-link:focus { transform: none; outline: 2px solid var(--white); outline-offset: -5px; }
 
 /* Schwarze Abschnitte: ab „Arbeiten“ bis zum Seitenende */
 .on-dark { background: var(--black); color: var(--white); }

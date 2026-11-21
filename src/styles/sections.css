@@ -252,7 +252,7 @@
 .quick__btn--tel { box-shadow: inset 0 0 0 1px var(--line-dark); color: var(--black); font-variant-numeric: tabular-nums; }
 .quick__btn--tel:hover { box-shadow: inset 0 0 0 1.5px var(--black); }
 /* „oder schriftlich“: feine Linie mit Wort in der Mitte, trennt Knöpfe und Notiz */
-.quick__or { display: flex; align-items: center; gap: 14px; margin-block: 4px; font-size: 14px; color: rgba(0, 0, 0, .5); }
+.quick__or { display: flex; align-items: center; gap: 14px; margin-block: 4px; font-size: 14px; color: #6E6E73; }
 .quick__or::before, .quick__or::after { content: ""; flex: 1; height: 1px; background: var(--line-dark); }
 /* Die Notiz in der Karte: hellgraues Feld statt weißem Kasten, damit sie zur Karte gehört */
 .quick .note { display: grid; gap: 10px; }
@@ -566,10 +566,10 @@
     0 0 0 1px rgba(17, 17, 19, .07),
     0 5cqw 9cqw -4cqw var(--shade),
     0 1.2cqw 2.6cqw -1.4cqw rgba(0, 0, 0, .22);
-  opacity: .001; translate: 0 6cqw;
   transition: opacity .8s ease, translate 1.2s cubic-bezier(.19, 1, .22, 1);
   animation: screen-float var(--float) ease-in-out infinite alternate;
 }
+.js .screen__card { opacity: .001; translate: 0 6cqw; }          /* ohne Skript gleich sichtbar */
 .screen.is-seen .screen__card { opacity: 1; translate: 0 0; }
 @keyframes screen-float { from { transform: translateY(-.9cqw); } to { transform: translateY(.9cqw); } }
 .screen__bar { display: grid; grid-template-columns: repeat(3, auto) 1fr; align-items: center; gap: 1cqw; height: 5.4cqw; padding-inline: .6cqw; }
@@ -596,6 +596,10 @@
 .screen:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 3cqw; }
 @media (prefers-reduced-motion: reduce) {
   .screen, .deck__stage { transition: none; }
-  .screen__card { opacity: 1; translate: none; transition: none; animation: none; }
+  .screen__card, .js .screen__card { opacity: 1; translate: none; transition: none; animation: none; }
   .screen, .screen__card::after, .screen__glow, .screen__site { animation: none !important; }
 }
+
+/* Erstgespräch steht seit 21.11.2026 am Ende, direkt nach „Drei Wege“ und „So läuft es“ (beide schwarz):
+   oben weniger Luft, unten so viel wie vorher „Drei Wege“ zum Abschluss hatte. */
+.offer + .services { padding-top: clamp(16px, 2vw, 40px); padding-bottom: clamp(72px, 9vw, 140px); }
